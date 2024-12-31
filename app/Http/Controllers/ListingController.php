@@ -617,7 +617,7 @@ class ListingController extends Controller
             ->selectRaw('COUNT(*) as total_count')
             ->first();
 
-            $capital = DB::selectOne('
+            $result = DB::selectOne('
                             SELECT
                                 COALESCE(capital, 0) as total
                             FROM
@@ -636,6 +636,10 @@ class ListingController extends Controller
                                 )
                             LIMIT 1
                         ');
+
+            $capital = [
+                'total' => $result ? $result->total : 0
+            ];
 
             $payments = DB::selectOne('
                             SELECT
