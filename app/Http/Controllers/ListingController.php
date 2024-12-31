@@ -619,7 +619,7 @@ class ListingController extends Controller
 
             $capital = DB::selectOne('
                             SELECT
-                                capital as total
+                                COALESCE(capital, 0) as total
                             FROM
                                 deliveries
                             WHERE
