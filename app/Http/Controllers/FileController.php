@@ -171,6 +171,6 @@ class FileController extends Controller
         // Crear una respuesta de descarga con el contenido de la imagen
         return response($imageContent, 200)
             ->header('Content-Type', 'image/jpeg')  // Ajusta el tipo de contenido según el tipo de imagen
-            ->header('Content-Disposition', 'attachment; filename="' . $fileName . ' - '. $route . ' - '. $date . '"');
+            ->header('Content-Disposition', 'attachment; filename="' . $route . ' - '. $date . ' - '. $fileName . '"');
     }
 }
