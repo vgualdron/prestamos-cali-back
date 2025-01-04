@@ -150,6 +150,8 @@ class FileController extends Controller
     {
         // Obtener el contenido de la imagen desde la URL
         $imageUrl = $request->query('imageUrl');
+        $route = $request->query('route');
+        $date = $request->query('date');
 
         // Validamos que la URL no esté vacía
         if (!$imageUrl) {
@@ -169,6 +171,6 @@ class FileController extends Controller
         // Crear una respuesta de descarga con el contenido de la imagen
         return response($imageContent, 200)
             ->header('Content-Type', 'image/jpeg')  // Ajusta el tipo de contenido según el tipo de imagen
-            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . ' - '. $route . ' - '. $date . '"');
     }
 }
