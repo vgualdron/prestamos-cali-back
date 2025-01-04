@@ -146,10 +146,9 @@ class FileController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    public function downloadImageFromUrl(Request $request, $url)
+    public function downloadImageFromUrl($imageUrl)
     {
         // Obtener el contenido de la imagen desde la URL
-        $imageUrl = $url;
         $imageContent = file_get_contents($imageUrl);
 
         // Verifica si se pudo obtener el contenido
