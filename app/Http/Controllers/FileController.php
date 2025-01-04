@@ -31,7 +31,7 @@ class FileController extends Controller
             $maintainFile = $request->maintain;
             $item = null;
             $f = base64_decode($file);
-          
+
             // Crear un nombre aleatorio para la imagen
             $time = strtotime("now");
             $nameComplete = $name."-".$time.".".$extension;
@@ -47,7 +47,7 @@ class FileController extends Controller
                     ->where('model_name', $modelName)
                     ->delete();
             }
-         
+
             $item = File::create([
                 'name' => $name,
                 'model_name' => $modelName,
@@ -144,5 +144,25 @@ class FileController extends Controller
             'data' => $items,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
+    }
+
+    public function downloadImageFromUrl(Request $request, $url)
+    {
+        // Obtener el contenido de la imagen desde la URL
+        $imageUrl = $url;
+        $imageContent = file_get_contents($imageUrl);
+
+        // Verifica si se pudo obtener el contenido
+        if ($imageContent === false) {
+            return response()->json(['error' => 'No se pudo obtener la imagen'], 404);
+        }
+
+        // Extraer el nombre del archivo de la URL
+        $fileName = basename($imageUrl);
+
+        // Crear una respuesta de descarga con el contenido de la imagen
+        return response($imageContent, 200)
+            ->header('Content-Type', 'image/jpeg')  // Ajusta el tipo de contenido según el tipo de imagen
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
     }
 }
