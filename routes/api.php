@@ -129,7 +129,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/file"], function () {
     Route::delete('/delete/{id}', [FileController::class, 'delete'])->name('file.delete');
     Route::post('/get', [FileController::class, 'get'])->name('file.get');
     Route::put('/update/{id}', [FileController::class, 'update'])->name('file.update');
-    Route::get('/download-image-from-url/{url}', [FileController::class, 'downloadImageFromUrl'])->name('file.downloadImageFromUrl');
+    Route::get('/download-image-from-url', [FileController::class, 'downloadImageFromUrl'])->name('file.downloadImageFromUrl');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/zip"], function () {
