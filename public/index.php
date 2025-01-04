@@ -1,5 +1,7 @@
 <?php
-
+header('Access-Control-Allow-Origin: https://app-prestamos.micomercio.com.co'); // Permite el dominio específico
+header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
