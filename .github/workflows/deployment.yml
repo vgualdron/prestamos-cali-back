@@ -1,5 +1,5 @@
 name: 🚀 Deploy website
-on: 
+on:
   push:
     branches:
       - master
@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credential: false
-      - name: Sync files 📂 Server hostinger.com 
+      - name: Sync files 📂 Server hostinger.com
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
           server: ${{ secrets.FTP_SERVER_NAME }}
@@ -25,6 +25,5 @@ jobs:
           local-dir: ./
           exclude: |
             **/vendor/**
-            **/.env*
             **/.git*
             **/.git*/**
