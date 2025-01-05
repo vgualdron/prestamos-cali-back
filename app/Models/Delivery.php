@@ -16,9 +16,6 @@ class Delivery extends Model
     protected $fillable = [
         'id',
         'listing_id',
-        'capital',
-        'created_at',
-        'updated_at',
         'transfers_count',
         'transfers_amount',
         'advances_count',
@@ -34,5 +31,8 @@ class Delivery extends Model
         'collection_secre',
         'collection_street',
         'clients',
+        'capital',
+        'created_at',
+        'updated_at',
     ];
 }
