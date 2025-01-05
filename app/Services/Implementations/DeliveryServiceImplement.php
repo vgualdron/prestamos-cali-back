@@ -22,6 +22,7 @@
                 DB::transaction(function () use ($delivery) {
                     $status = $this->delivery::create([
                         'listing_id' => $delivery['listing_id'],
+                        'created_at' => $delivery['date'],
                         'capital' => $delivery['capital'],
                         'transfers_count' => $delivery['transfers_count'],
                         'transfers_amount' => $delivery['transfers_amount'],
