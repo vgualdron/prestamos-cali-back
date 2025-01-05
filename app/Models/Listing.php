@@ -24,21 +24,22 @@ class Listing extends Authenticatable
         'user_id_authorized',
         'user_id',
         'city_id',
+        'order',
         'status'
     ];
-    
+
    public function userCollector() {
     return $this->hasOne(User::class, 'id', 'user_id_collector');
    }
-   
+
    public function userLeader() {
     return $this->hasOne(User::class, 'id', 'user_id_leader');
    }
-   
+
    public function userAuthorized() {
     return $this->hasOne(User::class, 'id', 'user_id_authorized');
    }
-   
+
    public function lendings()
    {
        return $this->hasMany(Lending::class, 'listing_id', 'id');

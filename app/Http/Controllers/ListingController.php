@@ -57,6 +57,7 @@ class ListingController extends Controller
             ->with('userLeader')
             ->with('userAuthorized')
             ->where('listings.status', '=', 'activa')
+            ->orderBy('listings.order', 'asc')
             ->get();
 
         } catch (Exception $e) {
@@ -87,6 +88,7 @@ class ListingController extends Controller
                             ->with('userCollector')
                             ->with('userLeader')
                             ->with('userAuthorized')
+                            ->orderBy('order', 'asc')
                             ->get();
 
         } catch (Exception $e) {
@@ -369,6 +371,7 @@ class ListingController extends Controller
                         AND files.created_at BETWEEN "'.$date.' 00:00:00" AND "'.$date.' 23:59:59"
                     )');
             })
+            ->orderBy('listings.order', 'asc')
             ->get();
         } catch (Exception $e) {
             return response()->json([
