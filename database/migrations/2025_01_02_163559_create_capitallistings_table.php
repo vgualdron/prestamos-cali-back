@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('capitallistings', function (Blueprint $table) {
+        Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('listing_id')->required();
             $table->integer('capital')->required();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('capitallistings');
+        Schema::dropIfExists('deliveries');
     }
 };

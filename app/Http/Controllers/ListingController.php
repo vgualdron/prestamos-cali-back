@@ -621,14 +621,14 @@ class ListingController extends Controller
                             SELECT
                                 capital as total
                             FROM
-                                capitallistings
+                                deliveries
                             WHERE
                                 listing_id = '. $idList .'
                                 AND DATE(created_at) = (
                                     SELECT
                                         MAX(DATE(created_at))
                                     FROM
-                                        capitallistings
+                                        deliveries
                                     WHERE
                                         listing_id = '. $idList .'
                                         AND MONTH(created_at) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
@@ -662,7 +662,7 @@ class ListingController extends Controller
                             SELECT
                             IF(COUNT(DISTINCT DATE(created_at)) = 0, 1, COUNT(DISTINCT DATE(created_at))) AS days_work
                         FROM
-                            capitallistings
+                            deliveries
                         WHERE
                             MONTH(created_at) = MONTH(CURRENT_DATE)
                             AND YEAR(created_at) = YEAR(CURRENT_DATE)

@@ -1,28 +1,28 @@
 <?php
     namespace App\Services\Implementations;
-    use App\Services\Interfaces\CapitallistingServiceInterface;
+    use App\Services\Interfaces\DeliveryServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
-    use App\Models\Capitallisting;
+    use App\Models\Delivery;
     use App\Traits\Commons;
     use Illuminate\Support\Facades\DB;
 
-    class CapitallistingServiceImplement implements CapitallistingServiceInterface {
+    class DeliveryServiceImplement implements DeliveryServiceInterface {
 
         use Commons;
 
-        private $capitallisting;
+        private $delivery;
         private $validator;
 
         function __construct(){
-            $this->capitallisting = new Capitallisting;
+            $this->delivery = new Delivery;
         }
 
-        function create(array $capitallisting){
+        function create(array $delivery){
             try {
-                DB::transaction(function () use ($capitallisting) {
-                    $status = $this->capitallisting::create([
-                        'listing_id' => $capitallisting['listing_id'],
-                        'capital' => $capitallisting['capital'],
+                DB::transaction(function () use ($delivery) {
+                    $status = $this->delivery::create([
+                        'listing_id' => $delivery['listing_id'],
+                        'capital' => $delivery['capital'],
                     ]);
                 });
                 return response()->json([

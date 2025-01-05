@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\Implementations\CapitallistingServiceImplement;
+use App\Services\Implementations\DeliveryServiceImplement;
 
-class CapitallistingController extends Controller
+class DeliveryController extends Controller
 {
     private $service;
     private $request;
 
-    public function __construct(Request $request, CapitallistingServiceImplement $service) {
+    public function __construct(Request $request, DeliveryServiceImplement $service) {
             $this->request = $request;
             $this->service = $service;
     }
