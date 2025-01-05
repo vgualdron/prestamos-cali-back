@@ -23,6 +23,22 @@
                     $status = $this->delivery::create([
                         'listing_id' => $delivery['listing_id'],
                         'capital' => $delivery['capital'],
+                        'transfers_count' => $delivery['transfers_count'],
+                        'transfers_amount' => $delivery['transfers_amount'],
+                        'advances_count' => $delivery['advances_count'],
+                        'advances_amount' => $delivery['advances_amount'],
+                        'articles_count' => $delivery['articles_count'],
+                        'articles_amount' => $delivery['articles_amount'],
+                        'renovations_count' => $delivery['renovations_count'],
+                        'renovations_amount' => $delivery['renovations_amount'],
+                        'expenses_news_count' => $delivery['expenses_news_count'],
+                        'expenses_news_amount' => $delivery['expenses_news_amount'],
+                        'expenses_renovations_count' => $delivery['expenses_renovations_count'],
+                        'expenses_renovations_amount' => $delivery['expenses_renovations_amount'],
+                        'collection_secre' => $delivery['collection_secre'],
+                        'collection_street' => $delivery['collection_street'],
+                        'clients' => $delivery['clients'],
+                        'capital' => $delivery['capital'],
                     ]);
                 });
                 return response()->json([
