@@ -18,12 +18,12 @@
         private $user;
         private $yard;
 
-        function __construct(){            
+        function __construct(){
             $this->oauthClient = new OauthClient;
             $this->user = new User;
             $this->yard = new Yard;
             $this->oauthAccessToken = new OauthAccessToken;
-        }    
+        }
 
         function getActiveToken(){
             try {
@@ -31,7 +31,7 @@
                             ->where('password_client', 1)
                             ->where('revoked', 0)
                             ->first();
-                  
+
                 $oauthClient = !empty($sql) ? $sql->key : null;
 
                 if (!empty($oauthClient)){
@@ -55,9 +55,9 @@
                 Artisan::call('cache:clear');
                 Artisan::call('config:clear');
                 Artisan::call('optimize:clear');
-                $user = $this->user::where('document_number', $documentNumber)->first();
-                $yard = $this->yard::where('id', $user->yard)->first();
+                $user = $this->user::where('document_number', $documentNumber)->where('active', 1)->first();
                 if (!empty($user)) {
+                    $yard = $this->yard::where('id', $user->yard)->first();
                     if ($user->active === 1) {
                         if(Auth::attempt(['document_number' => $documentNumber, 'password' => $password])){
                             $grantClient = $this->oauthClient->select('secret as key')
@@ -98,7 +98,7 @@
                                 $roles = $user->getRoleNames();
                                 $dataPermissions = [];
                                 $menu = [];
-                                
+
                                 foreach ($permissions as $permission) {
                                     $menu[$permission->group_id]['name'] = $permission->group_name;
                                     $menu[$permission->group_id]['label'] = $permission->group_label;
