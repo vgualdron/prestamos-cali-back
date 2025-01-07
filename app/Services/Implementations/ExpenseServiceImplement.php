@@ -34,10 +34,12 @@
                         'i.id as item_id',
                         'i.name as item_name',
                         'u.name as user_name',
+                        'f.url as file_url',
                     )
                     ->leftJoin('items as i', 'e.item_id', 'i.id')
                     ->leftJoin('areas as a', 'i.area_id', 'a.id')
                     ->leftJoin('users as u', 'e.user_id', 'u.id')
+                    ->leftJoin('files as f', 'f.id', 'e.file_id')
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('e.status', $explodeStatus);
                     })
@@ -98,11 +100,6 @@
                     ->leftJoin('news as n', 'n.id', 'l.new_id')
                     ->leftJoin('listings as ls', 'ls.id', 'l.listing_id')
                     ->leftJoin('files as f', 'f.id', 'e.file_id')
-                    /* ->leftJoin('files as f', function ($join) {
-                        $join->on('f.model_id', '=', 'n.id')
-                             ->where('f.model_name', '=', 'news')
-                             ->where('f.name', '=', 'VIDEO_AUTORIZA_CUENTA_TERCERO');
-                    }) */
                     ->where('e.item_id', $item)
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('e.status', $explodeStatus);
