@@ -7,7 +7,7 @@
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\DB;
-    
+
     class ExpenseServiceImplement implements ExpenseServiceInterface {
 
         use Commons;
@@ -20,7 +20,7 @@
             $this->expense = new Expense;
             $this->validator = $validator;
             $this->profileValidator = $profileValidator;
-        }    
+        }
 
         function list(string $status, string $items) {
             try {
@@ -89,7 +89,7 @@
                         'n.account_number_third',
                         'n.account_name_third',
                         'ls.name as listing_name',
-                        'f.url as file_auth_url',
+                        'f.url as file_url',
                     )
                     ->leftJoin('items as i', 'e.item_id', 'i.id')
                     ->leftJoin('areas as a', 'i.area_id', 'a.id')
@@ -97,11 +97,12 @@
                     ->leftJoin('lendings as l', 'l.expense_id', 'e.id')
                     ->leftJoin('news as n', 'n.id', 'l.new_id')
                     ->leftJoin('listings as ls', 'ls.id', 'l.listing_id')
-                    ->leftJoin('files as f', function ($join) {
+                    ->leftJoin('files as f', 'f.id', 'e.file_id')
+                    /* ->leftJoin('files as f', function ($join) {
                         $join->on('f.model_id', '=', 'n.id')
                              ->where('f.model_name', '=', 'news')
                              ->where('f.name', '=', 'VIDEO_AUTORIZA_CUENTA_TERCERO');
-                    })
+                    }) */
                     ->where('e.item_id', $item)
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('e.status', $explodeStatus);
@@ -142,7 +143,7 @@
                         'item_id' => $expense['item_id'],
                         'user_id' => $expense['user_id'] > 0 ? $expense['user_id'] : null,
                     ]);
-    
+
                 });
                 return response()->json([
                     'message' => [
@@ -177,7 +178,7 @@
                     ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-    
+
             return response()->json([
                 'message' => [
                     [
@@ -187,8 +188,8 @@
                 ]
             ], Response::HTTP_OK);
         }
-        
-        function delete(int $id){   
+
+        function delete(int $id){
             try {
                 $sql = $this->expense::find($id);
                 if(!empty($sql)) {
@@ -201,7 +202,7 @@
                             ]
                         ]
                     ], Response::HTTP_OK);
-                    
+
                 } else {
                     return response()->json([
                         'message' => [
