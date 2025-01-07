@@ -5,7 +5,7 @@
     use App\Models\Report;
     use App\Traits\Commons;
     use Illuminate\Support\Facades\DB;
-    
+
     class ReportServiceImplement implements ReportServiceInterface {
 
         use Commons;
@@ -14,7 +14,7 @@
 
         function __construct(){
             $this->report = new Report;
-        }    
+        }
 
         function list(){
             try {
@@ -54,12 +54,12 @@
                     'name',
                     'sql',
                     'order')
-                    ->where('id', $id)   
+                    ->where('id', $id)
                     ->first();
 
                 $rows = DB::select($report->sql);
 
-                if (count($rows) > 0){
+                if (count($rows) > 0) {
                     return response()->json([
                         'data' => $rows
                     ], Response::HTTP_OK);
@@ -67,8 +67,8 @@
                     return response()->json([
                         'message' => [
                             [
-                                'text' => 'No hay reportes',
-                                'detail' => 'Aun no ha registrado ningún reporte',
+                                'text' => 'No hay registros',
+                                'detail' => 'Aun no ha registros para ver este reporte',
                             ]
                         ]
                     ], Response::HTTP_NOT_FOUND);
