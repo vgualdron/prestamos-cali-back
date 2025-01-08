@@ -161,6 +161,7 @@
                 ->leftJoin('yards as s', 'n.sector', 's.id')
                 ->leftJoin('districts as b', 'n.district', 'b.id')
                 ->where('date', "<=", "$date 23:59:59")
+                ->where('d.status', "<>", "finalizada")
                 // ->whereDate('date', "<=", DB::raw("DATE_ADD($date, INTERVAL 2 DAY)"))
                 ->orderBy('date', 'ASC')
                 ->get();
@@ -401,7 +402,7 @@
                         $sqlDiary->status = 'finalizada';
                         $sqlDiary->save();
 
-                        $sqlNovel->status = 'aprobado';
+                        $sqlNovel->status = $diary['novel_status'];
                         $sqlNovel->approved_date = date('Y-m-d H:i:s');
                         $sqlNovel->visit_end_date = date('Y-m-d H:i:s');
                         $sqlNovel->approved_by = $diary['idUserSesion'];
