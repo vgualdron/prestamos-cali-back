@@ -88,14 +88,14 @@
                     ->leftJoin('areas as a', 'i.area_id', 'a.id')
                     ->leftJoin('users as u', 'e.user_id', 'u.id')
                     ->leftJoin('files as f', 'f.id', 'e.file_id')
-                    ->where('e.user_id', $user)
+                    // ->where('e.user_id', $user)
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('e.status', $explodeStatus);
                     })
                     ->when($items !== 'all', function ($q) use ($explodeItems) {
                         return $q->whereNotIn('e.item_id', $explodeItems);
                     })
-                    ->orderBy('e.date', 'ASC')
+                    ->orderBy('e.date', 'DESC')
                     ->get();
 
                 if (count($sql) > 0){
