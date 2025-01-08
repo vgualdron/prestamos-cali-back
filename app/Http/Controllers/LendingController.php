@@ -22,7 +22,7 @@ class LendingController extends Controller
             $idUserSesion = $request->user()->id;
             $items = Lending::where('listing_id', '=', $idList)
                                 ->with('payments')
-                                // ->with('interests')
+                                ->with('discounts')
                                 ->where('status', '=', 'open')
                                 ->orderBy('order', 'asc')->get();
         } catch (Exception $e) {
@@ -41,7 +41,7 @@ class LendingController extends Controller
             'message' => 'Succeed',
         ], JsonResponse::HTTP_OK);
     }
-    
+
     public function getLendingsWithPaymentsCurrentDate(Request $request, $idList)
     {
         try {
@@ -51,7 +51,7 @@ class LendingController extends Controller
             $startDate = date('Y-m-d'.' 00:00:00');
             $endDate = date('Y-m-d'.' 23:59:59');
             $idUserSesion = $request->user()->id;
-           
+
 			$items = Lending::select([
                 'lendings.*',
                 'news.family_reference_name',
@@ -93,6 +93,7 @@ class LendingController extends Controller
                      ->where('filePdf.name', '=', 'PDF_CV');
             })
             ->with('payments')
+            ->with('discounts')
             ->with('reddirections')
             ->where(function ($query) use ($idList, $status1, $status2, $status3, $startDate, $endDate) {
                 $query->where(function ($subQuery) use ($idList, $status1) {
@@ -124,13 +125,13 @@ class LendingController extends Controller
             'message' => 'Succeed',
         ], JsonResponse::HTTP_OK);
     }
-    
+
     public function getLendingsFromListCurrentDate(Request $request, $idList)
     {
         $date = date("Y-m-d");
         $firstDate = date("Y-m-d H:i:s", (strtotime(date($date))));
         $endDate = date("Y-m-d H:i:s", (strtotime(date($date)) + 86399));
-        
+
         try {
             $idUserSesion = $request->user()->id;
             $items = Lending::where('listing_id', '=', $idList)
@@ -161,7 +162,7 @@ class LendingController extends Controller
             $status2 = 'renovated';
             $status3 = 'closed';
             $idUserSesion = $request->user()->id;
-           
+
 			$items = Lending::select([
                 'lendings.*',
                 'news.family_reference_name',
@@ -236,15 +237,15 @@ class LendingController extends Controller
             'message' => 'Succeed',
         ], JsonResponse::HTTP_OK);
     }
-  
+
     public function show(Request $request, $id)
     {
         try {
             $items = Lending::where('id', '=', $id)
                 ->with('payments')
-                // ->with('interests')
+                ->with('discounts')
                 ->first();
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -271,10 +272,10 @@ class LendingController extends Controller
             $city = $request->city;
             $countDays = 1;
             $amountFees = 1;
-            
+
             $date = date("Y-m-d");
             $firstDate = date("Y-m-d H:i:s", (strtotime(date($date))));
-           
+
             if ($period === 'diario') {
                 $countDays = 21;
                 $amountFees = 22;
@@ -301,7 +302,7 @@ class LendingController extends Controller
                                 WHERE lis.city_id =".$city."
                                 GROUP BY lis.id
                                 ORDER BY COALESCE(SUM(len.amount), 0) ASC;");
-            
+
             if ($userSend) {
                 $result = DB::select("SELECT
                     lis.id as id,
@@ -342,7 +343,7 @@ class LendingController extends Controller
             ->where('model_id', $request->new_id)
             ->where('model_name', 'news')
             ->first();
-            
+
             $statusExpense = Expense::create([
                 'date' => $firstDate,
                 'amount' => $request->amount,
@@ -353,7 +354,7 @@ class LendingController extends Controller
                 'file_id' => $itemFile->id,
                 'registered_by' => $idUserSesion,
             ]);
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -425,23 +426,23 @@ class LendingController extends Controller
             ]
         ], JsonResponse::HTTP_OK);
     }
-    
+
     public function updateOrderRows(Request $request)
     {
         try {
             $rows = $request->all();
-            
+
             $items = [];
             $index = 1;
             foreach($rows['rows'] as $row){
                 $item = Lending::find($row['id'])->update([
                     'order' => $index
                 ]);
-                
+
                 $items[] = $item;
                 $index++;
             }
-         
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -475,11 +476,11 @@ class LendingController extends Controller
             $period = $request->period;
             $countDays = 1;
             $amountFees = 1;
-            
+
             $date = $request->date;
             $firstDate = date("Y-m-d H:i:s", (strtotime(date($date))));
             $currentDate = date("Y-m-d H:i:s");
-           
+
             if ($period === 'diario') {
                 $countDays = 21;
                 $amountFees = 22;
@@ -577,7 +578,7 @@ class LendingController extends Controller
             $idUserSesion = $request->user()->id;
             $amount = $request->amount;
             $period = $request->period;
-            
+
             $itemNovel = Novel::find($request->new_id);
             $novelItem = [
                 'status' => 'aprobado',
@@ -598,11 +599,11 @@ class LendingController extends Controller
 
             $countDays = 1;
             $amountFees = 1;
-            
+
             $date = date("Y-m-d H:i:s");
             $firstDate = date("Y-m-d H:i:s", (strtotime(date($date))));
             $currentDate = date("Y-m-d H:i:s");
-           
+
             if ($period === 'diario') {
                 $countDays = 21;
                 $amountFees = 22;
@@ -682,6 +683,7 @@ class LendingController extends Controller
             $idUserSesion = $request->user()->id;
             $items = Lending::where('new_id', '=', $idNew)
                                 ->with('payments')
+                                ->with('discounts')
                                 ->orderBy('order', 'asc')->get();
         } catch (Exception $e) {
             return response()->json([
