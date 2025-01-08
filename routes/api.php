@@ -28,6 +28,7 @@ use App\Http\Controllers\{
                         RedcollectorController,
                         ReddirectionController,
                         DeliveryController,
+                        DiscountController,
                     };
 
 /*
@@ -182,6 +183,11 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/payment"], function () 
     Route::post('/', [PaymentController::class, 'store']);
     Route::put('/{id}', [PaymentController::class, 'update']);
     Route::delete('/{id}', [PaymentController::class, 'destroy']);
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/discount"], function () {
+    Route::post('/', [DiscountController::class, 'store']);
+    Route::delete('/{id}', [DiscountController::class, 'destroy']);
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/district"], function () {
