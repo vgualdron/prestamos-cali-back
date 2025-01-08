@@ -8,7 +8,7 @@
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\DB;
-    
+
     class NovelServiceImplement implements NovelServiceInterface {
 
         use Commons;
@@ -21,7 +21,7 @@
             $this->novel = new Novel;
             $this->validator = $validator;
             $this->profileValidator = $profileValidator;
-        }    
+        }
 
         function list(string $status) {
             try {
@@ -101,6 +101,7 @@
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('n.status', $explodeStatus);
                     })
+                    ->orderBy('z.id', 'ASC')
                     ->orderBy('d.group', 'ASC')
                     ->orderBy('d.order', 'ASC')
                     ->get();
@@ -128,11 +129,11 @@
 
         function listReds(int $city, int $user) {
             try {
-              
-                $sql = "SELECT 
-                        ROW_NUMBER() OVER (ORDER BY 
-                            CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC, 
-                            SUBSTRING_INDEX(districts.order, ' ', -1) ASC, 
+
+                $sql = "SELECT
+                        ROW_NUMBER() OVER (ORDER BY
+                            CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC,
+                            SUBSTRING_INDEX(districts.order, ' ', -1) ASC,
                             lendings.id ASC
                         ) AS 'order',
                         lendings.id AS lending_id,
@@ -158,15 +159,15 @@
                         zones.name AS city_name,
                         zones.id AS city_id,
                         DATEDIFF(CURRENT_DATE, lendings.firstDate) AS days_since_creation,
-                        (lendings.amount * (1 + lendings.percentage / 100)) AS total_value, 
-                        (lendings.amount * (1 + 
-                            CASE 
+                        (lendings.amount * (1 + lendings.percentage / 100)) AS total_value,
+                        (lendings.amount * (1 +
+                            CASE
                                 WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
                                 ELSE lendings.percentage / 100
                             END
-                        )) AS total_due, 
-                        (lendings.amount * (1 + 
-                            CASE 
+                        )) AS total_due,
+                        (lendings.amount * (1 +
+                            CASE
                                 WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
                                 ELSE lendings.percentage / 100
                             END
@@ -180,7 +181,7 @@
                         districts.order AS district_order,
                         redcollectors.collector_id AS collector_id,
                         users.name AS collector_name,
-                        (SELECT id 
+                        (SELECT id
                             FROM reddirections
                             WHERE address = address_data.address
                             AND type_ref = address_data.address_type
@@ -188,7 +189,7 @@
                             ORDER BY registered_date DESC
                             LIMIT 1
                         ) AS is_current,
-                        (SELECT start_date 
+                        (SELECT start_date
                             FROM reddirections
                             WHERE address = address_data.address
                             AND type_ref = address_data.address_type
@@ -196,7 +197,7 @@
                             ORDER BY registered_date DESC
                             LIMIT 1
                         ) AS reddirection_start_date,
-                        (SELECT id 
+                        (SELECT id
                             FROM reddirections
                             WHERE address = address_data.address
                             AND type_ref = address_data.address_type
@@ -204,16 +205,16 @@
                             ORDER BY registered_date DESC
                             LIMIT 1
                         ) AS has_visited
-                    FROM 
+                    FROM
                         lendings
-                    LEFT JOIN 
+                    LEFT JOIN
                         listings ON lendings.listing_id = listings.id
-                    LEFT JOIN 
+                    LEFT JOIN
                         payments ON lendings.id = payments.lending_id
-                    LEFT JOIN 
+                    LEFT JOIN
                         news ON lendings.new_id = news.id
                     LEFT JOIN (
-                        SELECT 
+                        SELECT
                             news.id as new_id,
                             'CASA' AS address_type,
                             'CASA' AS address_name,
@@ -224,7 +225,7 @@
                         FROM news
                         WHERE address_house IS NOT NULL AND address_house_district IS NOT NULL
                         UNION ALL
-                        SELECT 
+                        SELECT
                             news.id as new_id,
                             'TRABAJO' AS address_type,
                             'TRABAJO' AS address_name,
@@ -235,7 +236,7 @@
                         FROM news
                         WHERE address_work IS NOT NULL AND address_work_district IS NOT NULL
                         UNION ALL
-                        SELECT 
+                        SELECT
                             news.id as new_id,
                             'REF 1' AS address_type,
                             CONCAT(family_reference_name, ' | ', family_reference_relationship) AS address_name,
@@ -246,7 +247,7 @@
                         FROM news
                         WHERE family_reference_address IS NOT NULL AND family_reference_district IS NOT NULL
                         UNION ALL
-                        SELECT 
+                        SELECT
                             news.id as new_id,
                             'REF 2' AS address_type,
                             CONCAT(family2_reference_name, ' | ', family2_reference_relationship) AS address_name,
@@ -257,7 +258,7 @@
                         FROM news
                         WHERE family2_reference_address IS NOT NULL AND family2_reference_district IS NOT NULL
                         UNION ALL
-                        SELECT 
+                        SELECT
                             news.id as new_id,
                             'FIADOR' AS address_type,
                             CONCAT(guarantor_name, ' | ', guarantor_relationship) AS address_name,
@@ -268,21 +269,21 @@
                         FROM news
                         WHERE guarantor_address IS NOT NULL AND guarantor_district IS NOT NULL
                     ) AS address_data ON news.id = address_data.new_id
-                    LEFT JOIN 
+                    LEFT JOIN
                         districts ON address_data.district = districts.id
-                    LEFT JOIN 
+                    LEFT JOIN
                         yards ON districts.sector = yards.id
-                    LEFT JOIN 
+                    LEFT JOIN
                         zones ON zones.id = yards.zone
-                    LEFT JOIN 
+                    LEFT JOIN
                         redcollectors ON redcollectors.sector_id = yards.id
-                    LEFT JOIN 
+                    LEFT JOIN
                         users ON redcollectors.collector_id = users.id
-                    WHERE 
+                    WHERE
                         lendings.status = 'open'
                     AND news.status = 'consignado'
                     AND lendings.order <> 0 "; // el order 0 es cuando se tiene a un cliente ene spera en cobro, y no quiere msotrarse en rojos
-                        
+
                 if ($city && $city > 0) {
                     $sql .= " AND zones.id = ".$city;
                 }
@@ -291,13 +292,13 @@
                     $sql .= " AND redcollectors.collector_id = ".$user;
                 }
 
-                $sql .= " GROUP BY 
+                $sql .= " GROUP BY
                         lendings.id, news.id, districts.id, address_data.address_type, address_data.address, address_data.district
-                    HAVING 
+                    HAVING
                         days_since_creation > 19
-                    ORDER BY 
-                        CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC, 
-                        SUBSTRING_INDEX(districts.order, ' ', -1) ASC, 
+                    ORDER BY
+                        CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC,
+                        SUBSTRING_INDEX(districts.order, ' ', -1) ASC,
                         lendings.id ASC;";
 
                 $results = DB::select($sql);
@@ -362,7 +363,7 @@
                             'registered_by' => $novel['registered_by'],
                         ]);
                     }
-    
+
                 });
                 return response()->json([
                     'message' => [
@@ -436,7 +437,7 @@
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
-        
+
         function updateStatus(array $novel, int $id){
             try {
                 /* $validation = $this->validate($this->validator, $novel, $id, 'actualizar', 'nuevo', null);
@@ -491,7 +492,7 @@
             }
         }
 
-        function delete(int $id){   
+        function delete(int $id){
             try {
                 $sql = $this->novel::find($id);
                 if(!empty($sql)) {
@@ -504,7 +505,7 @@
                             ]
                         ]
                     ], Response::HTTP_OK);
-                    
+
                 } else {
                     return response()->json([
                         'message' => [
@@ -688,7 +689,7 @@
                 return response()->json([
                     'data' => $new
                 ], Response::HTTP_OK);
-                
+
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
