@@ -7,7 +7,7 @@
     use App\Traits\Commons;
     use ZipArchive;
     use File;
-    
+
     class ZipServiceImplement implements ZipServiceInterface {
 
         use Commons;
@@ -18,7 +18,7 @@
         function __construct(ZipValidator $validator){
             $this->zip = new Zip;
             $this->validator = $validator;
-        }    
+        }
 
         function list(){
             try {
@@ -62,7 +62,7 @@
         function create(array $zip) {
             try {
                 $validation = $this->validate($this->validator, $zip, null, 'registrar', 'zip', null);
-                
+
                 if ($validation['success'] === false) {
                     return response()->json([
                         'message' => $validation['message']
@@ -77,16 +77,16 @@
                     $directories = File::directories($path);
 
                     // Verificar si hay archivos o carpetas
-                    if (count($files) > 0 || count($directories) > 0) {   
-                        $urlZip = $this->downloadZip('app/public');              
+                    if (count($files) > 0 || count($directories) > 0) {
+                        $urlZip = $this->downloadZip('app/public');
                         $status = $this->zip::create([
                             'name' => $urlZip,
                             'registered_by' => $zip['registered_by'],
                             'registered_date' => date('Y-m-d H:i:s'),
                         ]);
-                        
+
                         // File::cleanDirectory($path);
-                        
+
                         return response()->json([
                             'message' => [
                                 [
@@ -130,39 +130,39 @@
         public function downloadZip($path) {
             // Directorio que quieres escanear
             $directory = storage_path("$path/news");
-    
+
             // Nombre del archivo ZIP
             $time = date('d-m-Y-H-i-s');
             $zipFileName = "$time-archivos-de-los-clientes.zip";
             $zipRelativeName = "$path/zip/$zipFileName";
             $zipFilePath = storage_path($zipRelativeName);
             $pathClean = storage_path("$path/zip");
-            File::cleanDirectory($pathClean);
-    
+            // File::cleanDirectory($pathClean); activar para limpiar el folder
+
             // Crear una instancia de ZipArchive
             $zip = new ZipArchive();
-    
+
             // Abrir el archivo ZIP para escribir
             if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
                 return response()->json(['error' => 'No se puede crear el archivo ZIP'], 500);
             }
-    
+
             // Escanear el directorio y agregar archivos al archivo ZIP
             $this->addFilesToZip($zip, $directory);
-    
+
             // Cerrar el archivo ZIP
             $zip->close();
-    
+
             return "/storage/$zipRelativeName";
         }
-    
+
         private function addFilesToZip($zip, $directory, $baseDir = '') {
             $files = File::allFiles($directory);
             foreach ($files as $file) {
                 $relativePath = $baseDir . $file->getRelativePathname();
                 $zip->addFile($file->getRealPath(), $relativePath);
             }
-    
+
             $directories = File::directories($directory);
             foreach ($directories as $dir) {
                 $this->addFilesToZip($zip, $dir, $baseDir . basename($dir) . '/');
