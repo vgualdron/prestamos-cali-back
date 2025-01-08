@@ -70,6 +70,55 @@
             }
         }
 
+        function listByUser(int $user, string $status, string $items) {
+            try {
+                $explodeStatus = explode(',', $status);
+                $explodeItems = explode(',', $items);
+                $sql = $this->expense->from('expenses as e')
+                    ->select(
+                        'e.*',
+                        'a.id as area_id',
+                        'a.name as area_name',
+                        'i.id as item_id',
+                        'i.name as item_name',
+                        'u.name as user_name',
+                        'f.url as file_url',
+                    )
+                    ->leftJoin('items as i', 'e.item_id', 'i.id')
+                    ->leftJoin('areas as a', 'i.area_id', 'a.id')
+                    ->leftJoin('users as u', 'e.user_id', 'u.id')
+                    ->leftJoin('files as f', 'f.id', 'e.file_id')
+                    ->where('e.user_id', $user)
+                    ->when($status !== 'all', function ($q) use ($explodeStatus) {
+                        return $q->whereIn('e.status', $explodeStatus);
+                    })
+                    ->when($items !== 'all', function ($q) use ($explodeItems) {
+                        return $q->whereNotIn('e.item_id', $explodeItems);
+                    })
+                    ->orderBy('e.date', 'ASC')
+                    ->get();
+
+                if (count($sql) > 0){
+                    return response()->json([
+                        'data' => $sql
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'data' => []
+                    ], Response::HTTP_OK);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al cargar los registros',
+                            'detail' => $e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function listByItem(string $status, int $item) {
             try {
                 $explodeStatus = explode(',', $status);
