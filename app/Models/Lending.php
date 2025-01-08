@@ -37,11 +37,15 @@ class Lending extends Authenticatable
         'has_double_interest',
         'doubleDate',
     ];
-   
+
     public function payments() {
        return $this->hasMany(Payment::class, 'lending_id', 'id');
     }
-   
+
+    public function discounts() {
+       return $this->hasMany(Discount::class, 'lending_id', 'id');
+    }
+
     public function reddirections() {
        return $this->hasMany(Reddirection::class, 'lending_id', 'id');
     }
