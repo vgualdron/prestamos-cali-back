@@ -96,6 +96,8 @@
                             'd.status',
                             'd.observation',
                             's.name as sectorName',
+                            'n.visit_start_date',
+                            'n.visit_end_date',
                         )
                         ->leftJoin('users as u', 'd.user_id', 'u.id')
                         ->leftJoin('news as n', 'd.new_id', 'n.id')
