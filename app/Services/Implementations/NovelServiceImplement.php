@@ -91,6 +91,7 @@
                         'n.score',
                         'n.score_observation',
                         'n.account_active',
+                        'n.updated_at',
                     )
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
