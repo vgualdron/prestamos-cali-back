@@ -6,6 +6,7 @@ use App\Models\Listing;
 use App\Models\Lending;
 use App\Models\Payment;
 use App\Models\Expense;
+use App\Models\Delivery;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -309,12 +310,18 @@ class ListingController extends Controller
                         ->where('listings.id', $idList)
                         ->first();
 
+            $itemDelivery = Delivery::selectRaw('*')
+                        ->whereBetween('created_at', [$date." 00:00:00", $date." 23:59:59"])
+                        ->where('listing_id', $idList)
+                        ->first();
+
             $data = [
                 'itemList' => $itemList,
                 'itemPayment' => $itemPayment,
                 'itemRenove' => $itemRenove,
                 'itemNovel' => $itemNovel,
                 'itemExpense' => $itemExpense,
+                'itemDelivery' => $itemDelivery,
                 'date' => $date,
             ];
 
