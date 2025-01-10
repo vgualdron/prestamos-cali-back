@@ -476,7 +476,7 @@
                     'date' => $diary['date'],
                     'user_id' => $diary['user_id'],
                     'new_id' => $diary['new_id'],
-                    'status' => 'creado',
+                    'status' => $diary['status'],
                     'observation' => '',
                 ]);
 
