@@ -525,6 +525,7 @@
                     DB::transaction(function () use ($sql, $diary) {
                         $sql->status = $diary['status'];
                         $sql->new_id = $diary['new_id'];
+                        $sql->date = $diary['date'] . ' ' . date('H:i:s');
                         $sql->save();
                     });
                     return response()->json([
