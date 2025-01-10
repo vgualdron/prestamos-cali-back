@@ -63,7 +63,6 @@ class LendingController extends Controller
                 'news.has_letter',
                 'news.account_type',
                 'news.account_number',
-                'news.account_name',
                 'news.account_type_third',
                 'news.account_number_third',
                 'news.account_name_third',
