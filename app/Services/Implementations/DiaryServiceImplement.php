@@ -65,14 +65,17 @@
                     ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"]) // TO DO, ajustar para que muestre solo las visitas adegndadas o en visitando, o las del dia actual.
                     ->orderByRaw("
                         CASE
-                            WHEN n.site_visit = 'casa' THEN
-                                CAST(REGEXP_SUBSTR(dh.order, '^[0-9]+') AS UNSIGNED),
-                                REGEXP_SUBSTR(dh.order, '[A-Za-z]+$')
-                            WHEN n.site_visit = 'trabajo' THEN
-                                CAST(REGEXP_SUBSTR(dw.order, '^[0-9]+') AS UNSIGNED),
-                                REGEXP_SUBSTR(dw.order, '[A-Za-z]+$')
-                            ELSE d.date
-                        END
+                            WHEN n.site_visit = 'casa' THEN CAST(SUBSTRING_INDEX(dh.order, 'A', 1) AS UNSIGNED)
+                            WHEN n.site_visit = 'trabajo' THEN CAST(SUBSTRING_INDEX(dw.order, 'A', 1) AS UNSIGNED)
+                            ELSE 0
+                        END ASC
+                    ")
+                    ->orderByRaw("
+                        CASE
+                            WHEN n.site_visit = 'casa' THEN SUBSTRING(dh.order, -1)
+                            WHEN n.site_visit = 'trabajo' THEN SUBSTRING(dw.order, -1)
+                            ELSE ''
+                        END ASC
                     ")
                     ->orderBy('date', 'ASC')
                     ->orderBy('date', 'ASC')
