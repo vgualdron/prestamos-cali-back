@@ -514,12 +514,6 @@
 
         function update(array $diary, int $id) {
             try {
-                $validation = $this->validate($this->validator, $diary, $id, 'actualizar', 'agenda', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                }
                 $sql = $this->diary::find($id);
                 if(!empty($sql)) {
                     DB::transaction(function () use ($sql, $diary) {
