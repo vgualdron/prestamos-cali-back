@@ -203,7 +203,7 @@
                 ->leftJoin('yards as s', 'n.sector', 's.id')
                 ->leftJoin('districts as b', 'n.district', 'b.id')
                 ->where('date', "<=", "$date 23:59:59")
-                ->where('d.status', "<>", "finalizada")
+                ->whereIn('n.status', ["visitando", "agendado", "aprobado"])
                 // ->whereDate('date', "<=", DB::raw("DATE_ADD($date, INTERVAL 2 DAY)"))
                 ->orderBy('date', 'ASC')
                 ->get();
