@@ -63,6 +63,7 @@ class Novel extends Model
         'visit_end_date',
         'account_type',
         'account_number',
+        'account_name',
         'account_type_third',
         'account_number_third',
         'account_name_third',
