@@ -472,31 +472,19 @@
 
         function create(array $diary) {
             try {
-                $validation = $this->validate($this->validator, $diary, null, 'registrar', 'diario', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-
-                DB::transaction(function () use ($diary) {
-                    $dates = $this->getDatesOfWeek($diary['date'], $diary['moment']);
-                    $hours = $this->getHoursOfDay();
-                    foreach ($dates as $i => $value) {
-                        foreach ($hours as $j => $hour) {
-                            $sql = $this->diary::create([
-                                'date' => "$value $hour",
-                                'user_id' => $diary['userId'],
-                            ]);
-                        }
-                    }
-                });
+                $sql = $this->diary::create([
+                    'date' => $diary['date'],
+                    'user_id' => $diary['user_id'],
+                    'new_id' => $diary['new_id'],
+                    'status' => 'creado',
+                    'observation' => '',
+                ]);
 
                 return response()->json([
                     'message' => [
                         [
-                            'text' => 'Agenda registrado con éxito',
-                            'detail' => null
+                            'text' => 'Agendado con éxito',
+                            'detail' => $sql
                         ]
                     ]
                 ], Response::HTTP_OK);
