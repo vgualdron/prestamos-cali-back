@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Lending;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class PaymentController extends Controller
             'message' => 'Succeed',
         ], JsonResponse::HTTP_OK);
     }
-    
+
     public function getPaymentsForLending(Request $request, $idLending)
     {
         try {
@@ -98,13 +99,13 @@ class PaymentController extends Controller
             'message' => 'Succeed',
         ], JsonResponse::HTTP_OK);
     }
-    
+
     public function getPaymentsFromListCurrentDate(Request $request, $idList)
     {
         $date = date("Y-m-d");
         $firstDate = date("Y-m-d H:i:s", (strtotime(date($date))));
         $endDate = date("Y-m-d H:i:s", (strtotime(date($date)) + 86399));
-        
+
         try {
             $idUserSesion = $request->user()->id;
             $items = Payment::select('payments.*')
@@ -133,7 +134,7 @@ class PaymentController extends Controller
     {
         try {
             $items = Payment::where('id', '=', $id)->first();
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -155,7 +156,7 @@ class PaymentController extends Controller
     {
         try {
             $idUserSesion = $request->user()->id;
-            
+
             $item = Payment::create([
                 'lending_id' => $request->lending_id,
                 'date' => $request->date,
@@ -167,7 +168,7 @@ class PaymentController extends Controller
                 'type' => $request->type,
                 'status' => $request->status,
             ]);
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -222,7 +223,16 @@ class PaymentController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $items = Payment::destroy($id);
+            $payment = Payment::find($id);
+            $status = Payment::destroy($id);
+            $lending = Lending::find($payment->lending_id);
+            if ($lending && ($lending->status == 'closed' || $lending->status == 'renovated')) {
+                $lending->update([
+                    'status' => 'open',
+                    'type' => 'FALSO',
+                ]);
+            }
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
@@ -235,7 +245,7 @@ class PaymentController extends Controller
         }
 
         return response()->json([
-            'data' => $items,
+            'data' => $status,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
     }
