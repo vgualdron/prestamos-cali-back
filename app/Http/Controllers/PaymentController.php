@@ -229,7 +229,7 @@ class PaymentController extends Controller
             if ($lending && ($lending->status == 'closed' || $lending->status == 'renovated')) {
                 $lending->update([
                     'status' => 'open',
-                    'type' => 'FALSO',
+                    'type' => 'F',
                 ]);
             }
 
