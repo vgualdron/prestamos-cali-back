@@ -26,19 +26,44 @@
             try {
                 $dates = $this->getDatesOfWeek($date, $moment);
 
-                $sql = $this->diary->from('diaries as d')
+                $sql = $this->diary
+                    ->from('diaries as d')
                     ->select(
                         'd.id',
                         'd.user_id',
                         'u.name as userName',
                         'd.date',
                         'd.new_id',
+                        'n.name as new_name',
+                        'n.address as new_address',
+                        'n.address_work',
+                        'n.address_house',
+                        'n.site_visit',
+                        'n.district as new_district',
+                        'b.name as new_districtName',
+                        'b.order as new_districtOrder',
+                        'dh.name as new_districtHouseName',
+                        'dh.order as new_districtHouseOrder',
+                        'dw.name as new_districtWorkName',
+                        'dw.order as new_districtWorkOrder',
+                        'n.occupation as new_occupation',
+                        'n.phone as new_phone',
+                        'n.status as new_status',
                         'd.status',
                         'd.observation',
+                        's.name as sectorName',
+                        'n.visit_start_date',
+                        'n.visit_end_date',
                     )
                     ->leftJoin('users as u', 'd.user_id', 'u.id')
                     ->leftJoin('news as n', 'd.new_id', 'n.id')
+                    ->leftJoin('yards as s', 'n.sector', 's.id')
+                    ->leftJoin('districts as b', 'n.district', 'b.id')
+                    ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
+                    ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
                     ->where('user_id', $user)
+                    // ->where('date', "$valueDate $valueDay")
+                    // ->orderBy('date', 'ASC')
                     ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"])
                     ->orderBy('date', 'ASC')
                     ->get();
