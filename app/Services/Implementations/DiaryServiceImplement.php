@@ -62,9 +62,15 @@
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
                     ->where('user_id', $user)
-                    // ->where('date', "$valueDate $valueDay")
-                    // ->orderBy('date', 'ASC')
-                    ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"])
+                    ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"]) // TO DO, ajustar para que muestre solo las visitas adegndadas o en visitando, o las del dia actual.
+                    ->orderByRaw("
+                        CASE
+                            WHEN n.site_visit = 'casa' THEN dh.order
+                            WHEN n.site_visit = 'trabajo' THEN dw.order
+                            ELSE d.date
+                        END
+                    ")
+                    ->orderBy('date', 'ASC')
                     ->orderBy('date', 'ASC')
                     ->get();
 
@@ -473,7 +479,7 @@
         function create(array $diary) {
             try {
                 $sql = $this->diary::create([
-                    'date' => $diary['date'],
+                    'date' => $diary['date'] . ' ' . date('H:i:s'),
                     'user_id' => $diary['user_id'],
                     'new_id' => $diary['new_id'],
                     'status' => $diary['status'],
