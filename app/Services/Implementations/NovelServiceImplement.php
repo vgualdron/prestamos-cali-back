@@ -296,7 +296,7 @@
                 $sql .= " GROUP BY
                         lendings.id, news.id, districts.id, address_data.address_type, address_data.address, address_data.district
                     HAVING
-                        days_since_creation > 19
+                        days_since_creation > 22
                     ORDER BY
                         CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC,
                         SUBSTRING_INDEX(districts.order, ' ', -1) ASC,
