@@ -202,9 +202,11 @@
                 ->join('news as n', 'd.new_id', 'n.id')
                 ->leftJoin('yards as s', 'n.sector', 's.id')
                 ->leftJoin('districts as b', 'n.district', 'b.id')
-                ->where('date', "<=", "$date 23:59:59")
-                ->whereIn('n.status', ["visitando", "agendado", "aprobado"])
-                // ->whereDate('date', "<=", DB::raw("DATE_ADD($date, INTERVAL 2 DAY)"))
+                ->where(function ($query) use ($date) {
+                    $query->where('n.status', 'aprobado')
+                        ->where('date', '<=', "$date 23:59:59")
+                        ->orWhereIn('n.status', ['visitando', 'agendado']);
+                })
                 ->orderBy('date', 'ASC')
                 ->get();
 
