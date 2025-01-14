@@ -207,6 +207,7 @@
                         ->where('date', '<=', "$date 23:59:59")
                         ->orWhereIn('n.status', ['visitando', 'agendado']);
                 })
+                ->orWhere('d.status', 'pendiente')
                 ->orderBy('date', 'ASC')
                 ->get();
 
