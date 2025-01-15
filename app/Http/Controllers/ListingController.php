@@ -463,7 +463,7 @@ class ListingController extends Controller
                     AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 15
                 GROUP BY
                     lendings.id, listings.id
-                HAVING interes >= pagado
+                HAVING interes > pagado
             ) AS subquery'))
             ->selectRaw('COUNT(*) as total_count, SUM(pendiente) as total_pendiente')
             ->first();
@@ -561,7 +561,7 @@ class ListingController extends Controller
                     AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 21
                 GROUP BY
                     lendings.id, listings.id
-                HAVING interes >= pagado
+                HAVING interes > pagado
             ) AS subquery'))
             ->selectRaw('COUNT(*) as total_count, SUM(pendiente) as total_pendiente')
             ->first();
