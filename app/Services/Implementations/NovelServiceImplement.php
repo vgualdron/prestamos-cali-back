@@ -92,8 +92,8 @@
                         'n.score_observation',
                         'n.account_active',
                         'n.updated_at',
-                        'dia.id',
-                        'dia.status',
+                        'dia.id as diary_id',
+                        'dia.status as diary_status',
                     )
                     ->leftJoin('diaries as dia', function ($join) {
                         $join->on('dia.new_id', '=', 'n.id')
