@@ -92,7 +92,13 @@
                         'n.score_observation',
                         'n.account_active',
                         'n.updated_at',
+                        'dia.id',
+                        'dia.status',
                     )
+                    ->leftJoin('diaries as dia', function ($join) {
+                        $join->on('dia.new_id', '=', 'n.id')
+                             ->where('dia.status', '!=', 'finalizado');
+                    })
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
                     ->leftJoin('users as u', 'n.user_send', 'u.id')
@@ -652,7 +658,10 @@
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
                     ->leftJoin('users as u', 'n.user_send', 'u.id')
-                    ->leftJoin('diaries as d', 'd.new_id', 'n.id')
+                    ->leftJoin('diaries as d', function ($join) {
+                        $join->on('d.new_id', '=', 'n.id')
+                             ->where('d.status', '!=', 'finalizado');
+                    })
                     ->leftJoin('users as us', 'us.id', 'd.user_id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('yards as yh', 'dh.sector', 'yh.id')
