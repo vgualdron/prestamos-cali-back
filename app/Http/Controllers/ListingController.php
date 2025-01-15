@@ -402,7 +402,6 @@ class ListingController extends Controller
         try {
             $idUserSesion = $request->user()->id;
             $date = date("Y-m-d");
-            echo $date;
 
             $yellow = DB::table(DB::raw('(
                 SELECT
