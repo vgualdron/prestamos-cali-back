@@ -334,6 +334,19 @@
                     ], Response::HTTP_BAD_REQUEST);
                 } */
                 $message = 'Nuevo registrado con éxito';
+                $newItem = $this->novel->from('news as n')->select('n.*')->whereIn('n.status', ['creado', 'rechazado', 'borrador', 'agendado', 'visitando'])->first();
+
+                if ($newItem) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Error al registrar',
+                                'detail' => 'Ya se registró un cliente con esos datos.'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+
                 $new = $this->novel->from('news as n')->select('n.*')->where('n.phone', $novel['phone'])->first();
 
                 DB::transaction(function () use ($novel, $new, &$message) {
