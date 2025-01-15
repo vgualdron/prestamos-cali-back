@@ -672,7 +672,7 @@ class ListingController extends Controller
             $paymentsToday = DB::selectOne("
                             SELECT
                                 listings.id AS listing_id,
-                                CURRENT_DATE AS d,
+                                " .date('Y-m-d'). " AS d,
                                 COALESCE(SUM(p.amount), 0) AS total_payments
                             FROM
                                 listings
