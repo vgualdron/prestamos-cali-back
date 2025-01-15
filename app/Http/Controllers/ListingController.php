@@ -525,7 +525,7 @@ class ListingController extends Controller
                     lendings.status = "open"
                     AND listings.id = '. $idList .'
                     AND DATEDIFF(CURRENT_DATE, lendings.firstDate) >= 16
-                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 23
+                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 21
                 GROUP BY
                     lendings.id, listings.id
             ) AS subquery'))
@@ -557,7 +557,7 @@ class ListingController extends Controller
                     lendings.status = "open"
                     AND listings.id = '. $idList .'
                     AND DATEDIFF(CURRENT_DATE, lendings.firstDate) >= 16
-                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 23
+                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 21
                 GROUP BY
                     lendings.id, listings.id
                 HAVING interes >= pagado
@@ -590,7 +590,7 @@ class ListingController extends Controller
                     lendings.status = "open"
                     AND listings.id = '. $idList .'
                     AND DATEDIFF(CURRENT_DATE, lendings.firstDate) >= 16
-                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 23
+                    AND DATEDIFF(CURRENT_DATE, lendings.firstDate) <= 21
                 GROUP BY
                     lendings.id, listings.id
                 HAVING interes <= pagado
@@ -669,6 +669,26 @@ class ListingController extends Controller
                                 listings.id;
                         ');
 
+            $paymentsToday = DB::selectOne('
+                            SELECT
+                                listings.id AS listing_id,
+                                CURRENT_DATE AS d,
+                                COALESCE(SUM(p.amount), 0) AS total_payments
+                            FROM
+                                listings
+                            INNER JOIN
+                                lendings ON lendings.listing_id = listings.id
+                            LEFT JOIN
+                                payments p ON lendings.id = p.lending_id
+                                AND p.date IS NOT NULL
+                                AND DATE(p.date) = CURRENT_DATE
+                                AND p.is_valid = 1
+                            WHERE
+                                lendings.listing_id = '. $idList .'
+                            GROUP BY
+                                listings.id;
+                        ');
+
             $days = DB::selectOne('
                             SELECT
                             IF(COUNT(DISTINCT DATE(created_at)) = 0, 1, COUNT(DISTINCT DATE(created_at))) + 1 AS days_work
@@ -690,6 +710,7 @@ class ListingController extends Controller
                 'renove' => $renove,
                 'capital' => $capital,
                 'payments' => $payments,
+                'paymentsToday' => $paymentsToday,
                 'days' => $days,
             ];
 
