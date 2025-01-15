@@ -690,7 +690,7 @@ class LendingController extends Controller
             $items = Lending::where('new_id', '=', $idNew)
                                 ->with('payments')
                                 ->with('discounts')
-                                ->orderBy('order', 'asc')->get();
+                                ->orderBy('firstDate', 'desc')->get();
         } catch (Exception $e) {
             return response()->json([
                 'message' => [
