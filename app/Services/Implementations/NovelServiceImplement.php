@@ -334,7 +334,7 @@
                     ], Response::HTTP_BAD_REQUEST);
                 } */
                 $message = 'Nuevo registrado con éxito';
-                $newItem = $this->novel->from('news as n')->select('n.*')->whereIn('n.status', ['creado', 'rechazado', 'borrador', 'agendado', 'visitando'])->first();
+                $newItem = $this->novel->from('news as n')->select('n.*')->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando'])->first();
 
                 if ($newItem) {
                     return response()->json([
