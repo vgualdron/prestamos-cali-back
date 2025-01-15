@@ -157,17 +157,36 @@ class PaymentController extends Controller
         try {
             $idUserSesion = $request->user()->id;
 
-            $item = Payment::create([
-                'lending_id' => $request->lending_id,
-                'date' => $request->date,
-                'amount' => $request->amount,
-                'observation' => $request->observation ?? '',
-                'is_valid' => $request->is_valid,
-                'is_street' => $request->is_street ?? false,
-                'file_id' => $request->file_id,
-                'type' => $request->type,
-                'status' => $request->status,
-            ]);
+
+            $exists = Payment::select(
+                'payments.*',
+            )
+            ->where('payments.lending_id', $request->lending_id)
+            ->where('payments.type', 'renovacion')
+            ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error',
+                            'detail' => "Ya existe un registro con lending_id = " . $request->lending_id . " y type = 'renovacion'",
+                        ]
+                    ]
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            } else {
+                $item = Payment::create([
+                    'lending_id' => $request->lending_id,
+                    'date' => $request->date,
+                    'amount' => $request->amount,
+                    'observation' => $request->observation ?? '',
+                    'is_valid' => $request->is_valid,
+                    'is_street' => $request->is_street ?? false,
+                    'file_id' => $request->file_id,
+                    'type' => $request->type,
+                    'status' => $request->status,
+                ]);
+            }
 
         } catch (Exception $e) {
             return response()->json([
