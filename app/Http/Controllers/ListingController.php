@@ -683,7 +683,7 @@ class ListingController extends Controller
                             LEFT JOIN
                                 payments p ON lendings.id = p.lending_id
                                 AND p.date IS NOT NULL
-                                AND DATE(p.date) = " .$date ."
+                                AND DATE(p.date) = '" .$date ."'
                                 AND p.is_valid = 1
                             WHERE
                                 lendings.listing_id = ". $idList ."
