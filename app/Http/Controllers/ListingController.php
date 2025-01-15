@@ -401,6 +401,7 @@ class ListingController extends Controller
         $data = null;
         try {
             $idUserSesion = $request->user()->id;
+            $date = date("Y-m-d");
 
             $yellow = DB::table(DB::raw('(
                 SELECT
@@ -672,7 +673,7 @@ class ListingController extends Controller
             $paymentsToday = DB::selectOne("
                             SELECT
                                 listings.id AS listing_id,
-                                " .date('Y-m-d'). " AS d,
+                                " .$date. " AS d,
                                 COALESCE(SUM(p.amount), 0) AS total_payments
                             FROM
                                 listings
@@ -681,7 +682,7 @@ class ListingController extends Controller
                             LEFT JOIN
                                 payments p ON lendings.id = p.lending_id
                                 AND p.date IS NOT NULL
-                                AND DATE(p.date) = " . date('Y-m-d') ."
+                                AND DATE(p.date) = " .$date ."
                                 AND p.is_valid = 1
                             WHERE
                                 lendings.listing_id = ". $idList ."
