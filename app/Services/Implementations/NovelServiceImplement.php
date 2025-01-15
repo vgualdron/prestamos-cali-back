@@ -97,7 +97,7 @@
                     )
                     ->leftJoin('diaries as dia', function ($join) {
                         $join->on('dia.new_id', '=', 'n.id')
-                             ->where('dia.status', '!=', 'finalizado');
+                             ->where('dia.status', '!=', 'finalizada');
                     })
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
@@ -660,7 +660,7 @@
                     ->leftJoin('users as u', 'n.user_send', 'u.id')
                     ->leftJoin('diaries as d', function ($join) {
                         $join->on('d.new_id', '=', 'n.id')
-                             ->where('d.status', '!=', 'finalizado');
+                             ->where('d.status', '!=', 'finalizada');
                     })
                     ->leftJoin('users as us', 'us.id', 'd.user_id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
