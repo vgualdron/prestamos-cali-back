@@ -670,7 +670,6 @@ class ListingController extends Controller
                         ');
 
             $paymentsToday = DB::selectOne("
-                            SET time_zone = '-05:00';
                             SELECT
                                 listings.id AS listing_id,
                                 CURRENT_DATE AS d,
