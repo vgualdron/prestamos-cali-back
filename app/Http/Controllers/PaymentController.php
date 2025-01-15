@@ -162,7 +162,7 @@ class PaymentController extends Controller
                 'payments.*',
             )
             ->where('payments.lending_id', $request->lending_id)
-            ->where('payments.type', 'nequi')
+            ->where('payments.type', 'renovacion')
             ->exists();
 
             if ($exists) {
