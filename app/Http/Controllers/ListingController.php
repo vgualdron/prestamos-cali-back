@@ -669,7 +669,7 @@ class ListingController extends Controller
                                 listings.id;
                         ');
 
-            $paymentsToday = DB::selectOne('
+            $paymentsToday = DB::selectOne("
                             SET time_zone = '-05:00';
                             SELECT
                                 listings.id AS listing_id,
@@ -685,10 +685,10 @@ class ListingController extends Controller
                                 AND DATE(p.date) = CURRENT_DATE
                                 AND p.is_valid = 1
                             WHERE
-                                lendings.listing_id = '. $idList .'
+                                lendings.listing_id = ". $idList ."
                             GROUP BY
                                 listings.id;
-                        ');
+                        ");
 
             $days = DB::selectOne('
                             SELECT
