@@ -298,34 +298,38 @@ class LendingController extends Controller
             $idList = 1;
             $idUserExpense = 1;
 
-            $result = DB::select("SELECT
-                                lis.id as id,
-                                lis.name as name,
-                                lis.user_id_collector as user_id,
-                                COALESCE(SUM(len.amount), 0) AS capital
-                                FROM listings lis
-                                LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
-                                WHERE lis.city_id =".$city."
-                                GROUP BY lis.id
-                                ORDER BY COALESCE(SUM(len.amount), 0) ASC;");
+            $result = DB::selectOne("SELECT
+                            lis.id as id,
+                            lis.name as name,
+                            lis.user_id_collector as user_id,
+                            lis.city_id as city_id,
+                            COALESCE(SUM(len.amount), 0) AS capital
+                        FROM listings lis
+                        LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
+                        WHERE lis.city_id = ?
+                        AND lis.status = 'activa'
+                        GROUP BY lis.id
+                        ORDER BY COALESCE(SUM(len.amount), 0) ASC
+                        LIMIT 1", [$city]);
 
-            if ($userSend) {
-                $result = DB::select("SELECT
+            if ($userSend && $city == $result->city_id) {
+                $result = DB::selectOne("SELECT
                     lis.id as id,
                     lis.name as name,
                     lis.user_id_collector as user_id,
                     COALESCE(SUM(len.amount), 0) AS capital
-                    FROM listings lis
-                    LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
-                    WHERE lis.user_id_collector =".$userSend."
-                    GROUP BY lis.id
-                    ORDER BY COALESCE(SUM(len.amount), 0) ASC;");
+                FROM listings lis
+                LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
+                WHERE lis.user_id_collector = ?
+                AND lis.status = 'activa'
+                GROUP BY lis.id
+                ORDER BY COALESCE(SUM(len.amount), 0) ASC
+                LIMIT 1", [$userSend]);
             }
 
-            if (!empty($result)) {
-                $firstRow = $result[0];
-                $idList = $firstRow->id;
-                $idUserExpense = $firstRow->user_id;
+            if ($result) {
+                $idList = $result->id;
+                $idUserExpense = $result->user_id;
             }
 
             $statusLending = Lending::create([
