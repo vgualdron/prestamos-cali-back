@@ -623,7 +623,6 @@
                         'd.id as diary_id',
                         'd.status as diary_status',
                         'y.id as sector',
-                        'z.id as city',
                         'yh.id as sectorHouse',
                         'zh.id as cityHouse',
                         'yw.id as sectorWork',
