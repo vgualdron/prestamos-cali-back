@@ -202,6 +202,7 @@
                 ->join('news as n', 'd.new_id', 'n.id')
                 ->leftJoin('yards as s', 'n.sector', 's.id')
                 ->leftJoin('districts as b', 'n.district', 'b.id')
+                ->where('d.status', '<>' , 'cancelada')
                 ->where(function ($query) use ($date) {
                     $query->where('n.status', 'aprobado')
                         ->where('date', '<=', "$date 23:59:59")
