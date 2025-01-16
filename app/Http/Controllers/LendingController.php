@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Expense;
 use App\Models\File;
 use App\Models\Listing;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -312,19 +313,27 @@ class LendingController extends Controller
                         ORDER BY COALESCE(SUM(len.amount), 0) ASC
                         LIMIT 1", [$city]);
 
-            if ($userSend && $city == $result->city_id) {
-                $result = DB::selectOne("SELECT
-                    lis.id as id,
-                    lis.name as name,
-                    lis.user_id_collector as user_id,
-                    COALESCE(SUM(len.amount), 0) AS capital
-                FROM listings lis
-                LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
-                WHERE lis.user_id_collector = ?
-                AND lis.status = 'activa'
-                GROUP BY lis.id
-                ORDER BY COALESCE(SUM(len.amount), 0) ASC
-                LIMIT 1", [$userSend]);
+
+            $resultUserSend = null;
+
+            if ($userSend) {
+                $resultUserSend = DB::selectOne("SELECT
+                                lis.id as id,
+                                lis.name as name,
+                                lis.user_id_collector as user_id,
+                                lis.city_id as city_id,
+                                COALESCE(SUM(len.amount), 0) AS capital
+                            FROM listings lis
+                            LEFT JOIN lendings as len ON lis.id = len.listing_id AND len.status = 'open'
+                            WHERE lis.user_id_collector = ?
+                            AND lis.status = 'activa'
+                            GROUP BY lis.id
+                            ORDER BY COALESCE(SUM(len.amount), 0) ASC
+                            LIMIT 1", [$userSend]);
+            }
+
+            if ($resultUserSend && $city == $resultUserSend->city_id ) {
+                $result = $resultUserSend;
             }
 
             if ($result) {
