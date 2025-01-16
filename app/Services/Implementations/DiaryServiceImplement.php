@@ -444,7 +444,7 @@
                 $sqlNovel = $this->novel::find($diary['id']);
                 if(!empty($sqlDiary) && !empty($sqlNovel)) {
                      DB::transaction(function () use ($sqlDiary, $sqlNovel, $diary) {
-                        $sqlDiary->status = 'finalizada';
+                        $sqlDiary->status = $diary['novel_status'] == 'pendiente' ? 'cancelada' : 'finalizada';
                         $sqlDiary->save();
 
                         $sqlNovel->observation = $diary['novel_observation'];
