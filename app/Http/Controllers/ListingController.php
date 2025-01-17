@@ -317,7 +317,7 @@ class ListingController extends Controller
 
             $itemPaymentRejects = Payment::selectRaw('
                         COUNT(*) as total_count,
-                        COALESCE(SUM(payments.amount), 0) as total_amount,
+                        COALESCE(SUM(payments.amount), 0) as total_amount
                     ')
                     ->join('lendings', 'lendings.id', '=', 'payments.lending_id')
                     ->whereBetween('payments.date', [$date." 00:00:00", $date." 23:59:59"])
