@@ -165,7 +165,7 @@ class PaymentController extends Controller
             ->where('payments.type', 'renovacion')
             ->exists();
 
-            if ($exists) {
+            if ($exists && $request->type === 'renovacion') {
                 return response()->json([
                     'message' => [
                         [
