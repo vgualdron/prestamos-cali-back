@@ -9,6 +9,7 @@ use App\Models\Expense;
 use App\Models\File;
 use App\Models\Listing;
 use App\Models\User;
+use App\Models\Discount;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -516,6 +517,7 @@ class LendingController extends Controller
             $idList = $item->listing_id;
             $amount = $request->amount;
             $repayment = $request->repayment;
+            $discount = $request->discount;
 
             $idUserExpense = 1;
 
@@ -568,6 +570,16 @@ class LendingController extends Controller
                     'is_valid' => 1,
                     'date_transaction' => $currentDate,
                 ]);
+
+                if ($discount < 0) {
+                    $itemDiscount = Discount::create([
+                        'lending_id' => $itemLending->id,
+                        'date' => $currentDate,
+                        'amount' => $discount * (-1),
+                        'status' => 'aprobado',
+                        'observation' => 'DESCUENTO CREADO EDSDE EL PAGO DE LA ANTERIOR CARTULINA POR SALDO NEGATIVO',
+                    ]);
+                }
             }
 
         } catch (Exception $e) {
