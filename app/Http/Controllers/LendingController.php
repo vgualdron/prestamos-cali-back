@@ -577,7 +577,7 @@ class LendingController extends Controller
                         'date' => $currentDate,
                         'amount' => $discount * (-1),
                         'status' => 'aprobado',
-                        'observation' => 'DESCUENTO CREADO EDSDE EL PAGO DE LA ANTERIOR CARTULINA POR SALDO NEGATIVO',
+                        'observation' => 'DESCUENTO CREADO DESDE EL PAGO DE LA ANTERIOR CARTULINA POR SALDO NEGATIVO',
                     ]);
                 }
             }
