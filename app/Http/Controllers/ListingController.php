@@ -315,6 +315,15 @@ class ListingController extends Controller
                         ->where('listing_id', $idList)
                         ->first();
 
+            $itemPaymentRejects = Payment::selectRaw('
+                        COUNT(*) as total_count,
+                        COALESCE(SUM(payments.amount), 0) as total_amount,
+                    ')
+                    ->join('lendings', 'lendings.id', '=', 'payments.lending_id')
+                    ->whereBetween('payments.date', [$date." 00:00:00", $date." 23:59:59"])
+                    ->where('lendings.listing_id', $idList)
+                    ->first();
+
             $data = [
                 'itemList' => $itemList,
                 'itemPayment' => $itemPayment,
@@ -322,6 +331,7 @@ class ListingController extends Controller
                 'itemNovel' => $itemNovel,
                 'itemExpense' => $itemExpense,
                 'itemDelivery' => $itemDelivery,
+                'itemPaymentRejects' => $itemPaymentRejects,
                 'date' => $date,
             ];
 
