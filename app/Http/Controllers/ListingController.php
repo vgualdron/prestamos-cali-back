@@ -322,6 +322,7 @@ class ListingController extends Controller
                     ->join('lendings', 'lendings.id', '=', 'payments.lending_id')
                     ->whereBetween('payments.date', [$date." 00:00:00", $date." 23:59:59"])
                     ->where('lendings.listing_id', $idList)
+                    ->where('payments.status', 'rechazado')
                     ->first();
 
             $data = [
