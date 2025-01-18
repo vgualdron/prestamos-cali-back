@@ -62,7 +62,8 @@
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
                     ->where('user_id', $user)
-                    ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"]) // TO DO, ajustar para que muestre solo las visitas adegndadas o en visitando, o las del dia actual.
+                    // ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"])
+                    ->where('date', '>' ,"$dates[0] 00:00:00")
                     ->orderByRaw("DATE(d.date) ASC")
                     ->orderByRaw("
                         CASE
