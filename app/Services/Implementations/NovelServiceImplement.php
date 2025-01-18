@@ -137,159 +137,137 @@
         function listReds(int $city, int $user) {
             try {
 
-                $sql = "SELECT
-                        ROW_NUMBER() OVER (ORDER BY
-                            CAST(SUBSTRING_INDEX(districts.order, ' ', 1) AS UNSIGNED) ASC,
-                            SUBSTRING_INDEX(districts.order, ' ', -1) ASC,
-                            lendings.id ASC
-                        ) AS 'order',
-                        lendings.id AS lending_id,
-                        lendings.amount,
-                        lendings.percentage,
-                        lendings.has_double_interest,
-                        lendings.status,
-                        lendings.order as lending_order,
-                        listings.name as listing_name,
-                        listings.id as listing_id,
-                        COALESCE(SUM(payments.amount), 0) AS total_paid,
-                        news.id AS news_id,
-                        news.name AS news_name,
-                        news.status AS news_status,
-                        news.observation AS news_observation,
-                        news.type_cv AS news_type_cv,
-                        lendings.firstDate,
-                        lendings.endDate,
-                        districts.name AS district_name,
-                        yards.name AS sector_name,
-                        yards.id AS sector_id,
-                        yards.code AS sector_code,
-                        zones.name AS city_name,
-                        zones.id AS city_id,
-                        DATEDIFF(CURRENT_DATE, lendings.firstDate) AS days_since_creation,
-                        (lendings.amount * (1 + lendings.percentage / 100)) AS total_value,
-                        (lendings.amount * (1 +
-                            CASE
-                                WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
-                                ELSE lendings.percentage / 100
-                            END
-                        )) AS total_due,
-                        (lendings.amount * (1 +
-                            CASE
-                                WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
-                                ELSE lendings.percentage / 100
-                            END
-                        ) - COALESCE(SUM(payments.amount), 0)) AS remaining_balance,
-                        address_data.address_type,
-                        address_data.address_name,
-                        address_data.address,
-                        address_data.district,
-                        address_data.address_latitude,
-                        address_data.address_longitude,
-                        districts.order AS district_order,
-                        redcollectors.collector_id AS collector_id,
-                        users.name AS collector_name,
-                        (SELECT id
+                $sql = "WITH latest_reddirections AS (
+                            SELECT
+                                address,
+                                type_ref,
+                                status,
+                                MAX(registered_date) AS latest_date,
+                                id
                             FROM reddirections
-                            WHERE address = address_data.address
-                            AND type_ref = address_data.address_type
-                            AND status IN ('creado', 'activo')
-                            ORDER BY registered_date DESC
-                            LIMIT 1
-                        ) AS is_current,
-                        (SELECT start_date
-                            FROM reddirections
-                            WHERE address = address_data.address
-                            AND type_ref = address_data.address_type
-                            AND status IN ('creado', 'activo')
-                            ORDER BY registered_date DESC
-                            LIMIT 1
-                        ) AS reddirection_start_date,
-                        (SELECT id
-                            FROM reddirections
-                            WHERE address = address_data.address
-                            AND type_ref = address_data.address_type
-                            AND status IN ('aprobado', 'rechazado')
-                            ORDER BY registered_date DESC
-                            LIMIT 1
-                        ) AS has_visited
-                    FROM
-                        lendings
-                    LEFT JOIN
-                        listings ON lendings.listing_id = listings.id
-                    LEFT JOIN
-                        payments ON lendings.id = payments.lending_id
-                    LEFT JOIN
-                        news ON lendings.new_id = news.id
-                    LEFT JOIN (
+                            WHERE status IN ('creado', 'activo', 'aprobado', 'rechazado')
+                            GROUP BY address, type_ref, status
+                        )
                         SELECT
-                            news.id as new_id,
-                            'CASA' AS address_type,
-                            'CASA' AS address_name,
-                            address_house AS address,
-                            address_house_district AS district,
-                        	(SELECT latitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_CLIENTE' LIMIT 1) AS address_latitude,
-                        	(SELECT longitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_CLIENTE' LIMIT 1) AS address_longitude
-                        FROM news
-                        WHERE address_house IS NOT NULL AND address_house_district IS NOT NULL
-                        UNION ALL
-                        SELECT
-                            news.id as new_id,
-                            'TRABAJO' AS address_type,
-                            'TRABAJO' AS address_name,
-                            address_work,
-                            address_work_district,
-                        	(SELECT latitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CERTIFICADO_TRABAJO_CLIENTE' LIMIT 1) AS address_latitude,
-                        	(SELECT longitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CERTIFICADO_TRABAJO_CLIENTE' LIMIT 1) AS address_longitude
-                        FROM news
-                        WHERE address_work IS NOT NULL AND address_work_district IS NOT NULL
-                        UNION ALL
-                        SELECT
-                            news.id as new_id,
-                            'REF 1' AS address_type,
-                            CONCAT(family_reference_name, ' | ', family_reference_relationship) AS address_name,
-                            family_reference_address,
-                            family_reference_district,
-                        	(SELECT latitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_REFERENCIA_FAMILIAR_1' LIMIT 1) AS address_latitude,
-                        	(SELECT longitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_REFERENCIA_FAMILIAR_1' LIMIT 1) AS address_longitude
-                        FROM news
-                        WHERE family_reference_address IS NOT NULL AND family_reference_district IS NOT NULL
-                        UNION ALL
-                        SELECT
-                            news.id as new_id,
-                            'REF 2' AS address_type,
-                            CONCAT(family2_reference_name, ' | ', family2_reference_relationship) AS address_name,
-                            family2_reference_address,
-                            family2_reference_district,
-                        	(SELECT latitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_REFERENCIA_FAMILIAR_2'LIMIT 1) AS address_latitude,
-                        	(SELECT longitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_REFERENCIA_FAMILIAR_2' LIMIT 1) AS address_longitude
-                        FROM news
-                        WHERE family2_reference_address IS NOT NULL AND family2_reference_district IS NOT NULL
-                        UNION ALL
-                        SELECT
-                            news.id as new_id,
-                            'FIADOR' AS address_type,
-                            CONCAT(guarantor_name, ' | ', guarantor_relationship) AS address_name,
-                            guarantor_address,
-                            guarantor_district,
-                        	(SELECT latitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_FIADOR' LIMIT 1) AS address_latitude,
-                        	(SELECT longitude FROM files WHERE model_name = 'news' AND model_id = news.id AND name = 'FOTO_CASA_FIADOR' LIMIT 1) AS address_longitude
-                        FROM news
-                        WHERE guarantor_address IS NOT NULL AND guarantor_district IS NOT NULL
-                    ) AS address_data ON news.id = address_data.new_id
-                    LEFT JOIN
-                        districts ON address_data.district = districts.id
-                    LEFT JOIN
-                        yards ON districts.sector = yards.id
-                    LEFT JOIN
-                        zones ON zones.id = yards.zone
-                    LEFT JOIN
-                        redcollectors ON redcollectors.sector_id = yards.id
-                    LEFT JOIN
-                        users ON redcollectors.collector_id = users.id
-                    WHERE
-                        lendings.status = 'open'
-                    AND news.status = 'consignado'
-                    AND lendings.order <> 0 "; // el order 0 es cuando se tiene a un cliente ene spera en cobro, y no quiere msotrarse en rojos
+                            ROW_NUMBER() OVER (
+                                ORDER BY
+                                    districts.order ASC,
+                                    lendings.id ASC
+                            ) AS 'order',
+                            lendings.id AS lending_id,
+                            lendings.amount,
+                            lendings.percentage,
+                            lendings.has_double_interest,
+                            lendings.status,
+                            lendings.order AS lending_order,
+                            listings.name AS listing_name,
+                            listings.id AS listing_id,
+                            COALESCE(payments.total_paid, 0) AS total_paid,
+                            news.id AS news_id,
+                            news.name AS news_name,
+                            news.status AS news_status,
+                            news.observation AS news_observation,
+                            news.type_cv AS news_type_cv,
+                            lendings.firstDate,
+                            lendings.endDate,
+                            districts.name AS district_name,
+                            yards.name AS sector_name,
+                            yards.id AS sector_id,
+                            yards.code AS sector_code,
+                            zones.name AS city_name,
+                            zones.id AS city_id,
+                            DATEDIFF(CURRENT_DATE, lendings.firstDate) AS days_since_creation,
+                            (lendings.amount * (1 + lendings.percentage / 100)) AS total_value,
+                            (lendings.amount * (1 +
+                                CASE
+                                    WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
+                                    ELSE lendings.percentage / 100
+                                END
+                            )) AS total_due,
+                            (lendings.amount * (1 +
+                                CASE
+                                    WHEN lendings.has_double_interest = 1 THEN lendings.percentage * 2 / 100
+                                    ELSE lendings.percentage / 100
+                                END
+                            ) - COALESCE(payments.total_paid, 0)) AS remaining_balance,
+                            address_data.address_type,
+                            address_data.address_name,
+                            address_data.address,
+                            address_data.district,
+                            districts.order AS district_order,
+                            redcollectors.collector_id AS collector_id,
+                            users.name AS collector_name,
+                            latest_reddirections.id AS is_current,
+                            latest_reddirections.latest_date AS reddirection_start_date
+                        FROM
+                            lendings
+                        LEFT JOIN listings ON lendings.listing_id = listings.id
+                        LEFT JOIN (
+                            SELECT
+                                lending_id,
+                                SUM(amount) AS total_paid
+                            FROM payments
+                            GROUP BY lending_id
+                        ) AS payments ON lendings.id = payments.lending_id
+                        LEFT JOIN news ON lendings.new_id = news.id
+                        LEFT JOIN (
+                            SELECT
+                                news.id AS new_id,
+                                'CASA' AS address_type,
+                                'CASA' AS address_name,
+                                address_house AS address,
+                                address_house_district AS district
+                            FROM news
+                            WHERE address_house IS NOT NULL AND address_house_district IS NOT NULL
+                            UNION ALL
+                            SELECT
+                                news.id AS new_id,
+                                'TRABAJO' AS address_type,
+                                'TRABAJO' AS address_name,
+                                address_work AS address,
+                                address_work_district AS district
+                            FROM news
+                            WHERE address_work IS NOT NULL AND address_work_district IS NOT NULL
+                            UNION ALL
+                            SELECT
+                                news.id AS new_id,
+                                'REF 1' AS address_type,
+                                CONCAT(family_reference_name, ' | ', family_reference_relationship) AS address_name,
+                                family_reference_address AS address,
+                                family_reference_district AS district
+                            FROM news
+                            WHERE family_reference_address IS NOT NULL AND family_reference_district IS NOT NULL
+                            UNION ALL
+                            SELECT
+                                news.id AS new_id,
+                                'REF 2' AS address_type,
+                                CONCAT(family2_reference_name, ' | ', family2_reference_relationship) AS address_name,
+                                family2_reference_address AS address,
+                                family2_reference_district AS district
+                            FROM news
+                            WHERE family2_reference_address IS NOT NULL AND family2_reference_district IS NOT NULL
+                            UNION ALL
+                            SELECT
+                                news.id AS new_id,
+                                'FIADOR' AS address_type,
+                                CONCAT(guarantor_name, ' | ', guarantor_relationship) AS address_name,
+                                guarantor_address AS address,
+                                guarantor_district AS district
+                            FROM news
+                            WHERE guarantor_address IS NOT NULL AND guarantor_district IS NOT NULL
+                        ) AS address_data ON news.id = address_data.new_id
+                        LEFT JOIN districts ON address_data.district = districts.id
+                        LEFT JOIN yards ON districts.sector = yards.id
+                        LEFT JOIN zones ON zones.id = yards.zone
+                        LEFT JOIN redcollectors ON redcollectors.sector_id = yards.id
+                        LEFT JOIN users ON redcollectors.collector_id = users.id
+                        LEFT JOIN latest_reddirections ON
+                            latest_reddirections.address = address_data.address
+                            AND latest_reddirections.type_ref = address_data.address_type
+                        WHERE
+                            lendings.status = 'open'
+                            AND news.status = 'consignado'
+                            AND lendings.order <> 0"; // el order 0 es cuando se tiene a un cliente en espera en cobro, y no quiere msotrarse en rojos
 
                 if ($city && $city > 0) {
                     $sql .= " AND zones.id = ".$city;
