@@ -7,7 +7,7 @@
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\DB;
-    
+
     class ReddirectionServiceImplement implements ReddirectionServiceInterface {
 
         use Commons;
@@ -18,7 +18,7 @@
         function __construct(ProfileValidator $profileValidator){
             $this->reddirection = new Reddirection;
             $this->profileValidator = $profileValidator;
-        }    
+        }
 
         function create(array $reddirection){
             try {
@@ -79,6 +79,7 @@
                                             'u.latitude as user_latitude',
                                             'u.longitude as user_longitude',
                                             'u.name as collector_name',
+                                            'u.push_token as collector_token',
                                         )
                                         ->leftJoin('lendings as l', 'l.id', 'rd.lending_id')
                                         ->leftJoin('news as n', 'n.id', 'l.new_id')
@@ -97,7 +98,7 @@
                 return response()->json([
                     'data' => $item
                 ], Response::HTTP_OK);
-                
+
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
@@ -196,7 +197,7 @@
                 return response()->json([
                     'data' => $item
                 ], Response::HTTP_OK);
-                
+
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
