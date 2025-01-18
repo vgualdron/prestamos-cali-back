@@ -142,6 +142,7 @@
                                 address,
                                 type_ref,
                                 status,
+                                start_date AS start_date,
                                 MAX(registered_date) AS latest_date,
                                 id
                             FROM reddirections
@@ -198,7 +199,7 @@
                             redcollectors.collector_id AS collector_id,
                             users.name AS collector_name,
                             latest_reddirections.id AS is_current,
-                            latest_reddirections.latest_date AS reddirection_start_date
+                            latest_reddirections.start_date AS reddirection_start_date
                         FROM
                             lendings
                         LEFT JOIN listings ON lendings.listing_id = listings.id
