@@ -190,7 +190,7 @@
                                         ->leftJoin('files as f1', 'f1.id', 'rd.file_id')
                                         ->leftJoin('files as f2', 'f2.id', 'rd.file2_id')
                                         ->where('rd.lending_id', $lending)
-                                        ->where('rd.status', 'activo')
+                                        ->whereIn('rd.status', ['activo', 'finalizado'])
                                         ->orderBy('rd.address', 'ASC')
                                         ->orderBy('rd.registered_date', 'DESC')
                                         ->get();
