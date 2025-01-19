@@ -80,6 +80,12 @@
                                             'u.longitude as user_longitude',
                                             'u.name as collector_name',
                                             'u.push_token as collector_token',
+                                            'f1.url as file_url',
+                                            'f1.latitude as file_latitude',
+                                            'f1.longitude as file_longitude',
+                                            'f2.url as file2_url',
+                                            'f2.latitude as file2_latitude',
+                                            'f2.longitude as file2_longitude',
                                         )
                                         ->leftJoin('lendings as l', 'l.id', 'rd.lending_id')
                                         ->leftJoin('news as n', 'n.id', 'l.new_id')
@@ -87,6 +93,8 @@
                                         ->leftJoin('districts as d', 'd.id', 'rd.district_id')
                                         ->leftJoin('yards as y', 'y.id', 'd.sector')
                                         ->leftJoin('users as u', 'u.id', 'rd.collector_id')
+                                        ->leftJoin('files as f1', 'f1.id', 'rd.file_id')
+                                        ->leftJoin('files as f2', 'f2.id', 'rd.file2_id')
                                         ->leftJoin('files as f', function($join) {
                                             $join->where('f.model_name', '=', 'news')
                                                  ->on('f.model_id', '=', 'n.id')
