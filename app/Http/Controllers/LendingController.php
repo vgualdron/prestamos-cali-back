@@ -207,7 +207,8 @@ class LendingController extends Controller
                 $join->on('questions.model_id', '=', 'news.id')
                      ->where('questions.model_name', '=', 'news')
                      ->where('questions.status', '<>', 'rechazado')
-                     ->where('questions.type', '=', 'nuevo-antiguo');
+                     ->where('questions.type', '=', 'nuevo-antiguo')
+                     ->on('questions.created_at', '>', 'lendings.updated_at');
             })
             ->leftJoin('files', function ($join) {
                 $join->on('files.model_id', '=', 'lendings.expense_id')
