@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Lending;
+use App\Models\File;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -250,6 +252,11 @@ class PaymentController extends Controller
                     'status' => 'open',
                     'type' => 'F',
                 ]);
+            }
+            if ($payment && $payment->file_id) {
+                $file = File::find($payment->file_id);
+                // Storage::disk('payments')->delete($file->name);
+                $fileStatus = File::destroy($payment->file_id);
             }
 
         } catch (Exception $e) {
