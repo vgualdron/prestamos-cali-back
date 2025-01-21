@@ -125,6 +125,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/diary"], function () {
     Route::put('/update-status/{id}', [DiaryController::class, 'updateStatus'])->name('diary.changeStatus');
     Route::delete('/delete/{id}', [DiaryController::class, 'delete'])->name('diary.delete');
     Route::get('/get/{id}', [DiaryController::class, 'get'])->name('diary.get');
+    Route::put('/complete-data/{id}', [DiaryController::class, 'completeData'])->name('diary.completeData');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/file"], function () {

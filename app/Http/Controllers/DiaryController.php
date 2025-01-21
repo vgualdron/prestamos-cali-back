@@ -12,7 +12,7 @@ class DiaryController extends Controller
     private $service;
     private $request;
 
-    public function __construct(Request $request, DiaryServiceImplement $service) { 
+    public function __construct(Request $request, DiaryServiceImplement $service) {
         $this->request = $request;
         $this->service = $service;
     }
@@ -20,7 +20,7 @@ class DiaryController extends Controller
     function list(string $date, int $user, string $moment){
         return $this->service->list($date, $user, $moment);
     }
-    
+
     function listDayByDay(string $date, int $user, string $moment){
         return $this->service->listDayByDay($date, $user, $moment);
     }
@@ -40,7 +40,7 @@ class DiaryController extends Controller
         $data['idUserSesion'] = $idUserSesion;
         return $this->service->approveVisit($data);
     }
-    
+
     function create(){
         return $this->service->create($this->request->all());
     }
@@ -48,11 +48,28 @@ class DiaryController extends Controller
     function update(int $id){
         return $this->service->update($this->request->all(), $id);
     }
-    
+
     function updateStatus(int $id){
         return $this->service->updateStatus($this->request->all(), $id);
     }
- 
+
+    function completeData(int $id) {
+
+        try {
+            $item = Diary::find($id)->update($this->request->all());
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => [],
+                'message'=>$e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return response()->json([
+            'data' => $item,
+            'message' => 'Succeed'
+        ], JsonResponse::HTTP_OK);
+    }
+
     function delete(int $id){
         return $this->service->delete($id);
     }
