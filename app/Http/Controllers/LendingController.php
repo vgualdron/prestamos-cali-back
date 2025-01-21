@@ -316,6 +316,7 @@ class LendingController extends Controller
                         LIMIT 1", [$city]);
 
 
+            $resultUser = null;
             $resultUserSend = null;
 
             if ($userSend) {
@@ -332,10 +333,25 @@ class LendingController extends Controller
                             GROUP BY lis.id
                             ORDER BY COALESCE(SUM(len.amount), 0) ASC
                             LIMIT 1", [$userSend]);
+
+                $resultUser = DB::selectOne("SELECT
+                                l.id as id,
+                                l.name as listing_name,
+                                l.city_id as city_id,
+                                l.user_id_collector as user_id
+                            FROM users u
+                            LEFT JOIN listings as l ON l.id = u.favorite_listing
+                            WHERE u.id = ?
+                            AND l.status = 'activa'
+                            LIMIT 1", [$userSend]);
             }
 
             if ($resultUserSend && $city == $resultUserSend->city_id ) {
                 $result = $resultUserSend;
+            }
+
+            if ($resultUser && $city == $resultUser->city_id ) { // se da prioridad a la ruta favorita de la persona que registró la dirección
+                $result = $resultUser;
             }
 
             if ($result) {
