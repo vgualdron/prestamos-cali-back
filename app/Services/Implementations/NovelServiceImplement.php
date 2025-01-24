@@ -199,7 +199,7 @@
                             redcollectors.collector_id AS collector_id,
                             users.name AS collector_name,
                             latest_reddirections.id AS is_current,
-                            latest_reddirections.start_date AS reddirection_start_date
+                            latest_reddirections.start_date AS reddirection_start_date,
                             latest_reddirections.end_date AS reddirection_end_date
                         FROM
                             lendings
