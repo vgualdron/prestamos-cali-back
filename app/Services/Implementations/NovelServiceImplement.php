@@ -143,6 +143,7 @@
                                 type_ref,
                                 status,
                                 start_date AS start_date,
+                                end_date AS end_date,
                                 MAX(registered_date) AS latest_date,
                                 id
                             FROM reddirections
