@@ -147,7 +147,7 @@
                                 MAX(registered_date) AS latest_date,
                                 id
                             FROM reddirections
-                            WHERE status IN ('creado', 'activo', 'aprobado', 'rechazado')
+                            WHERE status IN ('creado', 'activo', 'aprobado', 'rechazado', 'finalizado')
                             GROUP BY address, type_ref, status
                         )
                         SELECT
