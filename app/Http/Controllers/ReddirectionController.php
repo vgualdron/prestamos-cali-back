@@ -12,7 +12,7 @@ class ReddirectionController extends Controller
     private $service;
     private $request;
 
-    public function __construct(Request $request, ReddirectionServiceImplement $service) { 
+    public function __construct(Request $request, ReddirectionServiceImplement $service) {
         $this->request = $request;
         $this->service = $service;
     }
@@ -35,5 +35,9 @@ class ReddirectionController extends Controller
 
     function getByLending(int $lending){
         return $this->service->getByLending($lending);
+    }
+
+    function delete(int $id){
+        return $this->service->delete($id);
     }
 }

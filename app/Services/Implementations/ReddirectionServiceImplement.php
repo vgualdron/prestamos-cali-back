@@ -217,5 +217,40 @@
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+
+        function delete(int $id){
+            try {
+                $sql = $this->reddirection::find($id);
+                if(!empty($sql)) {
+                    $sql->delete();
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Eliminado con éxito',
+                                'detail' => null
+                            ]
+                        ]
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar',
+                                'detail' => 'El registro no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al eliminar',
+                            'detail' => $e->getMessage(),
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 ?>

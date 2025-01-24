@@ -244,6 +244,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/reddirections"], functi
     Route::get('/get-current-by-user/{user}', [ReddirectionController::class, 'getCurrentByUser'])->name('reddirections.getCurrentByUser');
     Route::get('/get-by-lending/{lending}', [ReddirectionController::class, 'getByLending'])->name('reddirections.getByLending');
     Route::put('/{id}', [ReddirectionController::class, 'update'])->name('reddirection.update');
+    Route::delete('/{id}', [ReddirectionController::class, 'delete'])->name('reddirection.delete');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/delivery"], function () {
