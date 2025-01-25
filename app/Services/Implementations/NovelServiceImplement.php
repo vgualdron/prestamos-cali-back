@@ -663,6 +663,7 @@
                     ->leftJoin('users as ul', 'n.lent_by', 'ul.id')
                     ->leftJoin('users as ua', 'n.approved_by', 'ua.id')
                     ->where('n.id', $id)
+                    ->orderBy('d.date', 'desc')
                     ->first();
                 if(!empty($sql)) {
                     return response()->json([
