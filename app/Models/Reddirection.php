@@ -30,6 +30,7 @@ class Reddirection extends Model
         'value',
         'file_id',
         'file2_id',
+        'file3_id',
         'status',
         'attended',
         'solution',

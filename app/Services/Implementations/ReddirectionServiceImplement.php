@@ -86,6 +86,9 @@
                                             'f2.url as file2_url',
                                             'f2.latitude as file2_latitude',
                                             'f2.longitude as file2_longitude',
+                                            'f3.url as file3_url',
+                                            'f3.latitude as file3_latitude',
+                                            'f3.longitude as file3_longitude',
                                         )
                                         ->leftJoin('lendings as l', 'l.id', 'rd.lending_id')
                                         ->leftJoin('news as n', 'n.id', 'l.new_id')
@@ -95,6 +98,7 @@
                                         ->leftJoin('users as u', 'u.id', 'rd.collector_id')
                                         ->leftJoin('files as f1', 'f1.id', 'rd.file_id')
                                         ->leftJoin('files as f2', 'f2.id', 'rd.file2_id')
+                                        ->leftJoin('files as f3', 'f3.id', 'rd.file3_id')
                                         ->leftJoin('files as f', function($join) {
                                             $join->where('f.model_name', '=', 'news')
                                                  ->on('f.model_id', '=', 'n.id')
@@ -130,6 +134,7 @@
                     $sql->end_date = $reddirection['end_date'];
                     $sql->file_id = $reddirection['file_id'];
                     $sql->file2_id = $reddirection['file2_id'];
+                    $sql->file3_id = $reddirection['file3_id'];
                     $sql->status = $reddirection['status'];
                     $sql->attended = $reddirection['attended'];
                     $sql->solution = $reddirection['solution'];
@@ -187,6 +192,9 @@
                                             'f2.url as file2_url',
                                             'f2.latitude as file2_latitude',
                                             'f2.longitude as file2_longitude',
+                                            'f3.url as file3_url',
+                                            'f3.latitude as file3_latitude',
+                                            'f3.longitude as file3_longitude',
                                             'u.name as collector_name',
                                         )
                                         ->leftJoin('lendings as l', 'l.id', 'rd.lending_id')
@@ -197,6 +205,7 @@
                                         ->leftJoin('users as u', 'u.id', 'rd.collector_id')
                                         ->leftJoin('files as f1', 'f1.id', 'rd.file_id')
                                         ->leftJoin('files as f2', 'f2.id', 'rd.file2_id')
+                                        ->leftJoin('files as f3', 'f3.id', 'rd.file3_id')
                                         ->where('rd.lending_id', $lending)
                                         ->whereIn('rd.status', ['activo', 'finalizado'])
                                         ->orderBy('rd.address', 'ASC')
