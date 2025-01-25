@@ -275,7 +275,7 @@ class ListingController extends Controller
                     COUNT(CASE WHEN payments.type = "nequi" AND payments.observation = "adelanto" THEN 1 ELSE NULL END) as total_count_repayment,
                     COUNT(CASE WHEN payments.type = "articulo" THEN 1 ELSE NULL END) as total_count_article,
                     COALESCE(SUM(CASE WHEN payments.is_street = 0 AND (payments.type = "nequi" OR payments.type = "renovacion") THEN payments.amount ELSE 0 END), 0) as total_amount_secre,
-                    COALESCE(SUM(CASE WHEN payments.is_street = 1 AND payments.type = "nequi" THEN payments.amount ELSE 0 END), 0) as total_amount_street')
+                    COALESCE(SUM(CASE WHEN payments.is_street = 1 AND (payments.type = "nequi" OR payments.type = "renovacion") THEN payments.amount ELSE 0 END), 0) as total_amount_street')
                 ->join('lendings', 'lendings.id', '=', 'payments.lending_id')
                 ->whereBetween('payments.date', [$date." 00:00:00", $date." 23:59:59"])
                 ->where('lendings.listing_id', $idList)
