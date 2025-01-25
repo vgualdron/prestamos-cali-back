@@ -177,13 +177,26 @@ class PaymentController extends Controller
                     ]
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             } else {
+                $latestPayment = Payment::select('payments.*')
+                    ->where('payments.lending_id', $request->lending_id)
+                    ->orderBy('payments.date', 'desc')
+                    ->first();
+
+                $isStreet = false;
+
+                if ($request->is_street) {
+                    $isStreet = $request->is_street;
+                } else {
+                    $isStreet = $latestPayment->is_street;
+                }
+
                 $item = Payment::create([
                     'lending_id' => $request->lending_id,
                     'date' => $request->date,
                     'amount' => $request->amount,
                     'observation' => $request->observation ?? '',
                     'is_valid' => $request->is_valid,
-                    'is_street' => $request->is_street ?? false,
+                    'is_street' => $isStreet,
                     'file_id' => $request->file_id,
                     'type' => $request->type,
                     'status' => $request->status,
