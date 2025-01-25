@@ -186,7 +186,7 @@ class PaymentController extends Controller
 
                 if ($request->is_street) {
                     $isStreet = $request->is_street;
-                } else {
+                } else if ($latestPayment) {
                     $isStreet = $latestPayment->is_street;
                 }
 
