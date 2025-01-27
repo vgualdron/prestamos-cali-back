@@ -455,6 +455,7 @@
                         $sqlNovel->visit_end_date = date('Y-m-d H:i:s');
                         $sqlNovel->approved_by = $diary['idUserSesion'];
                         $sqlNovel->lent_by = $diary['userVisit'];
+                        $sqlNovel->attempts = $diary['attempts'];
                         $sqlNovel->save();
                     });
                     return response()->json([
