@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Models\Lending;
 use App\Models\File;
+use App\Models\Reddirection;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -270,6 +271,11 @@ class PaymentController extends Controller
                 $file = File::find($payment->file_id);
                 // Storage::disk('payments')->delete($file->name);
                 $fileStatus = File::destroy($payment->file_id);
+                $red = Reddirection::where('file2_id', $payment->file_id)->first();
+                if ($red) {
+                    $red->file2_id = null;
+                    $redStatus = $red->save();
+                }
             }
 
         } catch (Exception $e) {
