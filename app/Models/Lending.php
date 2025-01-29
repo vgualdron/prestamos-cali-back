@@ -57,4 +57,22 @@ class Lending extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($lending) {
+            if ($lending->isDirty('nameDebtor')) { // Solo si cambia el nameDebtor
+                $newName = $lending->nameDebtor;
+                $newId = $lending->new_id;
+
+                // Actualizar todos los préstamos con el mismo new_id
+                // Lending::where('new_id', $newId)->update(['nameDebtor' => $newName]);
+
+                // Actualizar el nombre en la tabla news
+                Novel::where('id', $newId)->update(['name' => $newName]);
+            }
+        });
+    }
 }
