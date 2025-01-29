@@ -67,8 +67,10 @@ class Lending extends Authenticatable
                 $newName = $lending->nameDebtor;
                 $newId = $lending->new_id;
 
-                // Actualizar todos los préstamos con el mismo new_id
-                // Lending::where('new_id', $newId)->update(['nameDebtor' => $newName]);
+                // Actualizar todos los préstamos con el mismo new_id sin disparar eventos
+                Lending::withoutEvents(function () use ($newId, $newName) {
+                    Lending::where('new_id', $newId)->update(['nameDebtor' => $newName]);
+                });
 
                 // Actualizar el nombre en la tabla news
                 Novel::where('id', $newId)->update(['name' => $newName]);
