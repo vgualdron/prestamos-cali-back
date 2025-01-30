@@ -334,7 +334,7 @@
                 $data['REFERENCIA 1']['TELEFONO'] = $sql->family_reference_phone ? true : false;
                 $data['REFERENCIA 1']['PARENTESCO'] = $sql->family_reference_relationship ? true : false;
 
-                $nameFile = "VIDEO_REFERENCIA_FAMILIAR_1";
+                $nameFile = "FOTO_CASA_REFERENCIA_FAMILIAR_1";
                 $file = $files->first(function($file) use ($nameFile) {
                     return $file["name"] == $nameFile;
                 });
@@ -346,7 +346,7 @@
                 });
                 $data['REFERENCIA 1'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
 
-                $nameFile = "FOTO_CASA_REFERENCIA_FAMILIAR_1";
+                $nameFile = "VIDEO_REFERENCIA_FAMILIAR_1";
                 $file = $files->first(function($file) use ($nameFile) {
                     return $file["name"] == $nameFile;
                 });
@@ -357,12 +357,6 @@
                 $data['REFERENCIA 2']['TELEFONO'] = $sql->family2_reference_phone ? true : false;
                 $data['REFERENCIA 2']['PARENTESCO'] = $sql->family2_reference_relationship ? true : false;
 
-                $nameFile = "VIDEO_REFERENCIA_FAMILIAR_2";
-                $file = $files->first(function($file) use ($nameFile) {
-                    return $file["name"] == $nameFile;
-                });
-                $data['REFERENCIA 2'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
-
                 $nameFile = "FOTO_CASA_REFERENCIA_FAMILIAR_2";
                 $file = $files->first(function($file) use ($nameFile) {
                     return $file["name"] == $nameFile;
@@ -370,6 +364,12 @@
                 $data['REFERENCIA 2'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
 
                 $nameFile = "VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_2";
+                $file = $files->first(function($file) use ($nameFile) {
+                    return $file["name"] == $nameFile;
+                });
+                $data['REFERENCIA 2'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
+
+                $nameFile = "VIDEO_REFERENCIA_FAMILIAR_2";
                 $file = $files->first(function($file) use ($nameFile) {
                     return $file["name"] == $nameFile;
                 });
