@@ -324,7 +324,7 @@
                 $newItem = $this->novel->from('news as n')
                                         ->select('n.*')
                                         ->where('n.phone', $novel['phone'])
-                                        ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando'])
+                                        ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
                                         ->first();
 
                 if ($newItem) {
