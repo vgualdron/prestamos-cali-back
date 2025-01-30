@@ -340,6 +340,12 @@
                 });
                 $data['REFERENCIA 1'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
 
+                $nameFile = "VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_1";
+                $file = $files->first(function($file) use ($nameFile) {
+                    return $file["name"] == $nameFile;
+                });
+                $data['REFERENCIA 1'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
+
                 $nameFile = "FOTO_CASA_REFERENCIA_FAMILIAR_1";
                 $file = $files->first(function($file) use ($nameFile) {
                     return $file["name"] == $nameFile;
@@ -363,6 +369,11 @@
                 });
                 $data['REFERENCIA 2'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
 
+                $nameFile = "VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_2";
+                $file = $files->first(function($file) use ($nameFile) {
+                    return $file["name"] == $nameFile;
+                });
+                $data['REFERENCIA 2'][$nameFile] = $file && $file->status === "aprobado" ? true : false;
 
                 $data['FIADOR']['DOCUMENTO'] = $sql->guarantor_document_number ? true : false;
                 $data['FIADOR']['OCUPACION'] = $sql->guarantor_occupation ? true : false;
