@@ -62,21 +62,25 @@ class Lending extends Authenticatable
     {
         parent::boot();
 
+        static::updating(function ($lending) {
+            // Guardamos la fecha original antes de la actualización
+            $lending->original_updated_at = $lending->getOriginal('updated_at');
+        });
+
         static::updated(function ($lending) {
             if ($lending->isDirty('nameDebtor')) { // Solo si cambia el nameDebtor
                 $newName = $lending->nameDebtor;
                 $newId = $lending->new_id;
 
                 // Obtener la fecha original de updated_at
-                $originalUpdatedAt = $lending->updated_at;
+                $originalUpdatedAt = $lending->original_updated_at; // Recuperamos la fecha original
 
-                // Actualizar todos los préstamos con el mismo new_id sin cambiar updated_at
-                // Desactivar timestamps temporalmente
+                            // Actualizar los préstamos con el mismo new_id sin disparar eventos
                 Lending::withoutEvents(function () use ($newId, $newName, $originalUpdatedAt) {
-                    Lending::where('new_id', $newId)->update(['nameDebtor' => $newName]);
-
-                    // Restaurar la fecha original de updated_at
-                    Lending::where('new_id', $newId)->update(['updated_at' => $originalUpdatedAt]);
+                    Lending::where('new_id', $newId)->update([
+                        'nameDebtor' => $newName,
+                        'updated_at' => $originalUpdatedAt, // Restaurar la fecha original
+                    ]);
                 });
 
                 // Actualizar el nombre en la tabla news
