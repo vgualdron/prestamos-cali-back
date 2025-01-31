@@ -62,11 +62,6 @@ class Lending extends Authenticatable
     {
         parent::boot();
 
-        static::updating(function ($lending) {
-            // Guardamos la fecha original antes de la actualización
-            $lending->original_updated_at = $lending->getOriginal('updated_at');
-        });
-
         static::updated(function ($lending) {
             if ($lending->isDirty('nameDebtor')) { // Solo si cambia el nameDebtor
                 $newName = $lending->nameDebtor;
