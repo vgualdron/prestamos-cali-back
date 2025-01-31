@@ -71,11 +71,12 @@ class Lending extends Authenticatable
                 $originalUpdatedAt = $lending->updated_at;
 
                 // Actualizar todos los préstamos con el mismo new_id sin cambiar updated_at
+                // Desactivar timestamps temporalmente
                 Lending::withoutEvents(function () use ($newId, $newName, $originalUpdatedAt) {
-                    Lending::where('new_id', $newId)->update([
-                        'nameDebtor' => $newName,
-                        'updated_at' => $originalUpdatedAt
-                    ]);
+                    Lending::where('new_id', $newId)->update(['nameDebtor' => $newName]);
+
+                    // Restaurar la fecha original de updated_at
+                    Lending::where('new_id', $newId)->update(['updated_at' => $originalUpdatedAt]);
                 });
 
                 // Actualizar el nombre en la tabla news
