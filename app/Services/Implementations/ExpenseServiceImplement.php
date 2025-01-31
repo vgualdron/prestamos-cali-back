@@ -46,7 +46,7 @@
                     ->when($items !== 'all', function ($q) use ($explodeItems) {
                         return $q->whereNotIn('e.item_id', $explodeItems);
                     })
-                    ->orderBy('e.date', 'ASC')
+                    ->orderBy('e.date', 'DESC')
                     ->get();
 
                 if (count($sql) > 0){
