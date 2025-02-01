@@ -235,7 +235,7 @@
                             SELECT
                                 news.id AS new_id,
                                 'REF 1' AS address_type,
-                                CONCAT(family_reference_name, ' | ', family_reference_relationship) AS address_name,
+                                 CONCAT(COALESCE(family1_reference_name, ''), ' | ', COALESCE(family1_reference_relationship, '')) AS address_name,
                                 family_reference_address AS address,
                                 family_reference_district AS district
                             FROM news
@@ -244,7 +244,7 @@
                             SELECT
                                 news.id AS new_id,
                                 'REF 2' AS address_type,
-                                CONCAT(family2_reference_name, ' | ', family2_reference_relationship) AS address_name,
+                                CONCAT(COALESCE(family2_reference_name, ''), ' | ', COALESCE(family2_reference_relationship, '')) AS address_name,
                                 family2_reference_address AS address,
                                 family2_reference_district AS district
                             FROM news
@@ -253,7 +253,7 @@
                             SELECT
                                 news.id AS new_id,
                                 'FIADOR' AS address_type,
-                                CONCAT(guarantor_name, ' | ', guarantor_relationship) AS address_name,
+                                CONCAT(COALESCE(guarantor_name, ''), ' | ', COALESCE(guarantor_relationship, '')) AS address_name,
                                 guarantor_address AS address,
                                 guarantor_district AS district
                             FROM news
