@@ -31,7 +31,7 @@
                         'address' => $reddirection['address'],
                         'district_id' => $reddirection['district_id'],
                         'type_ref' => $reddirection['type_ref'],
-                        'description_ref' => $reddirection['description_ref'],
+                        'description_ref' => $reddirection['description_ref'] || 'NO REGISTRA',
                         'value' => $reddirection['value'],
                         'status' => $reddirection['status'],
                     ]);
