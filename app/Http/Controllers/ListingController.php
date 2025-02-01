@@ -703,13 +703,13 @@ class ListingController extends Controller
 
             $days = DB::selectOne('
                             SELECT
-                            IF(COUNT(DISTINCT DATE(created_at)) = 0, 1, COUNT(DISTINCT DATE(created_at))) + 1 AS days_work
+                            COUNT(DISTINCT DATE(date)) + 1 AS days_work
                         FROM
                             deliveries
                         WHERE
-                            MONTH(created_at) = MONTH(CURRENT_DATE)
-                            AND YEAR(created_at) = YEAR(CURRENT_DATE)
-                            AND created_at <= CURRENT_DATE();
+                            MONTH(date) = MONTH(CURRENT_DATE)
+                            AND YEAR(date) = YEAR(CURRENT_DATE)
+                            AND date <= CURRENT_DATE();
                         ');
 
             $data = [
