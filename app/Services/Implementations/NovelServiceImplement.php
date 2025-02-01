@@ -235,7 +235,7 @@
                             SELECT
                                 news.id AS new_id,
                                 'REF 1' AS address_type,
-                                 CONCAT(COALESCE(family1_reference_name, ''), ' | ', COALESCE(family1_reference_relationship, '')) AS address_name,
+                                CONCAT(COALESCE(family_reference_name, ''), ' | ', COALESCE(family_reference_relationship, '')) AS address_name,
                                 family_reference_address AS address,
                                 family_reference_district AS district
                             FROM news
