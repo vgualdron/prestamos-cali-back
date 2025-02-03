@@ -723,7 +723,29 @@ class ListingController extends Controller
                                 listings.id;
                         ");
 
-            $days = DB::selectOne('
+            $paymentsTodaySecre = DB::selectOne("
+                            SELECT
+                                listings.id AS listing_id,
+                                " .$date. " AS d,
+                                COALESCE(SUM(p.amount), 0) AS total_payments
+                            FROM
+                                listings
+                            INNER JOIN
+                                lendings ON lendings.listing_id = listings.id
+                            LEFT JOIN
+                                payments p ON lendings.id = p.lending_id
+                                AND p.date IS NOT NULL
+                                AND DATE(p.date) = '" .$date ."'
+                                AND p.is_valid = 1
+                                AND p.is_street = 0
+                            WHERE
+                                lendings.listing_id = ". $idList ."
+                            GROUP BY
+                                listings.id;
+                        ");
+
+
+                        $days = DB::selectOne('
                             SELECT
                             COUNT(DISTINCT DATE(date)) + 1 AS days_work
                         FROM
@@ -745,6 +767,7 @@ class ListingController extends Controller
                 'capital' => $capital,
                 'payments' => $payments,
                 'paymentsToday' => $paymentsToday,
+                'paymentsTodaySecre' => $paymentsTodaySecre,
                 'paymentsSecre' => $paymentsSecre,
                 'days' => $days,
             ];
