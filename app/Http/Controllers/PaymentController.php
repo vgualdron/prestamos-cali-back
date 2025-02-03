@@ -201,6 +201,7 @@ class PaymentController extends Controller
                     'file_id' => $request->file_id,
                     'type' => $request->type,
                     'status' => $request->status,
+                    'collector_id' => $request->collector_id,
                 ]);
             }
 
