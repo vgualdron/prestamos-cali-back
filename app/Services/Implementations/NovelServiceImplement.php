@@ -109,7 +109,7 @@
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
                     ->leftJoin('files as f', function ($join) {
-                        $join->on('f.model_id', '=', 'news.id')
+                        $join->on('f.model_id', '=', 'n.id')
                              ->where('f.model_name', '=', 'news')
                              ->where('f.name', '=', 'FOTO_VOUCHER')
                              ->whereRaw('f.registered_date > n.updated_at');
