@@ -94,6 +94,9 @@
                         'n.updated_at',
                         'dia.id as diary_id',
                         'dia.status as diary_status',
+                        'f.id as voucher_id',
+                        'f.url as voucher_url',
+                        'f.registered_date as voucher_date',
                     )
                     ->leftJoin('diaries as dia', function ($join) {
                         $join->on('dia.new_id', '=', 'n.id')
@@ -105,6 +108,12 @@
                     ->leftJoin('districts as d', 'n.district', 'd.id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
+                    ->leftJoin('files as f', function ($join) {
+                        $join->on('f.model_id', '=', 'news.id')
+                             ->where('f.model_name', '=', 'news')
+                             ->where('f.name', '=', 'FOTO_VOUCHER')
+                             ->whereRaw('f.registered_date > n.updated_at');
+                    })
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('n.status', $explodeStatus);
                     })
