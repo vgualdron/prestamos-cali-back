@@ -28,6 +28,7 @@ class Payment extends Authenticatable
         'reference',
         'nequi',
         'date_transaction',
+        'collector_id',
         'is_street',
         'is_valid',
     ];
@@ -36,8 +37,8 @@ class Payment extends Authenticatable
     {
         return $this->hasOne(File::class, 'id', 'file_id');
     }
-    
- 
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
