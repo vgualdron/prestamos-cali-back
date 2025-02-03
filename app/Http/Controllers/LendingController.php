@@ -94,7 +94,7 @@ class LendingController extends Controller
                 $join->on('f.model_id', '=', 'news.id')
                      ->where('f.model_name', '=', 'news')
                      ->where('f.name', '=', 'FOTO_VOUCHER')
-                     ->whereRaw('f.registered_date > lending.created');
+                     ->whereRaw('f.registered_date > lendings.created_at');
             })
             ->leftJoin('files as filePdf', function ($join) {
                 $join->on('filePdf.model_id', '=', 'news.id')
