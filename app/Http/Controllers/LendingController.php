@@ -91,11 +91,15 @@ class LendingController extends Controller
                      ->where('files.model_name', '=', 'expenses');
             })
             ->leftJoin(DB::raw('(
-                SELECT * FROM files
-                WHERE name = "FOTO_VOUCHER"
-                AND model_name = "news"
-                ORDER BY registered_date DESC
-                LIMIT 1
+                SELECT f1.*
+                FROM files f1
+                INNER JOIN (
+                    SELECT model_id, MAX(registered_date) as max_date
+                    FROM files
+                    WHERE name = "FOTO_VOUCHER"
+                    AND model_name = "news"
+                    GROUP BY model_id
+                ) f2 ON f1.model_id = f2.model_id AND f1.registered_date = f2.max_date
             ) as f'), function ($join) {
                 $join->on('f.model_id', '=', 'news.id');
             })
