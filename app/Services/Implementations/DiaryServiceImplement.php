@@ -52,8 +52,8 @@
                         'd.status',
                         'd.observation',
                         's.name as sectorName',
-                        'sh.name as sectorNameHouse',
-                        'sw.name as sectorNameWork',
+                        // 'sh.name as sectorNameHouse',
+                        // 'sw.name as sectorNameWork',
                         'n.visit_start_date',
                         'n.visit_end_date',
                     )
