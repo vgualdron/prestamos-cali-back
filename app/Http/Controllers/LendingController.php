@@ -90,11 +90,14 @@ class LendingController extends Controller
                 $join->on('files.model_id', '=', 'lendings.expense_id')
                      ->where('files.model_name', '=', 'expenses');
             })
-            ->leftJoin('files as f', function ($join) {
-                $join->on('f.model_id', '=', 'news.id')
-                     ->where('f.model_name', '=', 'news')
-                     ->where('f.name', '=', 'FOTO_VOUCHER')
-                     ->whereRaw('f.registered_date > lendings.created_at');
+            ->leftJoin(DB::raw('(
+                SELECT * FROM files
+                WHERE name = "FOTO_VOUCHER"
+                AND model_name = "news"
+                ORDER BY registered_date DESC
+                LIMIT 1
+            ) as f'), function ($join) {
+                $join->on('f.model_id', '=', 'news.id');
             })
             ->leftJoin('files as filePdf', function ($join) {
                 $join->on('filePdf.model_id', '=', 'news.id')
