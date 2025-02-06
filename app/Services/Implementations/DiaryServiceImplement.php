@@ -52,16 +52,16 @@
                         'd.status',
                         'd.observation',
                         's.name as sectorName',
-                        // 'sh.name as sectorNameHouse',
-                        // 'sw.name as sectorNameWork',
+                        'sh.name as sectorNameHouse',
+                        'sw.name as sectorNameWork',
                         'n.visit_start_date',
                         'n.visit_end_date',
                     )
                     ->leftJoin('users as u', 'd.user_id', 'u.id')
                     ->leftJoin('news as n', 'd.new_id', 'n.id')
                     ->leftJoin('yards as s', 'n.sector', 's.id')
-                    // ->leftJoin('yards as sh', 'dh.sector', 'sh.id')
-                    // ->leftJoin('yards as sw', 'dw.sector', 'sw.id')
+                    ->leftJoin('yards as sh', 'n.address_house_district', 'sh.id')
+                    ->leftJoin('yards as sw', 'n.address_work_district', 'sw.id')
                     ->leftJoin('districts as b', 'n.district', 'b.id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
