@@ -753,7 +753,7 @@ class ListingController extends Controller
                 SELECT
                     COUNT(DISTINCT DATE(date)) +
                     CASE
-                        WHEN HOUR('" . $currentDate . "') < 21 THEN 0
+                        WHEN HOUR('" . $currentDate . "') < 22 THEN 0
                         ELSE 1
                     END AS days_work
                 FROM
