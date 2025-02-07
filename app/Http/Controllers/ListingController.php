@@ -745,16 +745,16 @@ class ListingController extends Controller
                         ");
 
 
-                        $days = DB::selectOne('
-                            SELECT
-                            COUNT(DISTINCT DATE(date)) + 1 AS days_work
-                        FROM
-                            deliveries
-                        WHERE
-                            MONTH(date) = MONTH(CURRENT_DATE)
-                            AND YEAR(date) = YEAR(CURRENT_DATE)
-                            AND date <= CURRENT_DATE();
-                        ');
+            $days = DB::selectOne('
+                SELECT
+                COUNT(DISTINCT DATE(date)) AS days_work
+            FROM
+                deliveries
+            WHERE
+                MONTH(date) = MONTH(CURRENT_DATE)
+                AND YEAR(date) = YEAR(CURRENT_DATE)
+                AND date <= CURRENT_DATE();
+            ');
 
             $data = [
                 'yellow' => $yellow,
