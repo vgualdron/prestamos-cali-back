@@ -753,8 +753,12 @@ class ListingController extends Controller
                 SELECT
                     COUNT(DISTINCT DATE(date)) +
                     CASE
-                        WHEN HOUR('" . $currentDate . "') < 22 THEN 0
-                        ELSE 1
+                        WHEN NOT EXISTS (
+                            SELECT 1
+                            FROM deliveries
+                            WHERE DATE(date) = DATE('" . $currentDate . "')
+                        ) THEN 1
+                        ELSE 0
                     END AS days_work
                 FROM
                     deliveries
