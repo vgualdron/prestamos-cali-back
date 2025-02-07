@@ -756,6 +756,8 @@ class ListingController extends Controller
                 AND date <= CURRENT_DATE();
             ');
 
+            $currentDate = date('Y-m-d H:i:s');
+
             $data = [
                 'yellow' => $yellow,
                 'yellowUp' => $yellowUp,
@@ -770,6 +772,7 @@ class ListingController extends Controller
                 'paymentsTodaySecre' => $paymentsTodaySecre,
                 'paymentsSecre' => $paymentsSecre,
                 'days' => $days,
+                'date' => $currentDate,
             ];
 
         } catch (Exception $e) {
