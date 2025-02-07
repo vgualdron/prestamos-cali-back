@@ -747,16 +747,23 @@ class ListingController extends Controller
 
             $currentDate = date('Y-m-d H:i:s');
 
+            $currentDate = date('Y-m-d H:i:s');
+
             $days = DB::selectOne("
                 SELECT
-                    COUNT(DISTINCT DATE(date)) AS days_work
+                    COUNT(DISTINCT DATE(date)) +
+                    CASE
+                        WHEN HOUR('" . $currentDate . "') < 21 THEN 0
+                        ELSE 1
+                    END AS days_work
                 FROM
                     deliveries
                 WHERE
-                    MONTH(date) = MONTH('" .$currentDate ."')
-                    AND YEAR(date) = YEAR('" .$currentDate ."')
-                    AND date <= '" .$currentDate ."'
+                    MONTH(date) = MONTH('" . $currentDate . "')
+                    AND YEAR(date) = YEAR('" . $currentDate . "')
+                    AND date <= '" . $currentDate . "'
             ");
+
 
 
             $data = [
