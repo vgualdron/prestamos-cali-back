@@ -74,8 +74,6 @@
                                             'y.id as sector_id',
                                             'y.code as sector_code',
                                             'y.name as sector_name',
-                                            'f.latitude as address_latitude_',
-                                            'f.longitude as address_longitude_',
                                             'u.latitude as user_latitude',
                                             'u.longitude as user_longitude',
                                             'u.name as collector_name',
@@ -89,6 +87,26 @@
                                             'f3.url as file3_url',
                                             'f3.latitude as file3_latitude',
                                             'f3.longitude as file3_longitude',
+                                            DB::raw("(SELECT latitude FROM files WHERE model_id = n.id AND model_name = 'news' AND
+                                                    name = CASE
+                                                        WHEN rd.type_ref = 'CASA' THEN 'FOTO_CASA_CLIENTE'
+                                                        WHEN rd.type_ref = 'TRABAJO' THEN 'FOTO_CERTIFICADO_TRABAJO_CLIENTE'
+                                                        WHEN rd.type_ref = 'REF 1' THEN 'FOTO_CASA_REFERENCIA_FAMILIAR_1'
+                                                        WHEN rd.type_ref = 'REF 2' THEN 'FOTO_CASA_REFERENCIA_FAMILIAR_2'
+                                                        WHEN rd.type_ref = 'FIADOR' THEN 'FOTO_CEDULA_FIADOR_FRONTAL'
+                                                        ELSE NULL
+                                                    END
+                                                    ) as address_latitude"),
+                                            DB::raw("(SELECT longitude FROM files WHERE model_id = n.id AND model_name = 'news' AND
+                                                    name = CASE
+                                                        WHEN rd.type_ref = 'CASA' THEN 'FOTO_CASA_CLIENTE'
+                                                        WHEN rd.type_ref = 'TRABAJO' THEN 'FOTO_CERTIFICADO_TRABAJO_CLIENTE'
+                                                        WHEN rd.type_ref = 'REF 1' THEN 'FOTO_CASA_REFERENCIA_FAMILIAR_1'
+                                                        WHEN rd.type_ref = 'REF 2' THEN 'FOTO_CASA_REFERENCIA_FAMILIAR_2'
+                                                        WHEN rd.type_ref = 'FIADOR' THEN 'FOTO_CEDULA_FIADOR_FRONTAL'
+                                                        ELSE NULL
+                                                    END
+                                                    ) as address_longitude")
                                         )
                                         ->leftJoin('lendings as l', 'l.id', 'rd.lending_id')
                                         ->leftJoin('news as n', 'n.id', 'l.new_id')
@@ -99,11 +117,6 @@
                                         ->leftJoin('files as f1', 'f1.id', 'rd.file_id')
                                         ->leftJoin('files as f2', 'f2.id', 'rd.file2_id')
                                         ->leftJoin('files as f3', 'f3.id', 'rd.file3_id')
-                                        ->leftJoin('files as f', function($join) {
-                                            $join->where('f.model_name', '=', 'news')
-                                                 ->on('f.model_id', '=', 'n.id')
-                                                 ->where('f.name', '=', 'PDF_CV');
-                                        })
                                         ->where('rd.collector_id', $user)
                                         ->where('rd.status', 'activo')
                                         ->first();
