@@ -146,6 +146,8 @@
         function listReds(int $city, int $user) {
             try {
 
+                $date = date("Y-m-d");
+
                 $sql = "WITH latest_reddirections AS (
                             SELECT
                                 address,
@@ -208,6 +210,7 @@
                             districts.order AS district_order,
                             redcollectors.collector_id AS collector_id,
                             users.name AS collector_name,
+                            latest_reddirections.latest_date AS latest_date,
                             latest_reddirections.id AS is_current,
                             latest_reddirections.start_date AS reddirection_start_date,
                             latest_reddirections.end_date AS reddirection_end_date
@@ -273,9 +276,7 @@
                         LEFT JOIN zones ON zones.id = yards.zone
                         LEFT JOIN redcollectors ON redcollectors.sector_id = yards.id
                         LEFT JOIN users ON redcollectors.collector_id = users.id
-                        LEFT JOIN latest_reddirections ON
-                            latest_reddirections.address = address_data.address
-                            AND latest_reddirections.type_ref = address_data.address_type
+                        LEFT JOIN latest_reddirections ON latest_reddirections.address = address_data.address AND latest_reddirections.type_ref = address_data.address_type
                         WHERE
                             lendings.status = 'open'
                             AND news.status = 'consignado'
