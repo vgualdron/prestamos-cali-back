@@ -221,8 +221,8 @@
                                         ->leftJoin('files as f3', 'f3.id', 'rd.file3_id')
                                         ->where('rd.lending_id', $lending)
                                         ->whereIn('rd.status', ['activo', 'finalizado'])
-                                        ->orderBy('rd.address', 'ASC')
                                         ->orderBy('rd.start_date', 'DESC')
+                                        ->orderBy('rd.address', 'ASC')
                                         ->orderBy('rd.registered_date', 'DESC')
                                         ->get();
                 return response()->json([
