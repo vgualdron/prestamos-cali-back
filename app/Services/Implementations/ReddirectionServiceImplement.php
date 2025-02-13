@@ -222,6 +222,7 @@
                                         ->where('rd.lending_id', $lending)
                                         ->whereIn('rd.status', ['activo', 'finalizado'])
                                         ->orderBy('rd.address', 'ASC')
+                                        ->orderBy('rd.start_date', 'DESC')
                                         ->orderBy('rd.registered_date', 'DESC')
                                         ->get();
                 return response()->json([
