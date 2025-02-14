@@ -156,6 +156,7 @@
                                 MAX(start_date) AS start_date,
                                 MAX(end_date) AS end_date,
                                 MAX(registered_date) AS latest_date,
+                                solution AS latest_solution,
                                 id
                             FROM reddirections
                             WHERE status IN ('creado', 'activo', 'aprobado', 'rechazado', 'finalizado')
@@ -211,6 +212,7 @@
                             redcollectors.collector_id AS collector_id,
                             users.name AS collector_name,
                             latest_reddirections.latest_date AS latest_date,
+                            latest_reddirections.latest_solution AS latest_solution,
                             latest_reddirections.id AS is_current,
                             latest_reddirections.start_date AS reddirection_start_date,
                             latest_reddirections.end_date AS reddirection_end_date
