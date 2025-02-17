@@ -32,8 +32,8 @@ class ValidateClientTimestamp
         }
 
         try {
-            // Convertir la fecha del cliente a un objeto Carbon
-            $clientDateTime = Carbon::parse($clientTimestamp);
+            // Convertir la fecha del cliente a un objeto Carbon, especificando UTC
+            $clientDateTime = Carbon::parse($clientTimestamp)->timezone('UTC');
             $serverDateTime = Carbon::now();
 
             // Definir el tiempo máximo de diferencia permitida (ejemplo: 5 minutos)
