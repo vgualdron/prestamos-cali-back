@@ -48,7 +48,7 @@ Route::get('/health', function (Request $request) {
 
 Route::get('/download-image-from-url', [FileController::class, 'downloadImageFromUrl'])->name('file.downloadImageFromUrl');
 
-Route::group(["prefix" => "/auth"], function () {
+Route::group(['middleware' => ['validate.timestamp'], "prefix" => "/auth"], function () {
     Route::get('/get-active-token', [AuthController::class, 'getActiveToken'])->name('auth.getActiveToken');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::middleware(['middleware' => 'auth:api'])->post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
