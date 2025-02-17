@@ -55,7 +55,7 @@ class ValidateClientTimestamp
                 'message' => [
                     [
                         'text' => 'Formato de fecha inválido',
-                        'detail' => 'Por favor, envíe la fecha en formato ISO 8601 (Ejemplo: 2025-02-16T12:34:56Z)',
+                        'detail' => $e->getMessage(),
                     ]
                 ],
             ], 400));
