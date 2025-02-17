@@ -40,7 +40,7 @@ class ValidateClientTimestamp
             $maxDifferenceMinutes = 5;
 
             // Validar si la fecha es demasiado antigua o en el futuro
-            if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
+            /* if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
                 abort(response()->json([
                     'message' => [
                         [
@@ -49,7 +49,7 @@ class ValidateClientTimestamp
                         ]
                     ],
                 ], 400));
-            }
+            } */
         } catch (\Exception $e) {
             abort(response()->json([
                 'message' => [
