@@ -32,13 +32,8 @@ class ValidateClientTimestamp
         }
 
         try {
-            // Convertir la fecha del cliente a un objeto Carbon con formato explícito y zona horaria UTC
-            $clientDateTime = Carbon::createFromFormat('Y-m-d\TH:i:s', $clientTimestamp, 'UTC');
-            var_dump($clientDateTime);
-
-            // Asegurarse de que la hora está en UTC
-            $clientDateTime->setTimezone('UTC');
-
+            // Convertir la fecha del cliente a un objeto Carbon
+            $clientDateTime = Carbon::parse($clientTimestamp);
             $serverDateTime = Carbon::now();
 
             // Definir el tiempo máximo de diferencia permitida (ejemplo: 5 minutos)
@@ -60,12 +55,11 @@ class ValidateClientTimestamp
                 'message' => [
                     [
                         'text' => 'Formato de fecha inválido',
-                        'detail' => $e->getMessage(),
+                        'detail' => 'Por favor, envíe la fecha en formato ISO 8601 (Ejemplo: 2025-02-16T12:34:56Z)',
                     ]
                 ],
             ], 400));
         }
-
         return $next($request);
     }
 }
