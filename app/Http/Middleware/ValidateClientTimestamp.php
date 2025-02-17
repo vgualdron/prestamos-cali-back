@@ -18,6 +18,7 @@ class ValidateClientTimestamp
     {
         // Obtener la fecha enviada en el header
         $clientTimestamp = $request->header('X-Client-Timestamp');
+        var_dump($clientTimestamp);
 
         // Verificar si el header existe
         if (!$clientTimestamp) {
