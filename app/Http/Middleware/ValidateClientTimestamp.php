@@ -18,7 +18,6 @@ class ValidateClientTimestamp
     {
         // Obtener la fecha enviada en el header
         $clientTimestamp = $request->header('X-Client-Timestamp');
-        var_dump($clientTimestamp);
 
         // Verificar si el header existe
         if (!$clientTimestamp) {
@@ -35,6 +34,7 @@ class ValidateClientTimestamp
         try {
             // Convertir la fecha del cliente a un objeto Carbon con formato explícito y zona horaria UTC
             $clientDateTime = Carbon::createFromFormat('Y-m-d\TH:i:s', $clientTimestamp, 'UTC');
+            var_dump($clientDateTime);
 
             // Asegurarse de que la hora está en UTC
             $clientDateTime->setTimezone('UTC');
