@@ -148,7 +148,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/configuration"], functi
     Route::delete('/{id}', [ConfigurationController::class, 'destroy'])->middleware('can:parameter.list')->name('parameter.delete');
 });
 
-Route::group(['middleware' => 'auth:api' , "prefix" => "/listing"], function () {
+Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/listing"], function () {
     Route::get('/', [ListingController::class, 'index']);
     Route::get('/mine', [ListingController::class, 'getMine']);
     Route::get('/{id}', [ListingController::class, 'show']);
