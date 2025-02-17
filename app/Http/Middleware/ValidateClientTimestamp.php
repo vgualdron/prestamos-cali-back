@@ -42,7 +42,7 @@ class ValidateClientTimestamp
                         'detail' => 'La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.',
                     ]
                 ],
-            ], 400));
+            ], 499));
         }
 
         return $next($request);
