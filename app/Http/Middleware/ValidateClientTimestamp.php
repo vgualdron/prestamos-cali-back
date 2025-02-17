@@ -32,14 +32,13 @@ class ValidateClientTimestamp
         }
 
         try {
-            // Convertir la fecha del cliente a un objeto Carbon, especificando UTC
-            $clientDateTime = Carbon::parse($clientTimestamp)->timezone('UTC');
-            $serverDateTime = Carbon::now();
-
-            // Definir el tiempo máximo de diferencia permitida (ejemplo: 5 minutos)
-            $maxDifferenceMinutes = 5;
+            // Convertir la fecha del cliente a un objeto Carbon en UTC
+            $clientDateTime = Carbon::createFromFormat('Y-m-d\TH:i:s', $clientTimestamp, 'UTC');
 
             // Validar si la fecha es demasiado antigua o en el futuro
+            $serverDateTime = Carbon::now();
+            $maxDifferenceMinutes = 5;
+
             if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
                 abort(response()->json([
                     'message' => [
