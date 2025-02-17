@@ -25,37 +25,27 @@ class ValidateClientTimestamp
             ], 400));
         }
 
-        try {
-            // Convertir la fecha del cliente a un objeto Carbon
-            $clientDateTime = Carbon::parse($clientTimestamp);
-            $serverDateTime = Carbon::now();
+        // Convertir la fecha del cliente a un objeto Carbon
+        $clientDateTime = Carbon::parse($clientTimestamp);
+        $serverDateTime = Carbon::now();
 
-            // Definir el tiempo máximo de diferencia permitida (ejemplo: 5 minutos)
-            $maxDifferenceMinutes = 5;
+        // Definir el tiempo máximo de diferencia permitida (ejemplo: 5 minutos)
+        $maxDifferenceMinutes = 5;
 
-            // Validar si la fecha es demasiado antigua o en el futuro
-            if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
-                abort(400, 'Fecha y hora desactualizadas. La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.');
-                /* echo "sadsa";
-                abort(response()->json([
-                    'message' => [
-                        [
-                            'text' => 'Fecha y hora desactualizadas',
-                            'detail' => 'La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.',
-                        ]
-                    ],
-                ], 400)); */
-            }
-        } catch (\Exception $e) {
+        // Validar si la fecha es demasiado antigua o en el futuro
+        if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
+            abort(400, 'Fecha y hora desactualizadas. La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.');
+            /* echo "sadsa";
             abort(response()->json([
                 'message' => [
                     [
-                        'text' => 'Formato de fecha inválido',
-                        'detail' => 'Por favor, envíe la fecha en formato ISO 8601 (Ejemplo: 2025-02-16T12:34:56Z)',
+                        'text' => 'Fecha y hora desactualizadas',
+                        'detail' => 'La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.',
                     ]
                 ],
-            ], 400));
+            ], 400)); */
         }
+
         return $next($request);
     }
 }
