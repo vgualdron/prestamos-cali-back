@@ -36,14 +36,14 @@ class ValidateClientTimestamp
             // Validar si la fecha es demasiado antigua o en el futuro
             if ($clientDateTime->diffInMinutes($serverDateTime) > $maxDifferenceMinutes) {
                 echo "sadsa";
-                /* abort(response()->json([
+                abort(response()->json([
                     'message' => [
                         [
                             'text' => 'Fecha y hora desactualizadas',
                             'detail' => 'La diferencia entre la hora del servidor y la del cliente no debe superar los 5 minutos.',
                         ]
                     ],
-                ], 400)); */
+                ], 400));
             }
         } catch (\Exception $e) {
             abort(response()->json([
