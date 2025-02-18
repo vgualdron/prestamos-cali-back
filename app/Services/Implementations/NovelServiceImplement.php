@@ -211,8 +211,6 @@
                     'n.score_observation',
                     'n.account_active',
                     'n.updated_at',
-                    'dia.id as diary_id',
-                    'dia.status as diary_status',
                     'f.id as voucher_id',
                     'f.url as voucher_url',
                     'f.registered_date as voucher_date'
@@ -235,9 +233,7 @@
                 ->when(!empty($query), function ($q) use ($query) {
                     return $q->where('n.name', 'LIKE', "%$query%");
                 })
-                ->orderBy('z.id', 'ASC')
-                ->orderBy('d.group', 'ASC')
-                ->orderBy('d.order', 'ASC')
+                ->orderBy('n.name', 'ASC')
                 ->limit(20)
                 ->get();
 
