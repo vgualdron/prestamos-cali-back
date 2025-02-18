@@ -138,8 +138,9 @@
 
         function update(array $reddirection, int $id){
             try {
-                $sql = $this->reddirection::find($id);
-                if(!empty($sql)) {
+                // $sql = $this->reddirection::find($id);
+                $sql = $this->reddirection::find($id)->update($reddirection);
+                /* if(!empty($sql)) {
                     $sql->collector_id = $reddirection['collector_id'];
                     $sql->approved_by = $reddirection['approved_by'];
                     $sql->approved_date = $reddirection['approved_date'];
@@ -170,7 +171,7 @@
                             ]
                         ]
                     ], Response::HTTP_NOT_FOUND);
-                }
+                } */
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
