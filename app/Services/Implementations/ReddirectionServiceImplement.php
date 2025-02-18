@@ -153,16 +153,16 @@
                     $sql->attended = $reddirection['attended'];
                     $sql->solution = $reddirection['solution'];
                     $sql->observation = $reddirection['observation'];
-                    $sql->save();
+                    $sql->save(); */
                     return response()->json([
                         'message' => [
                             [
                                 'text' => 'Actualizado con éxito',
-                                'detail' => null
+                                'detail' => $sql
                             ]
                         ]
                     ], Response::HTTP_OK);
-                } else {
+                /* } else {
                     return response()->json([
                         'message' => [
                             [
