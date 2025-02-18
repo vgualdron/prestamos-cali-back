@@ -145,7 +145,6 @@
 
         function listForUpdate(string $status, string $query) {
             try {
-                $explodeStatus = explode(',', $status);
                 $sql = $this->novel->from('news as n')
                 ->select(
                     'n.id',
@@ -230,8 +229,8 @@
                          ->where('f.name', '=', 'FOTO_VOUCHER')
                          ->whereRaw('f.registered_date > n.updated_at');
                 })
-                ->when($status !== 'all', function ($q) use ($explodeStatus) {
-                    return $q->whereIn('n.status', $explodeStatus);
+                ->when($status !== 'all', function ($q) use ($status) {
+                    return $q->where('n.status', $status);
                 })
                 ->when(!empty($query), function ($q) use ($query) {
                     return $q->where('n.name', 'LIKE', "%$query%");
