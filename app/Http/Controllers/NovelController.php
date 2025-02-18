@@ -12,13 +12,17 @@ class NovelController extends Controller
     private $service;
     private $request;
 
-    public function __construct(Request $request, NovelServiceImplement $service) { 
+    public function __construct(Request $request, NovelServiceImplement $service) {
         $this->request = $request;
         $this->service = $service;
     }
 
     function list(string $status){
         return $this->service->list($status);
+    }
+
+    function listForUpdate(string $status, string $query){
+        return $this->service->listForUpdate($status, $query);
     }
 
     function listReds(int $city, int $user){
@@ -36,13 +40,13 @@ class NovelController extends Controller
     function update(int $id){
         return $this->service->update($this->request->all(), $id);
     }
-    
+
     function updateStatus(int $id){
         return $this->service->updateStatus($this->request->all(), $id);
     }
-    
+
     function completeData(int $id) {
-       
+
         try {
             $item = Novel::find($id)->update($this->request->all());
         } catch (Exception $e) {

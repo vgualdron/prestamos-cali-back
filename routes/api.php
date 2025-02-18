@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/new"], function () {
     Route::get('/list/{status}', [NovelController::class, 'list'])->name('new.list');
+    Route::get('/list-for-update/{status}/{query}', [NovelController::class, 'listForUpdate'])->name('new.listForUpdate');
     Route::post('/create', [NovelController::class, 'create'])->name('new.create');
     Route::put('/update/{id}', [NovelController::class, 'update'])->name('new.update');
     Route::put('/update-status/{id}', [NovelController::class, 'updateStatus'])->name('new.changeStatus');

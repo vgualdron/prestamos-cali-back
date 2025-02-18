@@ -143,6 +143,126 @@
             }
         }
 
+        function listForUpdate(string $status, string $query) {
+            try {
+                $explodeStatus = explode(',', $status);
+                $sql = $this->novel->from('news as n')
+                ->select(
+                    'n.id',
+                    'n.document_number as documentNumber',
+                    'n.name as name',
+                    'n.phone as phone',
+                    'n.address as address',
+                    'n.address_house',
+                    'n.address_house_district',
+                    'dh.name as districtHouseName',
+                    'n.address_work',
+                    'n.address_work_district',
+                    'dw.name as districtWorkName',
+                    'n.site_visit',
+                    'n.district as district',
+                    'd.name as districtName',
+                    'd.group as districtGroup',
+                    'd.order as districtOrder',
+                    'n.occupation as occupation',
+                    'n.attempts as attempts',
+                    'n.observation as observation',
+                    'n.status as status',
+                    'n.created_at as date',
+                    'n.visit_start_date',
+                    DB::raw('IF(y.zone IS NOT NULL, z.name, "Sin ciudad") as cityName'),
+                    DB::raw('IF(y.zone IS NOT NULL, z.id, null) as city'),
+                    DB::raw('IF(n.sector IS NOT NULL, y.name, "Sin sector") as sectorName'),
+                    DB::raw('IF(n.sector IS NOT NULL, y.id, null) as sector'),
+                    DB::raw('IF(n.user_send IS NOT NULL, u.name, "Ninguno") as userSendName'),
+                    DB::raw('IF(n.user_send IS NOT NULL, u.id, null) as userSend'),
+                    'n.family_reference_district',
+                    'n.family_reference_name',
+                    'n.family_reference_address',
+                    'n.family_reference_phone',
+                    'n.family_reference_relationship',
+                    'n.family2_reference_district',
+                    'n.family2_reference_name',
+                    'n.family2_reference_address',
+                    'n.family2_reference_phone',
+                    'n.family2_reference_relationship',
+                    'n.guarantor_document_number',
+                    'n.guarantor_district',
+                    'n.guarantor_occupation',
+                    'n.guarantor_name',
+                    'n.guarantor_address',
+                    'n.guarantor_phone',
+                    'n.guarantor_relationship',
+                    'n.extra_reference',
+                    'n.period',
+                    'n.quantity',
+                    'n.visit_end_date',
+                    'n.account_type',
+                    'n.account_number',
+                    'n.account_type_third',
+                    'n.account_number_third',
+                    'n.account_name_third',
+                    'n.type_cv',
+                    'n.has_letter',
+                    'n.who_received_letter',
+                    'n.date_received_letter',
+                    'n.who_returned_letter',
+                    'n.date_returned_letter',
+                    'n.score',
+                    'n.score_observation',
+                    'n.account_active',
+                    'n.updated_at',
+                    'dia.id as diary_id',
+                    'dia.status as diary_status',
+                    'f.id as voucher_id',
+                    'f.url as voucher_url',
+                    'f.registered_date as voucher_date'
+                )
+                ->leftJoin('yards as y', 'n.sector', 'y.id')
+                ->leftJoin('zones as z', 'y.zone', 'z.id')
+                ->leftJoin('users as u', 'n.user_send', 'u.id')
+                ->leftJoin('districts as d', 'n.district', 'd.id')
+                ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
+                ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
+                ->leftJoin('files as f', function ($join) {
+                    $join->on('f.model_id', '=', 'n.id')
+                         ->where('f.model_name', '=', 'news')
+                         ->where('f.name', '=', 'FOTO_VOUCHER')
+                         ->whereRaw('f.registered_date > n.updated_at');
+                })
+                ->when($status !== 'all', function ($q) use ($explodeStatus) {
+                    return $q->whereIn('n.status', $explodeStatus);
+                })
+                ->when(!empty($query), function ($q) use ($query) {
+                    return $q->where('n.name', 'LIKE', "%$query%");
+                })
+                ->orderBy('z.id', 'ASC')
+                ->orderBy('d.group', 'ASC')
+                ->orderBy('d.order', 'ASC')
+                ->limit(20)
+                ->get();
+
+                if (count($sql) > 0){
+                    return response()->json([
+                        'data' => $sql
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'data' => []
+                    ], Response::HTTP_OK);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al cargar los registros',
+                            'detail' => $e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function listReds(int $city, int $user) {
             try {
 
