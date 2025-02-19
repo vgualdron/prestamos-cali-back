@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
-use App\Models\Lending;
-use App\Models\Payment;
-use App\Models\Expense;
-use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Services\Implementations\UserServiceImplement;
 use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
