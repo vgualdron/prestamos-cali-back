@@ -110,6 +110,8 @@ class UserController extends Controller
             ");
 
             $data = [
+                'price' => 2000,
+                'amountDiary' => 3,
                 'amountAddress' => $amountAddress->total,
                 'days' => $days->total,
                 'date' => $currentDate,
