@@ -88,6 +88,8 @@ class UserController extends Controller
                             ORDER BY
                                 total DESC;";
 
+            echo $sqlAmountAddress;
+
             $amountAddress = DB::selectOne($sqlAmountAddress);
 
 
