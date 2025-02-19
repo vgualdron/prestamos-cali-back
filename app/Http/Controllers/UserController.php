@@ -100,7 +100,7 @@ class UserController extends Controller
                             WHERE DATE(date) = DATE('" . $currentDate . "')
                         ) THEN 1
                         ELSE 0
-                    END AS days_work
+                    END AS total
                 FROM
                     deliveries
                 WHERE
@@ -110,8 +110,8 @@ class UserController extends Controller
             ");
 
             $data = [
-                'amountAddress' => $amountAddress,
-                'days' => $days,
+                'amountAddress' => $amountAddress['total'],
+                'days' => $days['total'],
                 'date' => $currentDate,
             ];
 
