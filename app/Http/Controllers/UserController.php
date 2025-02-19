@@ -67,7 +67,7 @@ class UserController extends Controller
         return $this->service->updateLocation($user, $idUserSesion);
     }
 
-    public function getInfo(Request $request, $idList)
+    public function getInfo(Request $request)
     {
         $data = null;
         try {
