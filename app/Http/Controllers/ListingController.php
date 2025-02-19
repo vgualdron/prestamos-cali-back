@@ -747,8 +747,6 @@ class ListingController extends Controller
 
             $currentDate = date('Y-m-d H:i:s');
 
-            $currentDate = date('Y-m-d H:i:s');
-
             $days = DB::selectOne("
                 SELECT
                     COUNT(DISTINCT DATE(date)) +

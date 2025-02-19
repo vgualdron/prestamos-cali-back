@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 });
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/user"], function () {
+    Route::get('/get-info', [UserController::class, 'getInfo'])->name('user.getInfo');
     Route::get('/list/{displayAll}', [UserController::class, 'list'])->name('user.list');
     Route::get('/list-by-role-name/{displayAll}/{name}/{city}', [UserController::class, 'listByRoleName'])->name('user.listByRoleName');
     Route::get('/list-by-area/{area}', [UserController::class, 'listByArea'])->name('user.listByArea');
