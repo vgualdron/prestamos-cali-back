@@ -72,8 +72,7 @@ class UserController extends Controller
             $date = date("Y-m-d");
             $currentDate = date('Y-m-d H:i:s');
 
-            $amountAddress = DB::selectOne("
-                            SELECT
+            $sqlAmountAddress = "SELECT
                                 COUNT(news.id) AS total
                             FROM
                                 users
@@ -87,8 +86,10 @@ class UserController extends Controller
                             GROUP BY
                                 users.id, users.name
                             ORDER BY
-                                total DESC;
-                        ");
+                                total DESC;";
+
+            $amountAddress = DB::selectOne($sqlAmountAddress);
+
 
             $days = DB::selectOne("
                 SELECT
@@ -108,6 +109,7 @@ class UserController extends Controller
                     AND YEAR(date) = YEAR('" . $currentDate . "')
                     AND date <= '" . $currentDate . "'
             ");
+
 
             $data = [
                 'price' => 2000,
