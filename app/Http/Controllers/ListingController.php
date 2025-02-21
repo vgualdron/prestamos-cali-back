@@ -766,8 +766,6 @@ class ListingController extends Controller
                     AND date <= '" . $currentDate . "'
             ");
 
-
-
             $data = [
                 'yellow' => $yellow,
                 'yellowUp' => $yellowUp,
