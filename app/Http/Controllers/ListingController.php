@@ -766,6 +766,22 @@ class ListingController extends Controller
                     AND date <= '" . $currentDate . "'
             ");
 
+            $workplan = DB::selectOne("
+                SELECT
+                    s.id AS step_id,
+                    s.name AS step_name,
+                    w.id AS workplan_id,
+                    w.status,
+                    w.registered_date
+                FROM steps s
+                LEFT JOIN workplans w ON s.id = w.step_id
+                    AND w.listing_id = " . $idList . "
+                    AND DATE(w.registered_date) = '" . $date . "'
+                WHERE w.id IS NULL
+                ORDER BY s.order ASC
+                LIMIT 1;
+            ");
+
             $data = [
                 'yellow' => $yellow,
                 'yellowUp' => $yellowUp,
@@ -782,6 +798,7 @@ class ListingController extends Controller
                 'days' => $days,
                 'date' => $currentDate,
                 'listing_id' => $idList,
+                'workplan' => $workplan,
             ];
 
         } catch (Exception $e) {
