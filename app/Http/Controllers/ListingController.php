@@ -783,6 +783,7 @@ class ListingController extends Controller
                 'paymentsSecre' => $paymentsSecre,
                 'days' => $days,
                 'date' => $currentDate,
+                'listing_id' => $idList,
             ];
 
         } catch (Exception $e) {
