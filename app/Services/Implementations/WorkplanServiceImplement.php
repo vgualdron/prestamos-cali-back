@@ -67,13 +67,13 @@
 
         function create(array $workplan){
             try {
-                $validation = $this->validate($this->validator, $district, null, 'registrar', 'workplan', null);
+                $validation = $this->validate($this->validator, $workplan, null, 'registrar', 'workplan', null);
                 if ($validation['success'] === false) {
                     return response()->json([
                         'message' => $validation['message']
                     ], Response::HTTP_BAD_REQUEST);
                 }
-                $status = $this->district::create($workplan);
+                $status = $this->workplan::create($workplan);
                 return response()->json([
                     'message' => [
                         [
