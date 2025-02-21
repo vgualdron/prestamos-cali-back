@@ -770,6 +770,8 @@ class ListingController extends Controller
                 SELECT
                     s.id AS step_id,
                     s.name AS step_name,
+                    s.description AS step_description,
+                    s.order AS step_order,
                     w.id AS workplan_id,
                     w.status,
                     w.registered_date
