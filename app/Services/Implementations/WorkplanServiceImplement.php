@@ -22,7 +22,7 @@
         function list(string $date){
             try {
                 $sql = "SELECT
-                        s.id AS '#',
+                        s.id AS 'step_id',
                         IFNULL(MAX(CASE WHEN w.listing_id = 1 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 10',
                         IFNULL(MAX(CASE WHEN w.listing_id = 2 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 23',
                         IFNULL(MAX(CASE WHEN w.listing_id = 3 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 179',
