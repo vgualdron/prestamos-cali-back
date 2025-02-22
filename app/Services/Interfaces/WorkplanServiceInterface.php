@@ -7,6 +7,5 @@
         function create(array $district);
         function update(array $district, int $id);
         function delete(int $id);
-        function get(int $id);
     }
 ?>
