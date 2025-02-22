@@ -42,6 +42,21 @@
 
                 $results = DB::select($sql);
 
+                // Formatear la respuesta para que cada fila sea un objeto
+                $workplans = [];
+
+                foreach ($results as $row) {
+                    $workplans[] = [
+                        "listing_name" => "Ruta " . $row->listing_id, // Asignar el nombre de la ruta
+                        "listing_id" => $row->listing_id,
+                        "status" => $row->status,
+                        "step_id" => $row->step_id
+                    ];
+                }
+
+                // Retornar como JSON si es una API
+                return response()->json($workplans);
+
                 if (count($results) > 0){
                     return response()->json([
                         'data' => $results
