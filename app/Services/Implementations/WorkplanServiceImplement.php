@@ -95,7 +95,7 @@
 
         function update(array $workplan, int $id){
             try {
-                $validation = $this->validate($this->validator, $district, $id, 'actualizar', 'workplan', null);
+                $validation = $this->validate($this->validator, $workplan, $id, 'actualizar', 'workplan', null);
                 if ($validation['success'] === false) {
                     return response()->json([
                         'message' => $validation['message']
