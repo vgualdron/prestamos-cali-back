@@ -772,9 +772,9 @@ class ListingController extends Controller
                     s.name AS step_name,
                     s.description AS step_description,
                     s.order AS step_order,
-                    w.id AS workplan_id,
-                    w.status,
-                    w.registered_date
+                    COALESCE(w.id, NULL) AS workplan_id,
+                    COALESCE(w.status, NULL) AS status,
+                    COALESCE(w.registered_date, NULL) AS registered_date
                 FROM steps s
                 LEFT JOIN workplans w ON s.id = w.step_id
                     AND w.listing_id = " . $idList . "
@@ -783,6 +783,19 @@ class ListingController extends Controller
                 ORDER BY s.order ASC
                 LIMIT 1;
             ");
+
+            // Si no hay registro, devolver un objeto con valores NULL
+            if (!$workplan) {
+                $workplan = (object) [
+                    'step_id' => null,
+                    'step_name' => null,
+                    'step_description' => null,
+                    'step_order' => null,
+                    'workplan_id' => null,
+                    'status' => null,
+                    'registered_date' => null,
+                ];
+            }
 
             $data = [
                 'yellow' => $yellow,
