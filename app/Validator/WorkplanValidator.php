@@ -14,15 +14,11 @@
 
         private function rules(){
             return[
-                'step_id' => 'required',
-                'listing_id' => 'required',
             ];
         }
 
         private function messages(){
             return [
-                'step_id.required' => 'El step es requerido',
-                'listing_id.required' => 'La lista es requerida',
             ];
         }
     }
