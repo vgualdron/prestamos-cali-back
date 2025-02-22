@@ -5,6 +5,7 @@
     use App\Models\Workplan;
     use App\Validator\WorkplanValidator;
     use App\Traits\Commons;
+    use Illuminate\Support\Facades\DB;
 
     class WorkplanServiceImplement implements WorkplanServiceInterface {
 
