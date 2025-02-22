@@ -15,8 +15,8 @@ class WorkplanController extends Controller
             $this->service = $service;
     }
 
-    function list(){
-        return $this->service->list();
+    function list(string $date){
+        return $this->service->list($date);
     }
 
     function create(){
