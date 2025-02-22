@@ -20,7 +20,7 @@
 
         function list(string $date){
             try {
-                $sql = "SELECT
+                /* $sql = "SELECT
                         s.id AS '#',
                         IFNULL(MAX(CASE WHEN w.listing_id = 1 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 10',
                         IFNULL(MAX(CASE WHEN w.listing_id = 2 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 23',
@@ -49,7 +49,10 @@
                     return response()->json([
                         'data' => []
                     ], Response::HTTP_OK);
-                }
+                } */
+                return response()->json([
+                    'data' => []
+                ], Response::HTTP_OK);
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
