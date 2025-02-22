@@ -23,18 +23,18 @@
             try {
                 $sql = "SELECT
                         s.id AS 'step_id',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 1 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 10',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 2 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 23',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 3 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 179',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 4 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 234',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 5 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 568',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 23 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 9',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 6 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 128',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 7 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 345',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 8 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 671',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 9 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 910',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 10 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 17',
-                        IFNULL(MAX(CASE WHEN w.listing_id = 11 THEN CONCAT(w.step_id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 111'
+                        IFNULL(MAX(CASE WHEN w.listing_id = 1 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 10',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 2 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 23',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 3 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 179',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 4 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 234',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 5 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 568',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 23 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 9',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 6 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 128',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 7 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 345',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 8 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 671',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 9 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 910',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 10 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 17',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 11 THEN CONCAT(w.id, '-' , w.status) ELSE NULL END), CONCAT('0', '-' , 'none')) AS 'Ruta 111'
                     FROM steps s
                     LEFT JOIN workplans w
                         ON s.id = w.step_id
