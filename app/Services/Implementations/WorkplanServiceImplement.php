@@ -18,39 +18,37 @@
             $this->validator = $validator;
         }
 
-        function list(){
+        function list(string $date){
             try {
-                $sql = $this->district->from('districts as d')
-                    ->select(
-                        'd.id',
-                        'd.name',
-                        'd.sector',
-                        'd.status',
-                        'd.group',
-                        'd.order',
-                        'y.name as sectorName',
-                        'z.name as cityName',
-                    )
-                    ->join('yards as y', 'd.sector', 'y.id')
-                    ->join('zones as z', 'y.zone', 'z.id')
-                    ->orderBy('z.code', 'asc')
-                    ->orderBy('d.group', 'asc')
-                    ->orderBy('d.order', 'asc')
-                    ->get();
+                $sql = "SELECT
+                        s.id AS '#',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 1 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 10',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 2 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 23',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 3 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 179',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 4 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 234',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 5 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 568',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 23 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 9',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 6 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 128',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 7 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 345',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 8 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 671',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 9 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 910',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 10 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 17',
+                        IFNULL(MAX(CASE WHEN w.listing_id = 11 THEN w.status ELSE NULL END), 'pendiente') AS 'Ruta 111'
+                    FROM steps s
+                    LEFT JOIN workplans w
+                        ON s.id = w.step_id
+                        AND DATE(w.registered_date) BETWEEN '" . $date . " 00:00:00 ' AND '" . $date . " 23:59:59' GROUP BY s.id ORDER BY s.id ASC;";
 
-                if (count($sql) > 0){
+                $results = DB::select($sql);
+
+                if (count($results) > 0){
                     return response()->json([
-                        'data' => $sql
+                        'data' => $results
                     ], Response::HTTP_OK);
                 } else {
                     return response()->json([
-                        'message' => [
-                            [
-                                'text' => 'No hay registros para mostrar',
-                                'detail' => 'Aún no se ha registrado ninguno'
-                            ]
-                        ]
-                    ], Response::HTTP_NOT_FOUND);
+                        'data' => []
+                    ], Response::HTTP_OK);
                 }
             } catch (\Throwable $e) {
                 return response()->json([
@@ -170,37 +168,5 @@
             }
         }
 
-        function get(int $id){
-            try {
-                $sql = $this->district->from('districts as d')
-                    ->select('d.id', 'd.name', 'd.sector', 'd.status', 'd.group', 'd.order', 'y.name as sectorName')
-                    ->join('yards as y', 'd.sector', 'y.id')
-                    ->where('id', $id)
-                    ->first();
-                if(!empty($sql)) {
-                    return response()->json([
-                        'data' => $sql
-                    ], Response::HTTP_OK);
-                } else {
-                    return response()->json([
-                        'message' => [
-                            [
-                                'text' => 'No existe',
-                                'detail' => 'por favor recargue la página'
-                            ]
-                        ]
-                    ], Response::HTTP_NOT_FOUND);
-                }
-            } catch (\Throwable $e) {
-                return response()->json([
-                    'message' => [
-                        [
-                            'text' => 'Se ha presentado un error al buscar',
-                            'detail' => $e->getMessage(),
-                        ]
-                    ]
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-        }
     }
 ?>

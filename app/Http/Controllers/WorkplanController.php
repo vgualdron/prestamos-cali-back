@@ -30,8 +30,4 @@ class WorkplanController extends Controller
     function delete(int $id){
         return $this->service->delete($id);
     }
-
-    function get(int $id){
-        return $this->service->get($id);
-    }
 }

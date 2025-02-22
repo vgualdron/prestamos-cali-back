@@ -255,11 +255,10 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 });
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/workplan"], function () {
-    Route::get('/', [WorkplanController::class, 'list'])->name('workplan.list');
+    Route::get('/{date}', [WorkplanController::class, 'list'])->name('workplan.list');
     Route::post('/', [WorkplanController::class, 'create'])->name('workplan.create');
     Route::put('/{id}', [WorkplanController::class, 'update'])->name('workplan.update');
     Route::delete('/{id}', [WorkplanController::class, 'delete'])->name('workplan.delete');
-    Route::get('/{id}', [WorkplanController::class, 'get'])->name('workplan.get');
 });
 
 // endpoints de carga da datos

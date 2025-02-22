@@ -3,7 +3,7 @@
 
     interface WorkplanServiceInterface
     {
-        function list();
+        function list(string $date);
         function create(array $district);
         function update(array $district, int $id);
         function delete(int $id);
