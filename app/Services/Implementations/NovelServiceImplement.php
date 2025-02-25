@@ -117,6 +117,7 @@
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('n.status', $explodeStatus);
                     })
+                    ->groupBy('n.id')
                     ->orderBy('z.id', 'ASC')
                     ->orderBy('d.group', 'ASC')
                     ->orderBy('d.order', 'ASC')
