@@ -91,7 +91,7 @@
                         'n.score',
                         'n.score_observation',
                         'n.account_active',
-                        'n.updated_at',
+                        DB::raw("DATE_FORMAT(n.updated_at, '%Y-%m-%d %H:%i:%s') as updated_at")
                         'dia.id as diary_id',
                         'dia.status as diary_status',
                         'f.id as voucher_id',
