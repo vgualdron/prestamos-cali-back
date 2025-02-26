@@ -91,6 +91,7 @@
                         'n.score',
                         'n.score_observation',
                         'n.account_active',
+                        DB::raw("CAST(DATE_FORMAT(n.updated_at, '%Y-%m-%d %H:%i:%s') AS CHAR) as date_update"),
                         DB::raw("CAST(DATE_FORMAT(n.updated_at, '%Y-%m-%d %H:%i:%s') AS CHAR) as updated_at"),
                         'dia.id as diary_id',
                         'dia.status as diary_status',
