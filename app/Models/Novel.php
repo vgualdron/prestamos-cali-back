@@ -8,6 +8,11 @@ class Novel extends Model
 {
     public $table = "news";
 
+    protected function serializeDate(Carbon $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
