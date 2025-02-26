@@ -3,16 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Novel extends Model
 {
     public $table = "news";
-
-    protected function serializeDate(Carbon $date)
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
 
     /**
      * The attributes that are mass assignable.
