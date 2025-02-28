@@ -84,11 +84,12 @@ class Lending extends Authenticatable
             }
 
             if ($lending->isDirty('step')) {
-                Lending::withoutEvents(function () use ($lending) {
-                    $lending->query()->update([
+                DB::table('lendings')
+                    ->where('id', $lending->id)
+                    ->update([
                         'date_step' => now(),
+                        'updated_at' => $lending->getOriginal('updated_at') // Mantiene el valor original
                     ]);
-                });
             }
 
         });
