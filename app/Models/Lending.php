@@ -36,6 +36,8 @@ class Lending extends Authenticatable
         'type',
         'has_double_interest',
         'doubleDate',
+        'step',
+        'date_step',
     ];
 
     public function payments() {
