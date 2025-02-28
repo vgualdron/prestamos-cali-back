@@ -85,9 +85,9 @@ class Lending extends Authenticatable
 
             if ($lending->isDirty('step')) {
                 Lending::withoutEvents(function () use ($lending) {
-                    $lending->timestamps = false; // Desactiva "updated_at"
-                    $lending->date_step = now(); // Asigna la fecha actual a "date_step"
-                    $lending->save();
+                    $lending->query()->update([
+                        'date_step' => now(),
+                    ]);
                 });
             }
 
