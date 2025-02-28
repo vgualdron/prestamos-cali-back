@@ -82,6 +82,15 @@ class Lending extends Authenticatable
                 // Actualizar el nombre en la tabla news
                 Novel::where('id', $newId)->update(['name' => $newName]);
             }
+
+            if ($lending->isDirty('step')) {
+                Lending::withoutEvents(function () use ($lending) {
+                    $lending->timestamps = false; // Desactiva "updated_at"
+                    $lending->date_step = now(); // Asigna la fecha actual a "date_step"
+                    $lending->save();
+                });
+            }
+
         });
     }
 }
