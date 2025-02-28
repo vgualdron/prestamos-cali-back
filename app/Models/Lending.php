@@ -5,7 +5,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\DB;
 
 class Lending extends Authenticatable
 {
@@ -89,7 +88,7 @@ class Lending extends Authenticatable
                     ->where('id', $lending->id)
                     ->update([
                         'date_step' => now(),
-                        'updated_at' => $lending->getOriginal('updated_at') // Mantiene el valor original
+                        'updated_at' => $lending->getOriginal('updated_at')
                     ]);
             }
 
