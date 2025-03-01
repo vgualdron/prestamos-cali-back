@@ -39,7 +39,6 @@
             }
         }
 
-
         function create(array $task){
             try {
                 $status = $this->task::create($task);
