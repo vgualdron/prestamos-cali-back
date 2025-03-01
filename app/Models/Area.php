@@ -16,6 +16,6 @@ class Area extends Model
     protected $fillable = [
         'id',
         'name',
-        'role_id',
+        'show_task',
     ];
 }
