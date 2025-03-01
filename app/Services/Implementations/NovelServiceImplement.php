@@ -98,10 +98,17 @@
                         'f.id as voucher_id',
                         'f.url as voucher_url',
                         'f.registered_date as voucher_date',
+                        'l.id as lending_id',
+                        'l.status as lending_status',
+                        'l.expense_id as expense_id',
                     )
                     ->leftJoin('diaries as dia', function ($join) {
                         $join->on('dia.new_id', '=', 'n.id')
                             ->where('dia.status', '!=', 'cancelada');
+                    })
+                    ->leftJoin('lendings as l', function ($join) {
+                        $join->on('l.new_id', '=', 'l.id')
+                            ->where('l.status', '=', 'open');
                     })
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
