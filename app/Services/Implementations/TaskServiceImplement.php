@@ -19,7 +19,7 @@
         function list(string $status) {
             try {
                 $sql = $this->task
-                    ->select('id', 'name', 'order', 'permission', 'background', 'color')
+                    ->select('*')
                     ->orderBy('order', 'ASC')
                     ->where('status', $status)
                     ->get();
