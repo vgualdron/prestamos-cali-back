@@ -56,7 +56,7 @@ class LendingController extends Controller
 
 			$items = Lending::select([
                 'lendings.*',
-                DB::raw("IF(DATE(lendings.date_step) = CURDATE(), lendings.step, '') AS step"),
+                DB::raw("IF(lendings.date_step BETWEEN '$startDate' AND '$endDate', lendings.step, '') AS step"),
                 'news.family_reference_name',
                 'news.family_reference_phone',
                 'news.family2_reference_name',
