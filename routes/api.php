@@ -261,6 +261,13 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
     Route::delete('/{id}', [WorkplanController::class, 'delete'])->name('workplan.delete');
 });
 
+Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/task"], function () {
+    Route::get('/{date}', [TaskController::class, 'list'])->name('task.list');
+    Route::post('/', [TaskController::class, 'create'])->name('task.create');
+    Route::put('/{id}', [TaskController::class, 'update'])->name('task.update');
+    Route::delete('/{id}', [TaskController::class, 'delete'])->name('task.delete');
+});
+
 // endpoints de carga da datos
 Route::post('/upload-data-payments', [UploadDataController::class, 'uploadPayments']);
 Route::post('/create-new', [UploadDataController::class, 'createNew']);
