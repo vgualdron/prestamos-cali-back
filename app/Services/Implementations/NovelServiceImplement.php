@@ -107,7 +107,7 @@
                             ->where('dia.status', '!=', 'cancelada');
                     })
                     ->leftJoin('lendings as l', function ($join) {
-                        $join->on('l.new_id', '=', 'l.id')
+                        $join->on('l.new_id', '=', 'n.id')
                             ->where('l.status', '=', 'open');
                     })
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
