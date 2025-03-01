@@ -19,6 +19,7 @@ class Tasks extends Model
         'description',
         'observation',
         'status',
+        'priority',
         'registered_by',
         'area_id',
         'updated_at',
