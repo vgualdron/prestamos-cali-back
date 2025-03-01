@@ -20,7 +20,7 @@
             try {
                 $sql = $this->task
                     ->select('*')
-                    ->orderBy('order', 'ASC')
+                    ->orderBy('priority', 'DESC')
                     ->where('status', $status)
                     ->get();
 
