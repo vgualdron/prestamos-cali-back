@@ -30,6 +30,7 @@ use App\Http\Controllers\{
                         DeliveryController,
                         DiscountController,
                         WorkplanController,
+                        TaskController,
                     };
 
 /*
