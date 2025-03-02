@@ -178,6 +178,7 @@ class LendingController extends Controller
             $status1 = 'open';
             $status2 = 'renovated';
             $status3 = 'closed';
+            $status4 = 'off';
             $idUserSesion = $request->user()->id;
 
 			$items = Lending::select([
@@ -233,7 +234,7 @@ class LendingController extends Controller
                      ->where('filePdf.model_name', '=', 'news')
                      ->where('filePdf.name', '=', 'PDF_CV');
             })
-            ->whereIn('lendings.status', [$status3])
+            ->whereIn('lendings.status', [$status3, $status4])
             ->where('lendings.listing_id', $idList)
             ->distinct()
             ->orderBy('lendings.type', 'asc')
