@@ -236,6 +236,12 @@ class LendingController extends Controller
             })
             ->whereIn('lendings.status', [$status3, $status4])
             ->where('lendings.listing_id', $idList)
+            ->whereNotExists(function ($query) use ($status1) {
+                $query->select(DB::raw(1))
+                      ->from('lendings as l')
+                      ->whereRaw('l.new_id = lendings.new_id') // Relación entre lendings con el mismo new_id
+                      ->where('l.status', '=', $status1); // Condición para excluir si existe algún lending con status1
+            })
             ->distinct()
             ->orderBy('lendings.type', 'asc')
             ->orderBy('lendings.id', 'asc')
