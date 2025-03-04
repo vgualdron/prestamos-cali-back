@@ -15,8 +15,8 @@ class TaskController extends Controller
             $this->service = $service;
     }
 
-    function list(string $date){
-        return $this->service->list($date);
+    function list(string $status){
+        return $this->service->list($status);
     }
 
     function create(){

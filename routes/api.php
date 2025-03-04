@@ -263,7 +263,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 });
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/task"], function () {
-    Route::get('/{date}', [TaskController::class, 'list'])->name('task.list');
+    Route::get('/{status}', [TaskController::class, 'list'])->name('task.list');
     Route::post('/', [TaskController::class, 'create'])->name('task.create');
     Route::put('/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::delete('/{id}', [TaskController::class, 'delete'])->name('task.delete');
