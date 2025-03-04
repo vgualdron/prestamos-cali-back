@@ -21,10 +21,10 @@
                 $explodeStatus = explode(',', $status);
                 $sql = $this->task
                     ->select('*')
-                    ->orderBy('priority', 'DESC')
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
                         return $q->whereIn('status', $explodeStatus);
                     })
+                    ->orderBy('priority', 'DESC')
                     ->get();
 
                     return response()->json([
