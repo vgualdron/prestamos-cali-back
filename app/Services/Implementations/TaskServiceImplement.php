@@ -18,10 +18,13 @@
 
         function list(string $status) {
             try {
+                $explodeStatus = explode(',', $status);
                 $sql = $this->task
                     ->select('*')
                     ->orderBy('priority', 'DESC')
-                    ->where('status', $status)
+                    ->when($status !== 'all', function ($q) use ($explodeStatus) {
+                        return $q->whereIn('status', $explodeStatus);
+                    })
                     ->get();
 
                     return response()->json([
