@@ -19,6 +19,7 @@
         function list(string $status) {
             try {
                 $explodeStatus = explode(',', $status);
+                echo $status;
                 $sql = $this->task->from('tasks as t')
                     ->select('t.*')
                     ->orderBy('priority', 'DESC')
