@@ -18,7 +18,6 @@
 
         function list(string $status) {
             try {
-                dd($status);
                 $explodeStatus = explode(',', $status);
                 $sql = $this->task->from('tasks as t')
                     ->select('t.*')
