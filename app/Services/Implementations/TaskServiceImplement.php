@@ -19,10 +19,10 @@
         function list(string $status) {
             try {
                 $explodeStatus = explode(',', $status);
-                $sql = $this->task
-                    ->select('*')
+                $sql = $this->task->from('tasks as t')
+                    ->select('t.*')
                     ->when($status !== 'all', function ($q) use ($explodeStatus) {
-                        return $q->whereIn('status', $explodeStatus);
+                        return $q->whereIn('t.status', $explodeStatus);
                     })
                     ->orderBy('priority', 'DESC')
                     ->get();
