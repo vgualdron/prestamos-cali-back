@@ -16,6 +16,7 @@ class TaskController extends Controller
     }
 
     function list(string $status){
+        dd("Llega aquí");
         return $this->service->list($status);
     }
 
