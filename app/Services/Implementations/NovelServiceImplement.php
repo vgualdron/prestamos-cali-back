@@ -266,7 +266,7 @@
                     return $q->where('n.name', 'LIKE', "%$query%");
                 })
                 ->orderBy('n.name', 'ASC')
-                ->limit(10)
+                ->limit(20)
                 ->get();
 
                 if (count($sql) > 0){
