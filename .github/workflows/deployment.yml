@@ -21,7 +21,7 @@ jobs:
           dangerous-clean-slate: false
           log-level: verbose
           protocol: ftps
-          timeout: 120000
+          timeout: 120001
           local-dir: ./
           exclude: |
             **/vendor/**
