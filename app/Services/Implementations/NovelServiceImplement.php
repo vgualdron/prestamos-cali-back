@@ -101,6 +101,16 @@
                         'l.id as lending_id',
                         'l.status as lending_status',
                         'l.expense_id as expense_id',
+                        'yh.id as sectorHouse',
+                        'zh.id as cityHouse',
+                        'yw.id as sectorWork',
+                        'zw.id as cityWork',
+                        'yrf.id as sectorRef1',
+                        'zrf.id as cityRef1',
+                        'yrf2.id as sectorRef2',
+                        'zrf2.id as cityRef2',
+                        'yg.id as sectorGuarantor',
+                        'zg.id as cityGuarantor',
                     )
                     ->leftJoin('diaries as dia', function ($join) {
                         $join->on('dia.new_id', '=', 'n.id')
@@ -115,7 +125,20 @@
                     ->leftJoin('users as u', 'n.user_send', 'u.id')
                     ->leftJoin('districts as d', 'n.district', 'd.id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
+                    ->leftJoin('yards as yh', 'dh.sector', 'yh.id')
+                    ->leftJoin('zones as zh', 'yh.zone', 'zh.id')
                     ->leftJoin('districts as dw', 'n.address_work_district', 'dw.id')
+                    ->leftJoin('yards as yw', 'dw.sector', 'yw.id')
+                    ->leftJoin('zones as zw', 'yw.zone', 'zw.id')
+                    ->leftJoin('districts as drf', 'n.family_reference_district', 'drf.id')
+                    ->leftJoin('yards as yrf', 'drf.sector', 'yrf.id')
+                    ->leftJoin('zones as zrf', 'yrf.zone', 'zrf.id')
+                    ->leftJoin('districts as drf2', 'n.family2_reference_district', 'drf2.id')
+                    ->leftJoin('yards as yrf2', 'drf2.sector', 'yrf2.id')
+                    ->leftJoin('zones as zrf2', 'yrf2.zone', 'zrf2.id')
+                    ->leftJoin('districts as dg', 'n.guarantor_district', 'dg.id')
+                    ->leftJoin('yards as yg', 'dg.sector', 'yg.id')
+                    ->leftJoin('zones as zg', 'yg.zone', 'zg.id')
                     ->leftJoin('files as f', function ($join) {
                         $join->on('f.model_id', '=', 'n.id')
                              ->where('f.model_name', '=', 'news')
