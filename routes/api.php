@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 });
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/yard"], function () {
-    Route::get('/list/{yard}/{displayAll}', [YardController::class, 'list'])->middleware('can:yard.list')->name('yard.list');
+    Route::get('/list/{yard}/{displayAll}', [YardController::class, 'list'])->name('yard.list');
     Route::get('/list-by-zone/{zone}/{displayAll}', [YardController::class, 'listByZone'])->name('yard.list');
     Route::post('/create', [YardController::class, 'create'])->middleware('can:yard.create')->name('yard.create');
     Route::put('/update/{id}', [YardController::class, 'update'])->middleware('can:yard.update')->name('yard.update');
