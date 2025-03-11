@@ -130,9 +130,9 @@ class FileController extends Controller
     public function delete(Request $request, $id)
     {
         try {
-            $item = Image::find($id);
-            Storage::disk('products')->delete($item->name);
-            $items = Image::destroy($id);
+            $item = File::find($id);
+            // Storage::disk('products')->delete($item->name);
+            $items = File::destroy($id);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
