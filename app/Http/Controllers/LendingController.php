@@ -50,6 +50,7 @@ class LendingController extends Controller
             $status1 = 'open';
             $status2 = 'renovated';
             $status3 = 'closed';
+            $status4 = 'off';
             $startDate = date('Y-m-d'.' 00:00:00');
             $endDate = date('Y-m-d'.' 23:59:59');
             $idUserSesion = $request->user()->id;
@@ -112,14 +113,14 @@ class LendingController extends Controller
             ->with('payments')
             ->with('discounts')
             ->with('reddirections')
-            ->where(function ($query) use ($idList, $status1, $status2, $status3, $startDate, $endDate) {
+            ->where(function ($query) use ($idList, $status1, $status2, $status3, $status4, $startDate, $endDate) {
                 $query->where(function ($subQuery) use ($idList, $status1) {
                     $subQuery->where('listing_id', $idList)
                         ->whereIn('lendings.status', [$status1]);
                 })
-                ->orWhere(function ($subQuery) use ($idList, $status2, $status3, $startDate, $endDate) {
+                ->orWhere(function ($subQuery) use ($idList, $status2, $status3, $status4, $startDate, $endDate) {
                     $subQuery->where('listing_id', $idList)
-                        ->whereIn('lendings.status', [$status2, $status3])
+                        ->whereIn('lendings.status', [$status2, $status3, $status4])
                         ->whereBetween('lendings.updated_at', [$startDate, $endDate]);
                 });
             })
