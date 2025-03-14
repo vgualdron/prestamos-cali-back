@@ -24,7 +24,7 @@ class UpdateLendingsDoubleInterest extends Command
     {
         // Ejecutar la consulta para obtener los registros que cumplen las condiciones
         $lendingsToUpdate = DB::select('
-            SELECT 
+            SELECT
             lendings.id AS lending_id,
             lendings.amount AS amount,
             lendings.firstDate AS date,
@@ -32,11 +32,11 @@ class UpdateLendingsDoubleInterest extends Command
             DATE_ADD(lendings.firstDate, INTERVAL 15 DAY) AS new_date,
             IFNULL(SUM(payments.amount), 0) AS total_paid,
             (lendings.amount * (lendings.percentage / 100)) AS expected_interest
-        FROM 
+        FROM
             lendings
-        LEFT JOIN 
+        LEFT JOIN
             payments ON lendings.id = payments.lending_id
-        WHERE 
+        WHERE
             lendings.status = "open"
             AND lendings.has_double_interest = false
             AND DATEDIFF(CURRENT_DATE, lendings.firstDate) >= 15
@@ -44,7 +44,7 @@ class UpdateLendingsDoubleInterest extends Command
             lendings.id
         HAVING
             expected_interest > total_paid
-        ORDER BY 
+        ORDER BY
             lendings.id;
         ');
 
@@ -59,7 +59,7 @@ class UpdateLendingsDoubleInterest extends Command
         }
 
         // Registrar el resultado en el log
-        $this->info(count($lendingsToUpdate) . ' registros actualizados con doble interés.');
+        $this->info(count($lendingsToUpdate) . ' --> registros actualizados con doble interés.');
         \Log::info('Registros actualizados con doble interés.', [
             'count' => count($lendingsToUpdate),
         ]);
