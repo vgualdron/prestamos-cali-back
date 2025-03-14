@@ -60,7 +60,7 @@ class UpdateLendingsDoubleInterest extends Command
 
         // Registrar el resultado en el log
         $this->info(count($lendingsToUpdate) . ' --> registros actualizados con doble interés.');
-        \Log::info('Registros actualizados con doble interés.', [
+        \Log::channel('double_interest')->info('Registros actualizados con doble interés.', [
             'count' => count($lendingsToUpdate),
         ]);
     }
