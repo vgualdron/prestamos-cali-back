@@ -7,7 +7,7 @@
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\DB;
-    
+
     class QuestionServiceImplement implements QuestionServiceInterface {
 
         use Commons;
@@ -19,7 +19,7 @@
         function __construct(ProfileValidator $profileValidator){
             $this->question = new Question;
             $this->profileValidator = $profileValidator;
-        }    
+        }
 
         function list(string $status, string $type) {
             try {
@@ -146,10 +146,10 @@
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
-        
-        function delete(int $id){   
+
+        function delete(int $id){
             try {
-                $sql = $this->expense::find($id);
+                $sql = $this->question::find($id);
                 if(!empty($sql)) {
                     $sql->delete();
                     return response()->json([
@@ -160,7 +160,7 @@
                             ]
                         ]
                     ], Response::HTTP_OK);
-                    
+
                 } else {
                     return response()->json([
                         'message' => [
