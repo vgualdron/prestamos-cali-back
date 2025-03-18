@@ -136,6 +136,47 @@
             }
         }
 
+        function getByUserAndDate(int $user, string $date){
+            try {
+
+                $dateStart = $date . ' 00:00:00';
+                $dateEnd = $date . ' 23:59:59';
+
+                $results = DB::table('reddirections as r')
+                    ->select(
+                        'r.id',
+                        'r.start_date',
+                        'r.end_date',
+                        DB::raw('TIMESTAMPDIFF(MINUTE, r.start_date, r.end_date) AS time_visit'),
+                        DB::raw('TIMESTAMPDIFF(MINUTE, r.end_date, LEAD(r.start_date) OVER (ORDER BY r.start_date)) AS displacement'),
+                        'd.order',
+                        'r.description_ref',
+                        'r.type_ref',
+                        'r.address'
+                    )
+                    ->join('districts as d', 'd.id', '=', 'r.district_id')
+                    ->where('r.collector_id', $user)
+                    ->whereNotNull('r.start_date')
+                    ->whereBetween('r.registered_date', [$dateStart, $dateEnd])
+                    ->orderBy('r.start_date')
+                    ->get();
+
+                return response()->json([
+                    'data' => $results
+                ], Response::HTTP_OK);
+
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al buscar',
+                            'detail' => $e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function update(array $reddirection, int $id){
             try {
                 // $sql = $this->reddirection::find($id);

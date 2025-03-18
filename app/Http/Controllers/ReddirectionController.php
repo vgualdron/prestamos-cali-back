@@ -29,6 +29,10 @@ class ReddirectionController extends Controller
         return $this->service->getCurrentByUser($user);
     }
 
+    function getByUserAndDate(int $user, string $date){
+        return $this->service->getByUserAndDate($user, $date);
+    }
+
     function update(int $id){
         return $this->service->update($this->request->all(), $id);
     }

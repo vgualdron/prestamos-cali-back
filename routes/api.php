@@ -246,6 +246,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/reddirections"], function () {
     Route::post('/', [ReddirectionController::class, 'create'])->name('reddirections.create');
     Route::get('/get-current-by-user/{user}', [ReddirectionController::class, 'getCurrentByUser'])->name('reddirections.getCurrentByUser');
+    Route::get('/get-by-user-and-date/{user}/{date}', [ReddirectionController::class, 'getByUserAndDate'])->name('reddirections.getByUserAndDate');
     Route::get('/get-by-lending/{lending}', [ReddirectionController::class, 'getByLending'])->name('reddirections.getByLending');
     Route::put('/{id}', [ReddirectionController::class, 'update'])->name('reddirection.update');
     Route::delete('/{id}', [ReddirectionController::class, 'delete'])->name('reddirection.delete');
