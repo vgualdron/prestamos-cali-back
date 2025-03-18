@@ -155,8 +155,11 @@
                         'r.address',
                         'r.observation',
                         'r.solution',
+                        'r.file_id',
+                        'f.url as file_id',
                     )
                     ->join('districts as d', 'd.id', '=', 'r.district_id')
+                    ->leftJoin('files as f', 'f.id', '=', 'r.file_id')
                     ->where('r.collector_id', $user)
                     ->whereNotNull('r.start_date')
                     ->whereBetween('r.registered_date', [$dateStart, $dateEnd])
