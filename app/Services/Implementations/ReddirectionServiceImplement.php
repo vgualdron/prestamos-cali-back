@@ -156,7 +156,7 @@
                         'r.observation',
                         'r.solution',
                         'r.file_id',
-                        'f.url as file_id',
+                        'f.url as file_url',
                         'f.status as file_status',
                     )
                     ->join('districts as d', 'd.id', '=', 'r.district_id')
