@@ -150,6 +150,7 @@
                         DB::raw('TIMESTAMPDIFF(MINUTE, r.start_date, r.end_date) AS time_visit'),
                         DB::raw('TIMESTAMPDIFF(MINUTE, r.end_date, LEAD(r.start_date) OVER (ORDER BY r.start_date)) AS displacement'),
                         'd.order',
+                        'd.name as district_name',
                         'r.description_ref',
                         'r.type_ref',
                         'r.address',
