@@ -152,7 +152,9 @@
                         'd.order',
                         'r.description_ref',
                         'r.type_ref',
-                        'r.address'
+                        'r.address',
+                        'r.observation',
+                        'r.solution',
                     )
                     ->join('districts as d', 'd.id', '=', 'r.district_id')
                     ->where('r.collector_id', $user)
