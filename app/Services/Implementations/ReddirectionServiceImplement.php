@@ -158,6 +158,8 @@
                         'r.file_id',
                         'f.url as file_url',
                         'f.status as file_status',
+                        'f.latitude as file_latitude',
+                        'f.longitude as file_longitude',
                     )
                     ->join('districts as d', 'd.id', '=', 'r.district_id')
                     ->leftJoin('files as f', 'f.id', '=', 'r.file_id')
