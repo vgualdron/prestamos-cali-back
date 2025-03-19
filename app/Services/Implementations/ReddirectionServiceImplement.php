@@ -161,9 +161,11 @@
                         'f.status as file_status',
                         'f.latitude as file_latitude',
                         'f.longitude as file_longitude',
+                        'l.nameDebtor',
                     )
                     ->join('districts as d', 'd.id', '=', 'r.district_id')
                     ->leftJoin('files as f', 'f.id', '=', 'r.file_id')
+                    ->leftJoin('lendings as l', 'l.id', '=', 'r.lending_id')
                     ->where('r.collector_id', $user)
                     ->whereNotNull('r.start_date')
                     ->whereBetween('r.registered_date', [$dateStart, $dateEnd])
