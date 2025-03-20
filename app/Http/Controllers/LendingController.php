@@ -653,6 +653,20 @@ class LendingController extends Controller
 
             $itemNovel->update($novelItem);
 
+            // borrar voucher
+            $itemFile = File::where('name', 'FOTO_VOUCHER')
+                ->where('model_name', 'news')
+                ->where('model_id', $request->new_id)
+                ->first();
+
+            if ($itemFile) {
+                // Eliminar el archivo del almacenamiento (si es necesario)
+                // Storage::disk('products')->delete($item->name);
+
+                // Eliminar el registro de la base de datos
+                $itemFile->delete();
+            }
+
             $itemLendingOld = Lending::find($request->lending_id);
             $dateUpdateOld = $itemLendingOld->updated_at;
             $newItem = [
