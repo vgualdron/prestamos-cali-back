@@ -275,6 +275,7 @@
                                 MIN(f.registered_date) AS first_file_date,
                                 MAX(f.registered_date) AS last_file_date,
                                 GROUP_CONCAT(f.url SEPARATOR ', ') AS file_urls
+                                f.type AS file_type
                             FROM files f
                             WHERE f.model_name = 'news'
                             AND f.registered_by = " . $user
@@ -317,7 +318,8 @@
                             bd.last_file_date,
                             bd.time_difference_minutes,
                             TIMESTAMPDIFF(MINUTE, bd.last_file_date, bd.next_block_start_date) AS block_delay_minutes,
-                            bd.file_urls, -- Mostramos las URLs concatenadas
+                            bd.file_urls,
+                            bd.file_type,
                             CASE
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work
