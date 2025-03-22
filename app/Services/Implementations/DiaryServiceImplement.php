@@ -238,6 +238,131 @@
             }
         }
 
+        function getByUserAndDate(int $user, string $date){
+            try {
+
+                $dateStart = $date . ' 00:00:00';
+                $dateEnd = $date . ' 23:59:59';
+
+                $sql = "WITH file_blocks AS (
+                            SELECT
+                                f.model_id AS news_id,
+                                f.registered_by,
+                                CASE
+                                    WHEN f.name IN (
+                                        'FOTO_CASA_CLIENTE', 'VIDEO_TOCANDO_CASA_CLIENTE', 'FOTO_CLIENTE',
+                                        'FOTO_CEDULA_CLIENTE_FRONTAL', 'FOTO_CEDULA_CLIENTE_POSTERIOR',
+                                        'FOTO_LETRA_CLIENTE', 'FOTO_FIRMANDO_LETRA_CLIENTE',
+                                        'FOTO_CERTIFICADO_TRABAJO_CLIENTE', 'FOTO_RECIBO_CASA_CLIENTE',
+                                        'FOTO_RED_SOCIAL', 'VIDEO_AUTORIZA_CUENTA_TERCERO'
+                                    ) THEN 'CLIENTE'
+                                    WHEN f.name IN (
+                                        'FOTO_CASA_REFERENCIA_FAMILIAR_1', 'VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_1',
+                                        'VIDEO_REFERENCIA_FAMILIAR_1', 'FOTO_CEDULA_FRONTAL_REFERENCIA_FAMILIAR_1',
+                                        'FOTO_CEDULA_POSTERIOR_REFERENCIA_FAMILIAR_1'
+                                    ) THEN 'REF 1'
+                                    WHEN f.name IN (
+                                        'FOTO_CASA_REFERENCIA_FAMILIAR_2', 'VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_2',
+                                        'VIDEO_REFERENCIA_FAMILIAR_2', 'FOTO_CEDULA_FRONTAL_REFERENCIA_FAMILIAR_2',
+                                        'FOTO_CEDULA_POSTERIOR_REFERENCIA_FAMILIAR_2'
+                                    ) THEN 'REF 2'
+                                    WHEN f.name IN (
+                                        'FOTO_CASA_FIADOR', 'FOTO_CEDULA_FIADOR_FRONTAL', 'FOTO_CEDULA_FIADOR_POSTERIOR',
+                                        'FOTO_LETRA_FIADOR', 'FOTO_FIRMANDO_LETRA_FIADOR',
+                                        'FOTO_CERTIFICADO_TRABAJO_FIADOR', 'FOTO_RECIBO_CASA_FIADOR'
+                                    ) THEN 'FIADOR'
+                                END AS bloque,
+                                MIN(f.registered_date) AS first_file_date,
+                                MAX(f.registered_date) AS last_file_date,
+                                GROUP_CONCAT(f.url SEPARATOR ', ') AS file_urls
+                            FROM files f
+                            WHERE f.model_name = 'news'
+                            AND f.registered_by = " . $user
+                            ." AND f.status = 'aprobado'
+                            AND f.name IN (
+                                'FOTO_CASA_CLIENTE', 'VIDEO_TOCANDO_CASA_CLIENTE', 'FOTO_CLIENTE',
+                                'FOTO_CEDULA_CLIENTE_FRONTAL', 'FOTO_CEDULA_CLIENTE_POSTERIOR',
+                                'FOTO_LETRA_CLIENTE', 'FOTO_FIRMANDO_LETRA_CLIENTE',
+                                'FOTO_CERTIFICADO_TRABAJO_CLIENTE', 'FOTO_RECIBO_CASA_CLIENTE',
+                                'FOTO_RED_SOCIAL', 'VIDEO_AUTORIZA_CUENTA_TERCERO',
+                                'FOTO_CASA_REFERENCIA_FAMILIAR_1', 'VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_1',
+                                'VIDEO_REFERENCIA_FAMILIAR_1', 'FOTO_CEDULA_FRONTAL_REFERENCIA_FAMILIAR_1',
+                                'FOTO_CEDULA_POSTERIOR_REFERENCIA_FAMILIAR_1',
+                                'FOTO_CASA_REFERENCIA_FAMILIAR_2', 'VIDEO_VERIFICACION_CASA_REFERENCIA_FAMILIAR_2',
+                                'VIDEO_REFERENCIA_FAMILIAR_2', 'FOTO_CEDULA_FRONTAL_REFERENCIA_FAMILIAR_2',
+                                'FOTO_CEDULA_POSTERIOR_REFERENCIA_FAMILIAR_2',
+                                'FOTO_CASA_FIADOR', 'FOTO_CEDULA_FIADOR_FRONTAL', 'FOTO_CEDULA_FIADOR_POSTERIOR',
+                                'FOTO_LETRA_FIADOR', 'FOTO_FIRMANDO_LETRA_FIADOR',
+                                'FOTO_CERTIFICADO_TRABAJO_FIADOR', 'FOTO_RECIBO_CASA_FIADOR'
+                            )
+                            AND f.registered_date BETWEEN '" . $dateStart . "' AND '" . $dateEnd . "'
+                            GROUP BY f.model_id, f.registered_by, bloque
+                        ),
+                        block_delays AS (
+                            SELECT
+                                fb.*,
+                                LEAD(fb.first_file_date) OVER (PARTITION BY fb.registered_by ORDER BY fb.first_file_date) AS next_block_start_date,
+                                TIMESTAMPDIFF(MINUTE, fb.first_file_date, fb.last_file_date) AS time_difference_minutes
+                            FROM file_blocks fb
+                        )
+                        SELECT
+                            bd.news_id,
+                            n.name AS news_name,
+                            n.status AS news_status,
+                            n.observation AS news_observation,
+                            bd.registered_by,
+                            bd.bloque,
+                            bd.first_file_date,
+                            bd.last_file_date,
+                            bd.time_difference_minutes,
+                            TIMESTAMPDIFF(MINUTE, bd.last_file_date, bd.next_block_start_date) AS block_delay_minutes,
+                            bd.file_urls, -- Mostramos las URLs concatenadas
+                            CASE
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work
+                                WHEN bd.bloque = 'REF 1' THEN n.family_reference_address
+                                WHEN bd.bloque = 'REF 2' THEN n.family2_reference_address
+                                WHEN bd.bloque = 'FIADOR' THEN n.guarantor_address
+                            END AS address,
+                            CASE
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house_district
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work_district
+                                WHEN bd.bloque = 'REF 1' THEN n.family_reference_district
+                                WHEN bd.bloque = 'REF 2' THEN n.family2_reference_district
+                                WHEN bd.bloque = 'FIADOR' THEN n.guarantor_district
+                            END AS district_id,
+                            d.name AS district_name,
+                            d.order AS district_code
+                        FROM block_delays bd
+                        INNER JOIN news n ON bd.news_id = n.id
+                        LEFT JOIN districts d ON d.id =
+                            CASE
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house_district
+                                WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work_district
+                                WHEN bd.bloque = 'REF 1' THEN n.family_reference_district
+                                WHEN bd.bloque = 'REF 2' THEN n.family2_reference_district
+                                WHEN bd.bloque = 'FIADOR' THEN n.guarantor_district
+                            END
+                        ORDER BY bd.first_file_date;";
+
+                $results = DB::select($sql);
+
+                return response()->json([
+                    'data' => $results
+                ], Response::HTTP_OK);
+
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al buscar',
+                            'detail' => $e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function getStatusCases(int $idNew) {
             try {
                 $data = [];

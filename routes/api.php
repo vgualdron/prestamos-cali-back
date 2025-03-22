@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
     Route::get('/list-day-by-day/{date}/{user}/{moment}', [DiaryController::class, 'listDayByDay'])->name('diary.list');
     Route::get('/list-visits-review/{date}', [DiaryController::class, 'listVisitsReview'])->name('diary.listVisitsReview');
     Route::get('/get-status-cases/{idNew}', [DiaryController::class, 'getStatusCases'])->name('diary.getStatusCases');
+    Route::get('/get-by-user-and-date/{user}/{date}', [DiaryController::class, 'getByUserAndDate'])->name('diary.getByUserAndDate');
     Route::post('/approve-visit', [DiaryController::class, 'approveVisit'])->name('diary.approveVisit');
     Route::post('/create', [DiaryController::class, 'create'])->name('diary.create');
     Route::put('/update/{id}', [DiaryController::class, 'update'])->name('diary.update');

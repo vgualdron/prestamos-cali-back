@@ -33,6 +33,10 @@ class DiaryController extends Controller
         return $this->service->getStatusCases($idNew);
     }
 
+    function getByUserAndDate(int $user, string $date){
+        return $this->service->getByUserAndDate($user, $date);
+    }
+
     function approveVisit(){
         $userSesion = $this->request->user();
         $idUserSesion = $userSesion->id;
