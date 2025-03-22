@@ -274,7 +274,14 @@
                                 END AS bloque,
                                 MIN(f.registered_date) AS first_file_date,
                                 MAX(f.registered_date) AS last_file_date,
-                                GROUP_CONCAT(f.url SEPARATOR ', ') AS file_urls,
+                                (SELECT f1.url
+                                    FROM files f1
+                                    WHERE f1.model_id = f.model_id
+                                    AND f1.registered_by = f.registered_by
+                                    AND f1.name = f.name
+                                    AND f1.status = 'aprobado'
+                                    ORDER BY f1.registered_date ASC
+                                    LIMIT 1) AS file_url,
                                 f.type AS file_type
                             FROM files f
                             WHERE f.model_name = 'news'
@@ -318,7 +325,7 @@
                             bd.last_file_date,
                             bd.time_difference_minutes,
                             TIMESTAMPDIFF(MINUTE, bd.last_file_date, bd.next_block_start_date) AS block_delay_minutes,
-                            bd.file_urls,
+                            bd.file_url,
                             bd.file_type,
                             CASE
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
