@@ -508,7 +508,7 @@
                 $message = 'Nuevo registrado con éxito';
                 $newItem = $this->novel->from('news as n')
                                         ->select('n.*')
-                                        ->where('n.phone', $novel['phone'])
+                                        ->where('n.phone', 'LIKE', '%' . $novel['phone'] . '%')
                                         ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
                                         ->first();
 
