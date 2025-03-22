@@ -274,7 +274,7 @@
                                 END AS bloque,
                                 MIN(f.registered_date) AS first_file_date,
                                 MAX(f.registered_date) AS last_file_date,
-                                GROUP_CONCAT(f.url SEPARATOR ', ') AS file_urls
+                                GROUP_CONCAT(f.url SEPARATOR ', ') AS file_urls,
                                 f.type AS file_type
                             FROM files f
                             WHERE f.model_name = 'news'
