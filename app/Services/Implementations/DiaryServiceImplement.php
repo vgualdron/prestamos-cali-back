@@ -331,7 +331,7 @@
                             bd.file_url,
                             bd.file_type,
                             bd.file_status,
-                            bd.file_latutude,
+                            bd.file_latitude,
                             bd.file_longitude,
                             CASE
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
