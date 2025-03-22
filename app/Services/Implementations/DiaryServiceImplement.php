@@ -283,7 +283,9 @@
                                     ORDER BY f1.registered_date ASC
                                     LIMIT 1) AS file_url,
                                 f.type AS file_type,
-                                f.status AS file_status
+                                f.status AS file_status,
+                                f.latitude AS file_latitude,
+                                f.longitude AS file_longitude
                             FROM files f
                             WHERE f.model_name = 'news'
                             AND f.registered_by = " . $user
@@ -329,6 +331,8 @@
                             bd.file_url,
                             bd.file_type,
                             bd.file_status,
+                            bd.file_latutude,
+                            bd.file_longitude,
                             CASE
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work
