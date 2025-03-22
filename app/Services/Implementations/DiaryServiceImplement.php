@@ -283,7 +283,7 @@
                                     ORDER BY f1.registered_date ASC
                                     LIMIT 1) AS file_url,
                                 f.type AS file_type,
-                                f.status AS file_status,
+                                f.status AS file_status
                             FROM files f
                             WHERE f.model_name = 'news'
                             AND f.registered_by = " . $user
@@ -328,6 +328,7 @@
                             TIMESTAMPDIFF(MINUTE, bd.last_file_date, bd.next_block_start_date) AS block_delay_minutes,
                             bd.file_url,
                             bd.file_type,
+                            bd.file_status,
                             CASE
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'casa' THEN n.address_house
                                 WHEN bd.bloque = 'CLIENTE' AND n.site_visit = 'trabajo' THEN n.address_work
