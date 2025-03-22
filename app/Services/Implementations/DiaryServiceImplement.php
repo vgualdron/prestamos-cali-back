@@ -309,6 +309,7 @@
                             bd.news_id,
                             n.name AS news_name,
                             n.status AS news_status,
+                            n.quantity AS news_quantity,
                             n.observation AS news_observation,
                             bd.registered_by,
                             bd.bloque,
