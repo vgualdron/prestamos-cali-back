@@ -282,7 +282,8 @@
                                     AND f1.status = 'aprobado'
                                     ORDER BY f1.registered_date ASC
                                     LIMIT 1) AS file_url,
-                                f.type AS file_type
+                                f.type AS file_type,
+                                f.status AS file_status,
                             FROM files f
                             WHERE f.model_name = 'news'
                             AND f.registered_by = " . $user
