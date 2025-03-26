@@ -371,7 +371,27 @@ class LendingController extends Controller
                 $result = $resultUser;
             }
 
+            $resultFavGlobal = DB::selectOne("SELECT
+                                                l.id AS id,
+                                                l.name AS listing_name,
+                                                l.city_id AS city_id,
+                                                l.user_id_collector AS user_id
+                                            FROM listings l
+                                            WHERE l.status = 'activa'
+                                            AND UPPER(l.name) = (
+                                                SELECT UPPER(value)
+                                                FROM configurations
+                                                WHERE reference = 'RUTA_FAVORITA'
+                                                LIMIT 1
+                                            )
+                                            LIMIT 1;");
+
             if ($result) {
+                $idList = $result->id;
+                $idUserExpense = $result->user_id;
+            }
+
+            if ($resultFavGlobal && $city == $resultFavGlobal->city_id) {
                 $idList = $result->id;
                 $idUserExpense = $result->user_id;
             }
