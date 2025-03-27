@@ -506,22 +506,25 @@
                     ], Response::HTTP_BAD_REQUEST);
                 } */
                 $message = 'Nuevo registrado con éxito';
-                $newItem = $this->novel->from('news as n')
-                                        ->select('n.*')
-                                        ->where('n.phone', 'LIKE', '%' . $novel['phone'] . '%')
-                                        ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
-                                        ->first();
 
-                if ($newItem) {
-                    return response()->json([
-                        'message' => [
-                            [
-                                'text' => 'Error al registrar',
-                                'detail' => 'Ya se registró un cliente con esos datos.'
+                $newItem = $this->novel->from('news as n')
+                        ->select('n.*')
+                        ->whereRaw("LENGTH(n.phone) = 10") // Verifica que tenga exactamente 10 dígitos
+                        ->where('n.phone', 'LIKE', '3%')  // Asegura que empiece con 3
+                        ->where('n.phone', 'LIKE', '%' . $novel['phone'] . '%')
+                        ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
+                        ->first();
+
+                    if ($newItem) {
+                        return response()->json([
+                            'message' => [
+                                [
+                                    'text' => 'Error al registrar',
+                                    'detail' => 'Ya se registró un cliente con esos datos, o el número no es válido.'
+                                ]
                             ]
-                        ]
-                    ], Response::HTTP_NOT_FOUND);
-                }
+                        ], Response::HTTP_NOT_FOUND);
+                    }
 
                 $new = $this->novel->from('news as n')->select('n.*')->where('n.phone', $novel['phone'])->first();
 
