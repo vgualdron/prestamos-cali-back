@@ -35,6 +35,7 @@ class User extends Authenticatable
         'longitude',
         'date_location',
         'salary',
+        'period',
         'date_contract',
         'created_at',
         'updated_at'

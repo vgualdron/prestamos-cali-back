@@ -36,6 +36,7 @@
                                 'u.date_location',
                                 'u.date_contract',
                                 'u.salary',
+                                'u.period',
                                 'u.area as area',
                                 'a.name as areaName',
                                 DB::Raw('IF(u.active = 1, "ACTIVO", "NO ACTIVO") as status'),
