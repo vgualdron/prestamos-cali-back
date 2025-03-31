@@ -197,6 +197,9 @@
                         'area' => $user['area'],
                         'password' => empty($user['password']) ? Hash::make($user['documentNumber']) : Hash::make($user['password']),
                         'yard' => $user['yard'],
+                        'salary' => $user['salary'],
+                        'period' => $user['period'],
+                        'date_contract' => $user['date_contract'],
                         'change_yard' => $user['changeYard']
                     ]);
 
@@ -239,6 +242,9 @@
                         $sql->yard = $user['yard'];
                         $sql->active = $user['active'];
                         $sql->area = $user['area'];
+                        $sql->salary = $user['salary'];
+                        $sql->period = $user['period'];
+                        $sql->date_contract = $user['date_contract'];
                         $sql->password = empty($user['password']) ? $sql->password : Hash::make($user['password']);
                         $sql->change_yard = $user['changeYard'];
                         $sql->save();
