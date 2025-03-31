@@ -826,10 +826,10 @@
                     ->leftJoin('yards as y', 'n.sector', 'y.id')
                     ->leftJoin('zones as z', 'y.zone', 'z.id')
                     ->leftJoin('users as u', 'n.user_send', 'u.id')
-                    ->leftJoin('diaries as d', function ($join) {
-                        $join->on('d.new_id', '=', 'n.id')
-                            ->where('d.status', '!=', 'cancelada');
-                    })
+                    ->leftJoin(DB::raw("
+                        (SELECT * FROM diaries WHERE status != 'cancelada'
+                        ORDER BY created_at DESC LIMIT 1) as d
+                    "), 'd.new_id', '=', 'n.id')
                     ->leftJoin('users as us', 'us.id', 'd.user_id')
                     ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                     ->leftJoin('yards as yh', 'dh.sector', 'yh.id')
