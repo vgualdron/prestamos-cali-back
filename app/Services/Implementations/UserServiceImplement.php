@@ -355,6 +355,9 @@
                     'longitude',
                     'date_location',
                     'area',
+                    'date_contract',
+                    'salary',
+                    'period',
                 )
                     ->where('id', $id)
                     ->first();
