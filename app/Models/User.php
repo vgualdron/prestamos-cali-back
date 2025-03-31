@@ -34,6 +34,8 @@ class User extends Authenticatable
         'latitude',
         'longitude',
         'date_location',
+        'salary',
+        'date_contract',
         'created_at',
         'updated_at'
     ];

@@ -7,7 +7,7 @@
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\DB;
-    
+
     class UserServiceImplement implements UserServiceInterface {
 
         use Commons;
@@ -20,7 +20,7 @@
             $this->user = new User;
             $this->validator = $validator;
             $this->profileValidator = $profileValidator;
-        }    
+        }
 
         function list(int $displayAll){
             try {
@@ -34,6 +34,8 @@
                                 'u.latitude',
                                 'u.longitude',
                                 'u.date_location',
+                                'u.date_contract',
+                                'u.salary',
                                 'u.area as area',
                                 'a.name as areaName',
                                 DB::Raw('IF(u.active = 1, "ACTIVO", "NO ACTIVO") as status'),
@@ -73,7 +75,7 @@
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
-        
+
         function listByRoleName(int $displayAll, string $name, int $city){
             try {
                 $sql = $this->user->from('users as u')
@@ -153,7 +155,7 @@
                             ->leftJoin('areas as a', 'u.area', 'a.id')
                             ->where('a.id', $area)
                             ->where('u.active', 1)
-                           
+
                             ->get();
 
                 if (count($sql) > 0){
@@ -196,7 +198,7 @@
                         'yard' => $user['yard'],
                         'change_yard' => $user['changeYard']
                     ]);
-    
+
                     $sql->assignRole($user['roles']);
                 });
                 return response()->json([
@@ -272,7 +274,7 @@
             }
         }
 
-        function delete(int $id){   
+        function delete(int $id){
             try {
                 $sql = $this->user::find($id);
                 if(!empty($sql)) {
