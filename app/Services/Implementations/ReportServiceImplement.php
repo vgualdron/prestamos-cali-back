@@ -57,7 +57,6 @@
                     ->where('id', $id)
                     ->first();
 
-                DB::statement("SET time_zone = 'America/Bogota'");
                 $rows = DB::select($report->sql);
 
                 if (count($rows) > 0) {
