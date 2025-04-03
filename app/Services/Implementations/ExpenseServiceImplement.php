@@ -3,6 +3,7 @@
     use App\Services\Interfaces\ExpenseServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
     use App\Models\Expense;
+    use App\Models\Loan;
     use App\Validator\{ExpenseValidator, ProfileValidator};
     use App\Traits\Commons;
     use Illuminate\Support\Facades\Hash;
@@ -195,6 +196,15 @@
                         'item_id' => $expense['item_id'],
                         'user_id' => $expense['user_id'] > 0 ? $expense['user_id'] : null,
                     ]);
+
+                    if (in_array($expense['item_id'], [3, 6, 10, 15])) {
+                        $sqlLoan = Loan::create([
+                            'amount' => $expense['amount'],
+                            'fee' => $expense['fee'],
+                            'status' => 'activo',
+                            'user_id' => $expense['user_id'] > 0 ? $expense['user_id'] : null,
+                        ]);
+                    }
 
                 });
                 return response()->json([
