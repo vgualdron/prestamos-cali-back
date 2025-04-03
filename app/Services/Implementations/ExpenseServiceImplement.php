@@ -196,16 +196,6 @@
                         'item_id' => $expense['item_id'],
                         'user_id' => $expense['user_id'] > 0 ? $expense['user_id'] : null,
                     ]);
-
-                    /* if (in_array($expense['item_id'], [3, 6, 10, 15])) {
-                        $sqlLoan = Loan::create([
-                            'amount' => $expense['amount'],
-                            'fee' => $expense['fee'],
-                            'status' => 'activo',
-                            'user_id' => $expense['user_id'] > 0 ? $expense['user_id'] : null,
-                        ]);
-                    } */
-
                 });
                 return response()->json([
                     'message' => [
@@ -227,9 +217,36 @@
             }
         }
 
-        function update(array $expense, int $id){
+        function update(array $expenseData, int $id) {
             try {
-                $sql = $this->expense::find($id)->update($expense);
+
+                $expense = $this->expense::find($id);
+
+                // Verificar si el expense existe
+                if (!$expense) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'El gasto no fue encontrado.',
+                                'detail' => null,
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+
+                // Actualizar el expense con los nuevos datos
+                $expense->update($expenseData);
+
+                // Verificar condición antes de crear el Loan
+                if ($expenseData['status'] === 'aprobado' && in_array($expense['item_id'], [3, 6, 10, 15])) {
+                    Loan::create([
+                        'amount' => $expenseData['amount'],
+                        'fee' => 50000,
+                        'status' => 'activo',
+                        'user_id' => $expenseData['user_id'] > 0 ? $expenseData['user_id'] : null,
+                    ]);
+                }
+
             } catch (Exception $e) {
                 return response()->json([
                     'message' => [
