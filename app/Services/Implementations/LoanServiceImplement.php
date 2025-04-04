@@ -147,6 +147,7 @@
             }
         }
 
+        // TO DO NO SE USA
         function delete(int $id){
             try {
                 $sql = $this->question::find($id);
@@ -194,6 +195,7 @@
             }
         }
 
+        // TO DO NO SE USA
         function get(int $id){
             try {
                 $sql = $this->question->from('questions as q')
@@ -235,40 +237,6 @@
                             ]
                         ]
                     ], Response::HTTP_NOT_FOUND);
-                }
-            } catch (\Throwable $e) {
-                return response()->json([
-                    'message' => [
-                        [
-                            'text' => 'Se ha presentado un error al buscar',
-                            'detail' => $e->getMessage()
-                        ]
-                    ]
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        function getStatus(array $question){
-            try {
-                $sql = $this->question->from('questions as q')
-                    ->select(
-                        'q.*',
-                    )
-                    // ->leftJoin('yards as y', 'n.sector', 'y.id')
-                    ->where('q.model_id', $question['model_id'])
-                    ->where('q.model_name', $question['model_name'])
-                    ->where('q.type', $question['type'])
-                    ->where('q.area_id', $question['area_id'])
-                    ->orderBy('q.created_at', 'DESC')
-                    ->first();
-                if(!empty($sql)) {
-                    return response()->json([
-                        'data' => $sql
-                    ], Response::HTTP_OK);
-                } else {
-                    return response()->json([
-                        'data' => null
-                    ], Response::HTTP_OK);
                 }
             } catch (\Throwable $e) {
                 return response()->json([
