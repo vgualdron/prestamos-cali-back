@@ -29,11 +29,13 @@
                         ->select(
                             'l.*',
                             'u.name as user_name',
+                            'a.name as area_name',
                             'u.area',
                             DB::raw('(SELECT COALESCE(SUM(amount), 0) FROM deposits WHERE loan_id = l.id AND d.status = "aprobado") as total_paid'),
                             DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado")) as remaining')
                         )
                         ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
+                        ->leftJoin('areas as a', 'u.area', '=', 'a.id')
                         ->when($status !== 'all', function ($query) use ($explodeStatus) {
                             return $query->whereIn('l.status', $explodeStatus);
                         })
