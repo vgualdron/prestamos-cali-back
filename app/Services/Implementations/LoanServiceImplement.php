@@ -65,6 +65,7 @@
             }
         }
 
+        // TO DO NO SE USA
         function create(array $question){
             try {
                 DB::transaction(function () use ($question) {
@@ -100,7 +101,7 @@
             }
         }
 
-        function update(array $question, int $id){
+        function update(array $loan, int $id){
             try {
                 /* $validation = $this->validate($this->validator, $novel, $id, 'actualizar', 'nuevo', null);
                 if ($validation['success'] === false) {
@@ -108,18 +109,12 @@
                         'message' => $validation['message']
                     ], Response::HTTP_BAD_REQUEST);
                 } */
-                $sql = $this->question::find($id);
+                $sql = $this->loan::find($id);
                 if(!empty($sql)) {
-                    DB::transaction(function () use ($sql, $question) {
-                        $sql->model_id = $question['model_id'];
-                        $sql->model_name = $question['model_name'];
-                        $sql->type = $question['type'];
-                        $sql->status = $question['status'];
-                        $sql->observation = $question['observation'];
-                        $sql->value = $question['value'];
-                        $sql->area_id = $question['area_id'];
-                        $sql->registered_by = $question['registered_by'];
-                        $sql->answered_by = $question['answered_by'];
+                    DB::transaction(function () use ($sql, $loan) {
+                        $sql->amount = $loan['amount'];
+                        $sql->fee = $loan['fee'];
+                        $sql->status = $loan['status'];
                         $sql->save();
                     });
                     return response()->json([
