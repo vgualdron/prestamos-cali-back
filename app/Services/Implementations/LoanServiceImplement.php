@@ -24,18 +24,19 @@
         function list(string $status) {
             try {
                 $explodeStatus = explode(',', $status);
-                $sql = $this->loan->from('loan as l')
-                    ->select(
-                        'l.*',
-                        'u.name as user_name',
-                    )
-                    ->leftJoin('users as u', 'l.user_id', 'u.id')
-                    ->when($status !== 'all', function ($q) use ($explodeStatus) {
-                        return $q->whereIn('l.status', $explodeStatus);
-                    })
-                    ->with('deposits')
-                    ->orderBy('q.created_at', 'desc')
-                    ->get();
+                $sql = $this->loan
+                        ->from('loans as l')
+                        ->select(
+                            'l.*',
+                            'u.name as user_name'
+                        )
+                        ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
+                        ->when($status !== 'all', function ($query) use ($explodeStatus) {
+                            return $query->whereIn('l.status', $explodeStatus);
+                        })
+                        ->with('deposits')
+                        ->orderBy('l.created_at', 'desc')
+                        ->get();
 
                 if (count($sql) > 0){
                     return response()->json([
