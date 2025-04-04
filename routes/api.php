@@ -31,6 +31,8 @@ use App\Http\Controllers\{
                         DiscountController,
                         WorkplanController,
                         TaskController,
+                        LoanController,
+                        DepositController,
                     };
 
 /*
@@ -269,6 +271,22 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
     Route::post('/', [TaskController::class, 'create'])->name('task.create');
     Route::put('/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::delete('/{id}', [TaskController::class, 'delete'])->name('task.delete');
+});
+
+Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/loan"], function () {
+    Route::get('/{status}', [LoanController::class, 'list'])->name('loan.list');
+    Route::post('/', [LoanController::class, 'create'])->name('loan.create');
+    Route::put('/{id}', [LoanController::class, 'update'])->name('loan.update');
+    Route::delete('/{id}', [LoanController::class, 'delete'])->name('loan.delete');
+    Route::get('/{id}', [LoanController::class, 'get'])->name('loan.get');
+});
+
+Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/deposit"], function () {
+    Route::get('/{status}', [DepositController::class, 'list'])->name('deposit.list');
+    Route::post('/', [DepositController::class, 'create'])->name('deposit.create');
+    Route::put('/{id}', [DepositController::class, 'update'])->name('deposit.update');
+    Route::delete('/{id}', [DepositController::class, 'delete'])->name('deposit.delete');
+    Route::get('/{id}', [DepositController::class, 'get'])->name('deposit.get');
 });
 
 // endpoints de carga da datos
