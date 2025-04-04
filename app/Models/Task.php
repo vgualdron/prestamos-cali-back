@@ -21,6 +21,7 @@ class Task extends Model
         'status',
         'priority',
         'registered_by',
+        'end_date',
         'area_id',
         'updated_at',
         'created_at',
