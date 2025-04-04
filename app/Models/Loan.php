@@ -29,6 +29,6 @@ class Loan extends Authenticatable
     ];
 
     public function deposits() {
-       return $this->hasMany(Deposits::class, 'loan_id', 'id');
+       return $this->hasMany(Deposit::class, 'loan_id', 'id');
     }
 }
