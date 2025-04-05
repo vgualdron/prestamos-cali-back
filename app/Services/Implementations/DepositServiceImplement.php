@@ -28,15 +28,11 @@
                 $sql = $this->deposit
                         ->from('deposits as d')
                         ->select(
-                            'l.amount',
-                            'l.fee',
+                            'l.loan_amount',
+                            'l.loan_fee',
                             'l.user_id',
                             'l.status as loan_status',
-                            'd.id',
-                            'd.amount as deposit_amount',
-                            'd.status as status',
-                            'd.file_id as deposit_file_id',
-                            'd.created_at as deposit_created_at',
+                            'd.*',
                             'f.url as deposit_file_url',
                             'u.name as user_name',
                             'a.name as area_name',
