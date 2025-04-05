@@ -34,7 +34,7 @@
                             'l.status as loan_status',
                             'd.id',
                             'd.amount as deposit_amount',
-                            'd.status as deposit_status',
+                            'd.status as status',
                             'd.file_id as deposit_file_id',
                             'd.created_at as deposit_created_at',
                             'f.url as deposit_file_url',
