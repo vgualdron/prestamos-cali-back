@@ -45,7 +45,7 @@
                         ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
                         ->leftJoin('areas as a', 'u.area', '=', 'a.id')
                         ->when($status !== 'all', function ($query) use ($explodeStatus) {
-                            return $query->whereIn('l.status', $explodeStatus);
+                            return $query->whereIn('d.status', $explodeStatus);
                         })
                         ->orderBy('u.area', 'desc')
                         ->orderBy('u.name', 'desc')
