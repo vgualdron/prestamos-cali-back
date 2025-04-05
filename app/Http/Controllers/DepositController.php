@@ -10,7 +10,7 @@ class DepositController extends Controller
     private $service;
     private $request;
 
-    public function __construct(Request $request, LoanServiceImplement $service) {
+    public function __construct(Request $request, DepositServiceImplement $service) {
             $this->request = $request;
             $this->service = $service;
     }
