@@ -58,12 +58,6 @@
 
         function update(array $deposit, int $id){
             try {
-                /* $validation = $this->validate($this->validator, $novel, $id, 'actualizar', 'nuevo', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                } */
                 $sql = $this->deposit::find($id);
                 if(!empty($sql)) {
                     DB::transaction(function () use ($sql, $deposit) {
