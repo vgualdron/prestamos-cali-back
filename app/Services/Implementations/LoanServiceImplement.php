@@ -25,25 +25,33 @@
             try {
                 $explodeStatus = explode(',', $status);
                 $sql = $this->loan
-                        ->from('loans as l')
-                        ->select(
-                            'l.*',
-                            'u.name as user_name',
-                            'a.name as area_name',
-                            'u.area',
-                            DB::raw('(SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado") as total_paid'),
-                            DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado")) as remaining')
-                        )
-                        ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
-                        ->leftJoin('areas as a', 'u.area', '=', 'a.id')
-                        ->when($status !== 'all', function ($query) use ($explodeStatus) {
-                            return $query->whereIn('l.status', $explodeStatus);
-                        })
-                        ->with('deposits')
-                        ->orderBy('u.area', 'desc')
-                        ->orderBy('u.name', 'desc')
-                        ->orderBy('l.created_at', 'desc')
-                        ->get();
+                    ->from('loans as l')
+                    ->select(
+                        'l.*',
+                        'u.name as user_name',
+                        'a.name as area_name',
+                        'u.area',
+                        // Total abonado
+                        DB::raw('(SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado") as total_paid'),
+                        // Cuánto queda debiendo
+                        DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado")) as remaining'),
+                        // Conteo de depósitos en estado aprobado
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado") as approved_count'),
+                        // Conteo de depósitos en estado creado
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "creado") as created_count'),
+                        // Conteo de depósitos en estado rechazado
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "rechazado") as rejected_count')
+                    )
+                    ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
+                    ->leftJoin('areas as a', 'u.area', '=', 'a.id')
+                    ->when($status !== 'all', function ($query) use ($explodeStatus) {
+                        return $query->whereIn('l.status', $explodeStatus);
+                    })
+                    ->with('deposits')
+                    ->orderBy('u.area', 'desc')
+                    ->orderBy('u.name', 'desc')
+                    ->orderBy('l.created_at', 'desc')
+                    ->get();
 
                 if (count($sql) > 0){
                     return response()->json([
