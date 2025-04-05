@@ -15,6 +15,10 @@ class DepositController extends Controller
             $this->service = $service;
     }
 
+    function list(string $status){
+        return $this->service->list($status);
+    }
+
     function create(){
         $item = $this->request->all();
         $userSesion = $this->request->user();

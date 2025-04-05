@@ -21,6 +21,55 @@
             $this->profileValidator = $profileValidator;
         }
 
+
+        function list(string $status) {
+            try {
+                $explodeStatus = explode(',', $status);
+                $sql = $this->deposit
+                        ->from('deposits as d')
+                        ->select(
+                            'l.*',
+                            'd.amount as deposit_amount',
+                            'd.status as deposit_status',
+                            'd.file_id as deposit_file_id',
+                            'u.name as user_name',
+                            'a.name as area_name',
+                            'u.area',
+                            DB::raw('(SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado") as total_paid'),
+                            DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado")) as remaining')
+                        )
+                        ->join('loans as l', 'l.id', '=', 'd.loan_id')
+                        ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
+                        ->leftJoin('areas as a', 'u.area', '=', 'a.id')
+                        ->when($status !== 'all', function ($query) use ($explodeStatus) {
+                            return $query->whereIn('l.status', $explodeStatus);
+                        })
+                        ->orderBy('u.area', 'desc')
+                        ->orderBy('u.name', 'desc')
+                        ->orderBy('l.created_at', 'desc')
+                        ->get();
+
+                if (count($sql) > 0){
+                    return response()->json([
+                        'data' => $sql
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'data' => []
+                    ], Response::HTTP_OK);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al cargar los registros',
+                            'detail' => $e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function create(array $deposit){
             try {
                 $sql = $this->deposit::create([
