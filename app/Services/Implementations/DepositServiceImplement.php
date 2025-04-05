@@ -23,24 +23,22 @@
 
         function create(array $deposit){
             try {
-                DB::transaction(function () use ($deposit) {
-                    $sql = $this->deposit::create([
-                        'loan_id' => $deposit['loan_id'],
-                        'amount' => $deposit['amount'],
-                        'status' => $deposit['status'],
-                        'file_id' => null,
-                        'type' => 'nequi',
-                        'observation' => null,
-                        'reference' => null,
-                        'nequi' => null,
-                        'date_transaction' => null,
-                    ]);
-                });
+                $sql = $this->deposit::create([
+                    'loan_id' => $deposit['loan_id'],
+                    'amount' => $deposit['amount'],
+                    'status' => $deposit['status'],
+                    'file_id' => null,
+                    'type' => 'nequi',
+                    'observation' => null,
+                    'reference' => null,
+                    'nequi' => null,
+                    'date_transaction' => null,
+                ]);
                 return response()->json([
                     'message' => [
                         [
-                            'text' => 'Solicitud de permiso registrado con éxito',
-                            'detail' => null
+                            'text' => 'registrado con exito',
+                            'detail' => $sql
                         ]
                     ]
                 ], Response::HTTP_OK);
