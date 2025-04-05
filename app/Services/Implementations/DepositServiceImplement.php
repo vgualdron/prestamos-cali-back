@@ -33,6 +33,7 @@
                             'd.status as deposit_status',
                             'd.file_id as deposit_file_id',
                             'd.created_at as deposit_created_at',
+                            'f.url as deposit_file_url',
                             'u.name as user_name',
                             'a.name as area_name',
                             'u.area',
@@ -40,6 +41,7 @@
                             DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE loan_id = l.id AND d.status = "aprobado")) as remaining')
                         )
                         ->join('loans as l', 'l.id', '=', 'd.loan_id')
+                        ->leftJoin('files as f', 'f.id', 'd.file_id')
                         ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
                         ->leftJoin('areas as a', 'u.area', '=', 'a.id')
                         ->when($status !== 'all', function ($query) use ($explodeStatus) {
