@@ -35,12 +35,8 @@
                     'nequi' => null,
                 ]);
                 return response()->json([
-                    'message' => [
-                        [
-                            'text' => 'registrado con exito',
-                            'detail' => $sql
-                        ]
-                    ]
+                    'data' => $sql,
+                    'message' => 'Succeed'
                 ], Response::HTTP_OK);
             } catch (\Throwable $e) {
                 return response()->json([
