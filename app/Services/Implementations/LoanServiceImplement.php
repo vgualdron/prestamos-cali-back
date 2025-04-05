@@ -36,11 +36,11 @@
                         // Cuánto queda debiendo
                         DB::raw('(l.amount - (SELECT COALESCE(SUM(amount), 0) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado")) as remaining'),
                         // Conteo de depósitos en estado aprobado
-                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado") as approved_count'),
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "aprobado") as count_approved'),
                         // Conteo de depósitos en estado creado
-                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "creado") as created_count'),
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "creado") as count_created'),
                         // Conteo de depósitos en estado rechazado
-                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "rechazado") as rejected_count')
+                        DB::raw('(SELECT COUNT(*) FROM deposits d WHERE d.loan_id = l.id AND d.status = "rechazado") as count_rejected')
                     )
                     ->leftJoin('users as u', 'l.user_id', '=', 'u.id')
                     ->leftJoin('areas as a', 'u.area', '=', 'a.id')
