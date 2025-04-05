@@ -32,6 +32,7 @@
                             'l.fee',
                             'l.user_id',
                             'l.status as loan_status',
+                            'd.id',
                             'd.amount as deposit_amount',
                             'd.status as deposit_status',
                             'd.file_id as deposit_file_id',
