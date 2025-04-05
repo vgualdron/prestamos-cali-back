@@ -28,12 +28,12 @@
                         'loan_id' => $deposit['loan_id'],
                         'amount' => $deposit['amount'],
                         'status' => $deposit['status'],
-                        'file_id' => $deposit['file_id'],
-                        'type' => $deposit['type'],
-                        'observation' => $deposit['observation'],
-                        'reference' => $deposit['reference'],
-                        'nequi' => $deposit['nequi'],
-                        'date_transaction' => $deposit['date_transaction'],
+                        'file_id' => null,
+                        'type' => 'nequi',
+                        'observation' => null,
+                        'reference' => null,
+                        'nequi' => null,
+                        'date_transaction' => null,
                     ]);
                 });
                 return response()->json([
