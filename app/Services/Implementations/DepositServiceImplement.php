@@ -32,6 +32,7 @@
                             'd.amount as deposit_amount',
                             'd.status as deposit_status',
                             'd.file_id as deposit_file_id',
+                            'd.created_at as deposit_created_at',
                             'u.name as user_name',
                             'a.name as area_name',
                             'u.area',
