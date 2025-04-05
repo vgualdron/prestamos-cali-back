@@ -282,11 +282,9 @@ Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/
 });
 
 Route::group(['middleware' => ['auth:api', 'validate.timestamp'], "prefix" => "/deposit"], function () {
-    Route::get('/{status}', [DepositController::class, 'list'])->name('deposit.list');
     Route::post('/', [DepositController::class, 'create'])->name('deposit.create');
     Route::put('/{id}', [DepositController::class, 'update'])->name('deposit.update');
     Route::delete('/{id}', [DepositController::class, 'delete'])->name('deposit.delete');
-    Route::get('/{id}', [DepositController::class, 'get'])->name('deposit.get');
 });
 
 // endpoints de carga da datos
