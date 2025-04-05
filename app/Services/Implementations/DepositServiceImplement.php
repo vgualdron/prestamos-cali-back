@@ -30,7 +30,7 @@
                     'date_transaction' => $deposit['date'],
                     'file_id' => $deposit['file_id'],
                     'type' => 'nequi',
-                    'observation' => null,
+                    'observation' => $deposit['observation'],
                     'reference' => null,
                     'nequi' => null,
                 ]);
