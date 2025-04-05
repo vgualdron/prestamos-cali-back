@@ -39,6 +39,7 @@
                         ->when($status !== 'all', function ($query) use ($explodeStatus) {
                             return $query->whereIn('l.status', $explodeStatus);
                         })
+                        ->with('deposits')
                         ->orderBy('u.area', 'desc')
                         ->orderBy('u.name', 'desc')
                         ->orderBy('l.created_at', 'desc')
