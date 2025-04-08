@@ -20,5 +20,6 @@ class Diary extends Model
         'observation',
         'user_id',
         'new_id',
+        'priority',
     ];
 }
