@@ -69,6 +69,7 @@
                     ->where('user_id', $user)
                     // ->whereBetween('date', ["$dates[0] 00:00:00", "$dates[5] 23:59:59"])
                     ->where('date', '>' ,"$dates[0] 00:00:00")
+                    ->orderByRaw("d.priority DESC")
                     ->orderByRaw("DATE(d.date) ASC")
                     ->orderByRaw("
                         CASE
