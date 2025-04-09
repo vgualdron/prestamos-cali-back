@@ -34,6 +34,7 @@
                         'u.name as userName',
                         'd.date',
                         'd.new_id',
+                        'd.priority',
                         'n.name as new_name',
                         'n.address as new_address',
                         'n.address_work',
