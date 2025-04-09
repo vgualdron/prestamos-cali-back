@@ -683,6 +683,7 @@
                         $sql->status = $diary['status'];
                         $sql->new_id = $diary['new_id'];
                         $sql->user_id = $diary['user_id'];
+                        $sql->priority = $diary['priority'];
                         $sql->date = $diary['date'] . ' ' . date('H:i:s');
                         $sql->save();
                     });
