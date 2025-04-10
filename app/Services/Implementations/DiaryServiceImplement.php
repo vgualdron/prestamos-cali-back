@@ -200,6 +200,7 @@
                     'n.district as new_district',
                     'b.name as new_districtName',
                     'n.occupation as new_occupation',
+                    'n.observation as new_observation',
                     'n.phone as new_phone',
                     'n.status as new_status',
                     'd.status',
