@@ -596,12 +596,6 @@
 
         function approveVisit(array $diary) {
             try {
-                /* $validation = $this->validate($this->validator, $novel, $id, 'actualizar', 'nuevo', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                } */
                 $sqlDiary = $this->diary::find($diary['diary_id']);
                 $sqlNovel = $this->novel::find($diary['id']);
                 if(!empty($sqlDiary) && !empty($sqlNovel)) {
