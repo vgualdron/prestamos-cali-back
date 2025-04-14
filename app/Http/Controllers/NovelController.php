@@ -25,6 +25,10 @@ class NovelController extends Controller
         return $this->service->listForUpdate($status, $query);
     }
 
+    function listForLetter(string $status){
+        return $this->service->listForLetter($status);
+    }
+
     function listReds(int $city, int $user){
         return $this->service->listReds($city, $user);
     }

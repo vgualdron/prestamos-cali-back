@@ -5,6 +5,7 @@
     {
         function list(string $status);
         function listForUpdate(string $status, string $query);
+        function listForLetter(string $status);
         function listReds(int $city, int $user);
         function create(array $novel);
         function update(array $novel, int $id);
