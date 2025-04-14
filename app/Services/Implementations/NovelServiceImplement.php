@@ -405,7 +405,7 @@
                 ->leftJoin('yards as y', 'n.sector', 'y.id')
                 ->leftJoin('zones as z', 'y.zone', 'z.id')
                 ->leftJoin('users as u', 'n.user_send', 'u.id')
-                ->leftJoin('users as ul', 'n.who_received_letter', 'u.id')
+                ->leftJoin('users as ul', 'n.who_received_letter', 'ul.id')
                 ->leftJoin('districts as d', 'n.district', 'd.id')
                 ->leftJoin('districts as dh', 'n.address_house_district', 'dh.id')
                 ->leftJoin('yards as yh', 'dh.sector', 'yh.id')
