@@ -639,21 +639,26 @@
 
         function create(array $novel){
             try {
-                /* $validation = $this->validate($this->validator, $novel, null, 'registrar', 'nuevo', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                } */
+
                 $message = 'Nuevo registrado con éxito';
+                $phone = $novel['phone'];
+
+                if (!preg_match('/^3\d{9}$/', $phone)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Número inválido',
+                                'detail' => 'El número debe tener 10 dígitos y comenzar por 3.'
+                            ]
+                        ]
+                    ], Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
 
                 $newItem = $this->novel->from('news as n')
-                        ->select('n.*')
-                        ->whereRaw("LENGTH(n.phone) = 10") // Verifica que tenga exactamente 10 dígitos
-                        ->where('n.phone', 'LIKE', '3%')  // Asegura que empiece con 3
-                        ->where('n.phone', 'LIKE', '%' . $novel['phone'] . '%')
-                        ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
-                        ->first();
+                                ->select('n.*')
+                                ->where('n.phone', $phone)
+                                ->whereIn('n.status', ['creado', 'borrador', 'agendado', 'visitando', 'analizando'])
+                                ->first();
 
                     if ($newItem) {
                         return response()->json([
