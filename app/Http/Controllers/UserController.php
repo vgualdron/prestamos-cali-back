@@ -72,21 +72,25 @@ class UserController extends Controller
             $date = date("Y-m-d");
             $currentDate = date('Y-m-d H:i:s');
 
-            $sqlAmountAddress = "SELECT
-                                COUNT(news.id) AS total
-                            FROM
-                                users
-                            LEFT JOIN
-                                news ON users.id = news.user_send
-                                AND MONTH(news.created_at) = MONTH('" . $currentDate . "')
-                                AND YEAR(news.created_at) = YEAR('" . $currentDate . "')
-                                AND news.status != 'analizando'
-                                AND news.status != 'borrador'
-                            WHERE users.id = " . $idUserSesion . "
-                            GROUP BY
-                                users.id, users.name
-                            ORDER BY
-                                total DESC;";
+            $sqlAmountAddress = "
+                                SELECT
+                                    COUNT(news.id) AS total
+                                FROM
+                                    users
+                                LEFT JOIN
+                                    news ON users.id = news.user_send
+                                    AND MONTH(news.created_at) = MONTH('" . $currentDate . "')
+                                    AND YEAR(news.created_at) = YEAR('" . $currentDate . "')
+                                    AND news.status != 'analizando'
+                                    AND news.status != 'borrador'
+                                    AND (
+                                        (DAY('" . $currentDate . "') <= 14 AND DAY(news.created_at) BETWEEN 1 AND 14)
+                                        OR
+                                        (DAY('" . $currentDate . "') > 14 AND DAY(news.created_at) BETWEEN 15 AND 31)
+                                    )
+                                WHERE users.id = " . $idUserSesion . "
+                                GROUP BY users.id, users.name
+                                ORDER BY total DESC;";
 
             // echo $sqlAmountAddress;
 
