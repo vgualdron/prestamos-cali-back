@@ -211,6 +211,8 @@ class LendingController extends Controller
                 'listings.name as listing_name',
                 'listings.user_id_collector as listing_user',
                 'questions.status as question_status',
+                'questions.id as question_id',
+                'questions.created_at as question_created_a',
             ])
             ->join('listings', 'listings.id', '=', 'lendings.listing_id')
             ->leftJoin('payments', 'lendings.id', '=', 'payments.lending_id')
