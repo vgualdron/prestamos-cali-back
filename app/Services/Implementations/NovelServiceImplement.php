@@ -425,13 +425,13 @@
                 ->leftJoin('files as f', function ($join) {
                     $join->on('f.model_id', '=', 'n.id')
                          ->where('f.model_name', '=', 'news')
-                         ->where('f.status', '!=', 'aprobado')
                          ->where('f.name', '=', 'FOTO_RECEPCION_LETRA');
                 })
                 ->when($status !== 'all', function ($q) use ($status) {
                     return $q->where('n.status', $status);
                 })
                 ->where('n.approved_date', '>', '2025-04-14 00:00:00')
+                ->where('f.status', '!=', 'aprobado')
                 ->orderBy('n.approved_date', 'ASC')
                 ->get();
 
