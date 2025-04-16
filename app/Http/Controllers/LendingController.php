@@ -181,6 +181,7 @@ class LendingController extends Controller
             $status3 = 'closed';
             $status4 = 'off';
             $idUserSesion = $request->user()->id;
+            $dateLimitQuestion = Carbon::now()->subDays(3)->startOfDay();
 
 			$items = Lending::select([
                 'lendings.*',
@@ -214,11 +215,12 @@ class LendingController extends Controller
             ->leftJoin('payments', 'lendings.id', '=', 'payments.lending_id')
             ->leftJoin('news', 'news.id', '=', 'lendings.new_id')
             ->leftJoin('expenses', 'expenses.id', '=', 'lendings.expense_id')
-            ->leftJoin('questions', function ($join) {
+            ->leftJoin('questions', function ($join) use ($dateLimitQuestion) {
                 $join->on('questions.model_id', '=', 'news.id')
                      ->where('questions.model_name', '=', 'news')
                      ->where('questions.status', '<>', 'rechazado')
                      ->where('questions.type', '=', 'nuevo-antiguo')
+                     ->where('questions.created_at', '>=', $dateLimitQuestion)
                      ->on('questions.created_at', '>', 'lendings.updated_at');
             })
             ->leftJoin('files', function ($join) {
