@@ -431,7 +431,10 @@
                     return $q->where('n.status', $status);
                 })
                 ->where('n.approved_date', '>', '2025-04-14 00:00:00')
-                ->where('f.status', '!=', 'aprobado')
+                ->where(function ($q) {
+                    $q->where('f.status', '!=', 'aprobado')
+                      ->orWhereNull('f.status');
+                })
                 ->orderBy('n.approved_date', 'ASC')
                 ->get();
 
