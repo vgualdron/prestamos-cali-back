@@ -432,7 +432,6 @@
                 })
                 ->where('n.approved_date', '>', '2025-04-14 00:00:00')
                 ->orderBy('n.name', 'ASC')
-                ->limit(5)
                 ->get();
 
                 if (count($sql) > 0){
