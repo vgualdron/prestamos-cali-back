@@ -431,7 +431,7 @@
                     return $q->where('n.status', $status);
                 })
                 ->where('n.approved_date', '>', '2025-04-14 00:00:00')
-                ->orderBy('n.name', 'ASC')
+                ->orderBy('n.approved_date', 'ASC')
                 ->get();
 
                 if (count($sql) > 0){
