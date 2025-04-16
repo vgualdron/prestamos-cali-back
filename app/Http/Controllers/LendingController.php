@@ -182,7 +182,7 @@ class LendingController extends Controller
             $status3 = 'closed';
             $status4 = 'off';
             $idUserSesion = $request->user()->id;
-            $dateLimitQuestion = Carbon::now()->subDays(3)->startOfDay();
+            $dateLimitQuestion = Carbon::now()->subDays(1)->startOfDay();
 
 			$items = Lending::select([
                 'lendings.*',
