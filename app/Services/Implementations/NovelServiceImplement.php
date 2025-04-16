@@ -425,6 +425,7 @@
                 ->leftJoin('files as f', function ($join) {
                     $join->on('f.model_id', '=', 'n.id')
                          ->where('f.model_name', '=', 'news')
+                         ->where('f.status', '!=', 'aprobado')
                          ->where('f.name', '=', 'FOTO_RECEPCION_LETRA');
                 })
                 ->when($status !== 'all', function ($q) use ($status) {
